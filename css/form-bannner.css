@@ -1,0 +1,146 @@
+
+.form-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.form-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-color-dark));
+}
+
+.form-title {
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+.form-title .highlight {
+    color: var(--primary-color-dark);
+    font-weight: 800;
+}
+
+.free-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(164, 191, 78, 0.3);
+}
+
+.features-list {
+    margin-top: 2rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.feature-item i {
+    color: var(--primary-color-dark);
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.feature-item span {
+    color: #495057;
+    font-weight: 500;
+}
+
+.measurement-form {
+    background: #f8f9fa;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.measurement-form .form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.measurement-form .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s;
+}
+
+.measurement-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(213, 226, 164, 0.25);
+}
+
+.measurement-form .form-check {
+    margin-bottom: 1rem;
+}
+
+.measurement-form .form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    margin-right: 0.5rem;
+    border: 2px solid #dee2e6;
+}
+
+.measurement-form .form-check-input:checked {
+    background-color: var(--primary-color-dark);
+    border-color: var(--primary-color-dark);
+}
+
+.measurement-form .form-check-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(213, 226, 164, 0.25);
+}
+
+.measurement-form .form-check-label {
+    color: #495057;
+    font-weight: 500;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 2rem;
+    }
+    
+    .measurement-form {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .form-title {
+        font-size: 1.5rem;
+    }
+}

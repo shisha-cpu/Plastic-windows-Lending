@@ -1,0 +1,201 @@
+ .promotions-section {
+        padding: 80px 0;
+     
+    }
+    
+    .section-header {
+
+        margin-bottom: 50px;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+    
+    .section-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .promotion-card {
+        height: 350px;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .promotion-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .promotion-content {
+        text-align: center;
+        color: white;
+        padding: 30px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .promotion-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: white;
+    }
+    
+    .promotion-description {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 25px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .promotion-btn {
+        background-color: var(--primary-color-dark);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 50px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+    
+    .promotion-btn:hover {
+        background-color: var(--primary-color);
+        color: #2c3e50;
+        transform: translateY(-2px);
+    }
+    
+    .carousel-indicators {
+        bottom: -50px;
+    }
+    
+    .carousel-indicators button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        opacity: 0.5;
+        margin: 0 5px;
+    }
+    
+    .carousel-indicators .active {
+        opacity: 1;
+        background-color: var(--primary-color-dark);
+    }
+    
+    .carousel-control-prev, .carousel-control-next {
+        width: 50px;
+        height: 50px;
+        background-color: var(--primary-color);
+        border-radius: 50%;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.8;
+    }
+    
+    .carousel-control-prev {
+        left: -25px;
+    }
+    
+    .carousel-control-next {
+        right: -25px;
+    }
+    
+    .carousel-control-prev:hover, .carousel-control-next:hover {
+        opacity: 1;
+        background-color: var(--primary-color-dark);
+    }
+    
+    /* Анимация карусели */
+    .carousel-item {
+        transition: transform 0.6s ease-in-out;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 992px) {
+        .promotion-card {
+            height: 300px;
+        }
+        
+        .promotion-title {
+            font-size: 1.3rem;
+        }
+        
+        .promotion-description {
+            font-size: 0.95rem;
+        }
+        
+        .carousel-control-prev {
+            left: 10px;
+        }
+        
+        .carousel-control-next {
+            right: 10px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .promotions-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+        }
+        
+        .promotion-card {
+            height: 280px;
+            margin-bottom: 20px;
+        }
+        
+        .promotion-content {
+            padding: 20px;
+        }
+        
+        .carousel-control-prev, .carousel-control-next {
+            width: 40px;
+            height: 40px;
+        }
+    }
+    
+    @media (max-width: 576px) {
+        .section-title {
+            font-size: 1.8rem;
+        }
+        
+        .promotion-card {
+            height: 250px;
+        }
+        
+        .promotion-title {
+            font-size: 1.2rem;
+        }
+        
+        .promotion-description {
+            font-size: 0.9rem;
+        }
+        
+        .promotion-btn {
+            padding: 10px 20px;
+            font-size: 0.8rem;
+        }
+        
+        .carousel-control-prev, .carousel-control-next {
+            display: none;
+        }
+    }

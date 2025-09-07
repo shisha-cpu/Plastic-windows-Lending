@@ -1,0 +1,87 @@
+.header-title {
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: left; /* выравнивание слева */
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.header-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0; /* линия тоже слева */
+  width: 200px; /* длина линии */
+  height: 15px; /* толщина линии */
+  background: var(--primary-color);
+}
+
+.section-container {
+  padding: 40px 0;
+}
+
+.glass-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  border: none;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  padding: 15px;
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.glass-imgVeka {
+  height: 220px;
+  object-fit: contain; /* вместо cover */
+  width: 100%;
+  margin-bottom: 15px;
+  background-color: #ffffff; /* фон, если картинка не займет всю область */
+}
+.glass-img {
+  height: 200px;
+  object-fit: cover; /* вместо cover */
+  width: 100%;
+  margin-bottom: 15px;
+  background-color: #ffffff; /* фон, если картинка не займет всю область */
+}
+
+.glass-title {
+  font-weight: 700;
+  color: #000; /* черный текст */
+  text-align: center; /* по центру */
+  margin-bottom: 10px;
+}
+
+.glass-price {
+  color: #000; 
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  text-align: center; /* по центру */
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #000; 
+  padding: 0.6rem 1.5rem;
+  font-weight: 600;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #2c3e50;
+}
+.card-body-text{
+    margin-top: -30px;
+}

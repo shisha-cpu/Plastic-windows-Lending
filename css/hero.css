@@ -1,0 +1,93 @@
+
+
+.hero-section {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.4)
+    ),
+    url("../img/XXXL (1).jpeg") no-repeat center center;
+  background-size: cover;
+  padding: 100px 0;
+  color: rgb(0, 0, 0);
+  position: relative;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.form-wrapper {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+}
+
+.form-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* отступ между input и кнопкой */
+}
+
+.name-input {
+  flex: 1;
+  min-width: 200px;
+  background: #fff;
+  border: none;
+  padding: 18px 20px; /* увеличенная высота */
+  font-size: 18px;
+  border-radius: 8px;
+}
+
+.name-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.consultation-btn {
+  background-color: var(--primary-color);
+  border: none;
+  padding: 18px 35px; /* увеличенная высота */
+  font-size: 18px;
+  font-weight: bold;
+  transition: all 0.3s;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.consultation-btn:hover {
+  background-color: var(--primary-color-dark);
+  transform: translateY(-2px);
+}
+
+.privacy-text {
+  font-size: 14px; /* больше чем было */
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.95);
+  margin-top: 25px;
+  max-width: 700px;
+}
+
+/* Стили для чекбокса */
+.form-check-input {
+  width: 20px;
+  height: 20px;
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* адаптив: на мобильных кнопка уходит вниз */
+@media (max-width: 576px) {
+  .form-flex {
+    flex-direction: column;
+  }
+
+  .consultation-btn {
+    width: 100%;
+  }
+}

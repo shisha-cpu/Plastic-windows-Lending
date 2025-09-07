@@ -1,0 +1,133 @@
+ .payment-section-unique {
+            padding: 40px 0;
+            font-family: 'Arial', sans-serif;
+        }
+        .payment-title-unique {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        .prepayment-badge-unique {
+            background-color: rgba(164, 191, 78, 0.7);
+            color: #2c3e50;
+            padding: 6px 12px;
+            font-weight: bold;
+            transform: skew(-15deg);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .prepayment-text-unique {
+            transform: skew(15deg);
+            display: inline-block;
+            font-size: 1rem;
+            color: #fff;
+        }
+        .payment-method-compact {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+        .payment-method-compact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .method-content-compact {
+            display: flex;
+            align-items: flex-start;
+            height: 100%;
+        }
+        .title-parallelogram-compact {
+            transform: skew(-15deg);
+            background: rgba(213, 226, 164, 0.7);
+            padding: 10px 15px;
+            color: #2c3e50;
+            margin-right: 15px;
+            display: inline-block;
+            border: 1px solid rgba(164, 191, 78, 0.7);
+            min-width: 100px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .title-content-compact {
+            transform: skew(15deg);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .method-text-compact {
+            flex: 1;
+            padding-left: 15px;
+            font-size: 0.9rem;
+        }
+        .parallelogram-bg-compact {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(213, 226, 164, 0.15);
+            opacity: 0.15;
+            transform: skew(-15deg) scale(1.5);
+            z-index: 0;
+        }
+        .content-wrapper-compact {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+        }
+        .visa-container-compact {
+            background: #f8f9fa;
+            border-left: 3px solid rgba(164, 191, 78, 0.7);
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .visa-logo-compact {
+            height: 22px;
+            margin-right: 10px;
+        }
+        .note-compact {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        .divider-compact {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(164, 191, 78, 0.7), transparent);
+            margin: 15px 0;
+        }
+        .bank-transfer-compact {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: transform 0.3s ease;
+            height: 180px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bank-transfer-compact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) {
+            .method-content-compact {
+                flex-direction: column;
+            }
+            .method-text-compact {
+                padding-left: 0;
+                padding-top: 10px;
+            }
+            .payment-method-compact,
+            .bank-transfer-compact {
+                height: auto;
+                min-height: 160px;
+            }
+        }

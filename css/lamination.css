@@ -1,0 +1,229 @@
+        .lamination-constructor {
+            padding: 50px 0;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        .header-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 35px;
+            color: #2c3e50;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .constructor-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .option-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .colors-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+        
+        .color-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 90px;
+        }
+        
+        .color-option:hover {
+            transform: translateY(-5px);
+        }
+        
+        .color-sample {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        
+        .color-option.active .color-sample {
+            border-color: var(--primary-color-dark);
+            box-shadow: 0 0 0 3px var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .color-name {
+            font-size: 0.85rem;
+            text-align: center;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .preview-container {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+            border: 1px solid #eee;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+        
+        .window-preview {
+            width: 350px;
+            height: 300px;
+            margin: 0 auto;
+            position: relative;
+            background: linear-gradient(to bottom, #87CEEB, #E0F7FA);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 25px rgba(0,0,0,0.2),
+                inset 0 0 50px rgba(255,255,255,0.5);
+            border: 4px solid #ccc;
+            perspective: 1000px;
+        }
+        
+        .window-frame {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 15px solid #a1887f;
+            border-radius: 8px;
+            transition: all 0.5s ease;
+            box-sizing: border-box;
+            box-shadow: 
+                inset 0 0 15px rgba(0,0,0,0.1),
+                0 0 5px rgba(0,0,0,0.2);
+        }
+        
+        .window-sash {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            background: rgba(255,255,255,0.7);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .window-pane {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(173, 216, 230, 0.6) 0%, rgba(135, 206, 235, 0.8) 100%);
+            border: 1px solid rgba(255,255,255,0.5);
+            box-sizing: border-box;
+        }
+        
+        .window-reflections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            animation: reflection 10s infinite linear;
+        }
+        
+        @keyframes reflection {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .window-hardware {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            width: 22px;
+            height: 70px;
+            background: silver;
+            border-radius: 12px;
+            transform: translateY(-50%);
+            transition: all 0.5s ease;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+        }
+        
+        .window-handle {
+            position: absolute;
+            top: 50%;
+            right: 32px;
+            width: 25px;
+            height: 8px;
+            background: silver;
+            border-radius: 4px;
+            transform: translateY(-50%);
+            transition: all 0.5s ease;
+        }
+        
+        .window-sill {
+            position: absolute;
+            bottom: -25px;
+            left: -10px;
+            right: -10px;
+            height: 20px;
+            background: linear-gradient(to bottom, #e0e0e0, #bdbdbd);
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        
+        .selection-result {
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .colors-container {
+                gap: 10px;
+            }
+            
+            .color-option {
+                width: 70px;
+            }
+            
+            .color-sample {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .window-preview {
+                width: 280px;
+                height: 240px;
+            }
+            
+            .window-frame {
+                border-width: 12px;
+            }
+        }
