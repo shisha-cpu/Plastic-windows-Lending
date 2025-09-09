@@ -13,25 +13,26 @@
         .tags-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 15px;
-            max-width: 900px;
+         
             margin: 0 auto;
         }
         .tag-item {
             background: white;
-            padding: 15px 25px;
-            border-radius: 30px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 15px 15px;
+            border-radius: 10px;
+
+            border: 1px solid #d8d1d1;;
             transition: all 0.3s ease;
             cursor: pointer;
             font-weight: 600;
             color: #2c3e50;
-            border: 2px solid transparent;
+          
             text-align: center;
             flex: 1;
-            min-width: 160px;
-            max-width: 200px;
+            min-width: 200px;
+           width: 550px;
         }
         .tag-item:hover {
             transform: translateY(-5px);
@@ -41,7 +42,7 @@
         }
         .tag-item.active {
             background: var(--primary-color);
-            color: #2c3e50;
+            color: #ffffff;
             border-color: var(--primary-color-dark);
             box-shadow: 0 6px 15px rgba(164, 191, 78, 0.3);
         }

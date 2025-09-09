@@ -1,7 +1,6 @@
-
 :root {
-    --primary-color: rgb(213, 226, 164);
-    --primary-color-dark: rgb(164, 191, 78);
+    --primary-color: rgb(9,184,80);
+    --primary-color-dark: rgb(27, 189, 91);
 }
 
 body {
@@ -11,38 +10,57 @@ body {
 }
 
 .container-custom {
-    max-width: 1600px;
+
     margin: 0 auto;
     padding: 0 15px;
 }
-
-/* Header Styles */
+.btn{
+    text-transform: none !important;
+}
 .header {
     border-bottom: 1px solid #e9ecef;
     padding: 0.5rem 0;
     overflow-x: hidden;
 }
-
+.profile-container {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+}
+.profile-btn {
+    border: none;
+    background: none;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+.profile-btn.active {
+    border: 2px solid var(--primary-color);
+    transform: scale(1.05);
+}
+.profile-icon {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+}
 .header .row {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
 }
 
-/* Бренд секция */
 .brand-section {
     display: flex;
     align-items: center;
     flex-shrink: 0;
 }
 
-/* Навигационная секция */
 .nav-section {
     display: flex;
     justify-content: center;
 }
 
-/* Контактная секция - ОСНОВНЫЕ ИЗМЕНЕНИЯ ЗДЕСЬ */
 .contact-section {
     display: flex;
     justify-content: flex-end;
@@ -57,7 +75,6 @@ body {
     gap: 0.5rem;
 }
 
-/* Navigation Styles */
 .nav-link {
     white-space: nowrap;
     position: relative;
@@ -70,6 +87,7 @@ body {
     background-color: var(--primary-color);
     color: #333;
     transition: all 0.3s;
+    width: 200px;
 }
 
 .calc-btn:hover {
@@ -79,18 +97,35 @@ body {
 .call-btn {
     border: 1px solid var(--primary-color);
     transition: all 0.3s;
+    text-transform: none !important;
+  
+}
+.bottom-nav-link .arrow {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 6px;
 }
 
+.bottom-nav-link .arrow svg {
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+}
+
+.bottom-nav-link:hover .arrow svg {
+    transform: translateY(2px); /* Subtle animation on hover */
+}
 .call-btn:hover {
     background-color: var(--primary-color);
     color: white;
+   
 }
 
 .hover-bg:hover {
     background-color: #f8f9fa;
 }
 
-/* Desktop Top Navigation */
 .top-nav {
     display: flex;
     justify-content: center;
@@ -107,10 +142,8 @@ body {
     padding: 1rem;
 }
 
-/* Desktop Bottom Navigation */
-
 .bottom-nav-container {
-    max-width: 1600px;
+
     margin: 0 auto;
 }
 
@@ -136,13 +169,13 @@ body {
 .bottom-nav-link.calc-btn {
     border-right: none;
     font-weight: 500;
+    
 }
 
 .bottom-nav-item:last-child .bottom-nav-link {
     border-right: none;
 }
 
-/* Mega Menu */
 .mega-menu {
     position: fixed;
     left: 0;
@@ -150,19 +183,21 @@ body {
     width: 100%;
     background: white;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    z-index: 1002; /* Увеличиваем z-index */
+    z-index: 1002;
     padding: 2rem;
     display: none;
     border-top: 1px solid #e9ecef;
 }
 .contact-details .text-end .fw-bold {
-    font-size: 1.1rem; /* Увеличенный шрифт телефона */
+    font-size: 1.1rem;
 }
 .mega-menu-content {
     max-width: 1600px;
     margin: 0 auto;
 }
-
+.text-muted {
+    margin-left: 10px;
+}
 .mega-menu-column {
     padding: 0 15px;
     min-width: 250px;
@@ -192,15 +227,13 @@ body {
     padding-left: 5px;
 }
 
-/* Burger Menu */
 .burger-menu {
-    display: none;
+    display: none !important;
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
 }
 
-/* Mobile Menu */
 .mobile-menu {
     position: fixed;
     top: 0;
@@ -275,11 +308,12 @@ body {
 
 .mobile-menu .calc-btn {
     display: block;
-    padding: 0.75rem;
+    padding: 0 0.75rem;
     text-align: center;
     margin: 1rem 0;
     border-radius: 0.25rem;
-    font-weight: 500;
+    font-weight: 500; 
+  
 }
 
 .mobile-overlay {
@@ -301,7 +335,7 @@ body {
 }
 
 .top-nav .dropdown-menu {
-    display: none; /* Скрываем по умолчанию */
+    display: none;
     min-width: 220px;
     left: 50%;
     transform: translateX(-50%);
@@ -309,48 +343,50 @@ body {
     border: none;
     border-radius: 0.5rem;
     padding: 1rem;
-    z-index: 1001; /* Увеличиваем z-index, чтобы подменю не перекрывалось */
+    z-index: 1001;
 }
 
-.top-nav .nav-item:hover .dropdown-menu {
-    display: block; /* Показываем при наведении */
-}
-/* Убедитесь, что header не ограничивает подменю */
-.header {
-    position: relative; /* Добавляем position: relative для контекста позиционирования */
-    overflow: visible; /* Убираем ограничение overflow */
-}
-
-/* Стили для подменю в top-nav */
-.top-nav .dropdown-menu {
-    position: absolute; /* Явно задаем absolute для подменю */
-    top: 100%; /* Подменю располагается сразу под пунктом меню */
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 220px;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    border: none;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    z-index: 1002; /* Увеличиваем z-index, чтобы подменю было выше других элементов */
-    background: white; /* Фон для подменю */
-}
-
-/* Убедитесь, что nav-item имеет правильный контекст */
-.top-nav .nav-item {
-    position: relative; /* Контекст для абсолютного позиционирования подменю */
-}
-
-/* Показываем подменю при наведении */
 .top-nav .nav-item:hover .dropdown-menu {
     display: block;
 }
 
-/* Дополнительно: убираем возможные конфликты с overflow в родительских элементах */
-.nav-section {
-    overflow: visible; /* Убедитесь, что nav-section не обрезает подменю */
+.header {
+    position: relative;
+    overflow: visible;
 }
-/* Responsive Design */
+
+.top-nav .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 220px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    z-index: 1002;
+    background: white;
+}
+
+.top-nav .nav-item {
+    position: relative;
+}
+
+.top-nav .nav-item:hover .dropdown-menu {
+    display: block;
+}
+
+.nav-section {
+    overflow: visible;
+}
+
+.logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--primary-color-dark);
+}
+
 @media (max-width: 991px) {
     .top-nav, .bottom-nav {
         display: none;
@@ -420,7 +456,6 @@ body {
     }
 }
 
-/* ОСНОВНОЙ ИСПРАВЛЕНИЕ ДЛЯ 767px */
 @media (max-width: 767px) {
     .brand-section {
         flex: 0 0 35%;
@@ -497,7 +532,6 @@ body {
     }
 }
 
-/* Дополнительные исправления для очень маленьких экранов */
 @media (max-width: 400px) {
     .contact-info {
         flex-wrap: wrap;

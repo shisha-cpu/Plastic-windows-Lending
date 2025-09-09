@@ -1,227 +1,168 @@
+        :root {
+
+            --text-dark: #2c3e50;
+            --text-gray: #6c757d;
+            --card-gray: #f0f2f5;
+            --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
 .reviews-section {
-        padding: 80px 0;
-     
-    }
-    
-    .section-header {
-       
-        margin-bottom: 50px;
-    }
-    
-    .section-title {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 15px;
-    }
-    
-    .section-subtitle {
-        color: #6c757d;
-        font-size: 1.1rem;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-    
-    .review-card {
-        background: white;
-        border-radius: 12px;
-        padding: 40px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        margin: 0 auto;
-        max-width: 800px;
-        position: relative;
-    }
-    
-    .review-content {
-        position: relative;
-        text-align: center;
-    }
-    
-    .quotes {
-        font-size: 5rem;
-        color: var(--primary-color);
-        line-height: 1;
-        margin-bottom: 20px;
-        font-family: Georgia, serif;
-    }
-    
-    .review-text {
-        font-size: 1.1rem;
-        line-height: 1.7;
-        color: #555;
-        margin-bottom: 30px;
-        font-style: italic;
-    }
-    
-    .review-author {
-        border-top: 2px solid var(--primary-color);
-        padding-top: 20px;
-        margin-top: 20px;
-    }
-    
-    .author-name {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 5px;
-    }
-    
-    .author-info {
-        color: #6c757d;
-        font-size: 0.95rem;
-        margin-bottom: 0;
-    }
-    
-    .carousel-indicators {
-        bottom: -60px;
-    }
-    
-    .carousel-indicators button {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background-color: var(--primary-color);
-        opacity: 0.5;
-        margin: 0 5px;
-    }
-    
-    .carousel-indicators .active {
-        opacity: 1;
-        background-color: var(--primary-color-dark);
-    }
-    
-    .carousel-control-prev, .carousel-control-next {
-        width: 50px;
-        height: 50px;
-        background-color: var(--primary-color);
-        border-radius: 50%;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.8;
-    }
-    
-    .carousel-control-prev {
-        left: 50px;
-    }
-    
-    .carousel-control-next {
-        right: 50px;
-    }
-    
-    .carousel-control-prev:hover, .carousel-control-next:hover {
-        opacity: 1;
-        background-color: var(--primary-color-dark);
-    }
-    
-    .reviews-actions {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        margin-top: 70px;
-    }
-    
-    .btn {
-        padding: 12px 30px;
-        border-radius: 50px;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary {
-        background-color: var(--primary-color-dark);
-        border: none;
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background-color: var(--primary-color);
-        color: #2c3e50;
-        transform: translateY(-2px);
-    }
-    
-    .btn-outline {
-        background-color: transparent;
-        border: 2px solid var(--primary-color-dark);
-        color: var(--primary-color-dark);
-    }
-    
-    .btn-outline:hover {
-        background-color: var(--primary-color-dark);
-        color: white;
-        transform: translateY(-2px);
-    }
-    
-    /* Анимация карусели */
-    .carousel-item {
-        transition: transform 0.6s ease-in-out;
-    }
-    
-    /* Адаптивность */
-    @media (max-width: 992px) {
-        .review-card {
-            padding: 30px;
+            padding: 80px 0;
+            background-color: #fff;
         }
-        
-        .carousel-control-prev {
-            left: 20px;
+        .container{
+            max-width: 1200px;
         }
-        
-        .carousel-control-next {
-            right: 20px;
-        }
-    }
-    
-    @media (max-width: 768px) {
-        .reviews-section {
-            padding: 60px 0;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
         }
         
         .section-title {
-            font-size: 2rem;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+        }
+        
+        .carousel-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .carousel-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .reviews-container {
+            position: relative;
+ 
         }
         
         .review-card {
-            padding: 25px 20px;
+            background: var(--card-gray);
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
         }
         
-        .quotes {
-            font-size: 4rem;
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .author-header {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .author-info {
+            flex: 1;
+        }
+        
+        .author-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+        
+        .author-position {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        
+        .author-photo {
+            width: 50%;
+            height: 180px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-size: 3rem;
+            border-radius: 8px;
+            margin-left: 20px;
+            overflow: hidden;
         }
         
         .review-text {
+            color: #555;
             font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
-        .carousel-control-prev, .carousel-control-next {
-            width: 40px;
-            height: 40px;
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .review-card {
+                margin-bottom: 20px;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .author-photo {
+                height: 160px;
+            }
         }
         
-        .reviews-actions {
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
+        @media (max-width: 768px) {
+            .reviews-section {
+                padding: 60px 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .author-header {
+                flex-direction: column;
+            }
+            
+            .author-photo {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 15px;
+                height: 140px;
+            }
         }
         
-        .btn {
-            width: 200px;
+        @media (max-width: 576px) {
+            .author-photo {
+                height: 120px;
+            }
+            
+            .review-text {
+                font-size: 0.95rem;
+            }
         }
-    }
-    
-    @media (max-width: 576px) {
-        .section-title {
-            font-size: 1.8rem;
-        }
-        
-        .review-card {
-            padding: 20px 15px;
-        }
-        
-        .quotes {
-            font-size: 3rem;
-        }
-        
-        .carousel-control-prev, .carousel-control-next {
-            display: none;
-        }
-    }

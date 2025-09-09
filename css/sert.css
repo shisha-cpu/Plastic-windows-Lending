@@ -1,64 +1,180 @@
- .certificate-section {
-            padding: 80px 0;
+.certificate-section {
+    padding: 80px 0;
+    position: relative;
+}
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+.section-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 25px;
+}
 
-        }
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #2c3e50;
-        }
-        .section-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 25px;
-        }
-        .certificate-slide {
-            padding: 15px;
-        }
-        .certificate-img {
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        .certificate-img:hover {
-            transform: scale(1.03);
-        }
-        .carousel-control-prev, .carousel-control-next {
-            width: 40px;
-            height: 40px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .carousel-control-prev {
-            left: 10px;
-        }
-        .carousel-control-next {
-            right: 10px;
-        }
-        .achievement-item {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
-        .achievement-icon {
-            font-size: 1.5rem;
-            color: #3498db;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-        @media (max-width: 992px) {
-            .certificate-section .row {
-                flex-direction: column-reverse;
-            }
-            .text-side {
-                margin-top: 40px;
-                text-align: center;
-            }
-            .achievement-item {
-                justify-content: center;
-            }
-        }
+/* Фиксированная высота для контейнера слайдера */
+#certificateCarousel {
+    height: 250px;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.certificate-slide {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certificate-img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+.certificate-img:hover {
+    transform: scale(1.03);
+}
+
+/* Контейнер для центрирования индикаторов */
+.custom-indicators-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* Кастомные индикаторы по центру */
+.custom-indicators {
+    display: flex;
+    gap: 12px;
+    padding-left: 0;
+}
+
+.custom-indicators button {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.custom-indicators button.active {
+    background-color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.custom-indicators button:hover {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.1);
+}
+
+/* Стили для кнопок навигации - обрезанные */
+.carousel-control-prev, .carousel-control-next {
+    width: 35px;
+    height: 35px;
+    background-color: rgba(108, 117, 125, 0.7);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* Левая кнопка - обрезана справа */
+.carousel-control-prev {
+    left: 0;
+    border-radius: 50% 0 0 50%;
+    width: 25px;
+    padding-right: 10px;
+}
+
+/* Правая кнопка - обрезана слева */
+.carousel-control-next {
+    right: 0;
+    border-radius: 0 50% 50% 0;
+    width: 25px;
+    padding-left: 10px;
+}
+
+.carousel-control-prev:hover, 
+.carousel-control-next:hover {
+    background-color: var(--primary-color);
+    opacity: 1;
+}
+
+.carousel-control-prev-icon, 
+.carousel-control-next-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 100% 100%;
+}
+
+/* Правый блок со слайдером */
+.slider-side {
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
+.achievement-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 992px) {
+    .certificate-section .row {
+        flex-direction: column-reverse;
+    }
+    .text-side {
+        margin-top: 40px;
+        text-align: center;
+    }
+    .achievement-item {
+        justify-content: center;
+    }
+    #certificateCarousel {
+        height: 200px;
+    }
+    .certificate-img {
+        height: 150px;
+    }
+    .carousel-control-prev {
+        left: 5px;
+    }
+    .carousel-control-next {
+        right: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    #certificateCarousel {
+        height: 180px;
+    }
+    .certificate-img {
+        height: 130px;
+    }
+    .carousel-control-prev {
+        left: 2px;
+    }
+    .carousel-control-next {
+        right: 2px;
+    }
+}

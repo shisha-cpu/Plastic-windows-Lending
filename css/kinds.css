@@ -11,8 +11,8 @@
             padding: 15px 20px;
         }
         .accordion-button:not(.collapsed) {
-            background-color: var(--primary-color);
-            color: #2c3e50;
+        
+            color: #00050a;
             box-shadow: none;
         }
         .accordion-button::after {
@@ -27,7 +27,7 @@
         .accordion-body {
             padding: 20px;
             background-color: #fff;
-            border-left: 3px solid var(--primary-color);
+           
         }
         .btn-custom {
             background-color: var(--primary-color-dark);

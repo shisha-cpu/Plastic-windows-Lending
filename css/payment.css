@@ -10,26 +10,31 @@
             text-align: center;
         }
         .prepayment-badge-unique {
-            background-color: rgba(164, 191, 78, 0.7);
+            background-color: var(--primary-color);
             color: #2c3e50;
             padding: 6px 12px;
             font-weight: bold;
             transform: skew(-15deg);
             display: inline-block;
             margin-bottom: 20px;
+    
         }
         .prepayment-text-unique {
             transform: skew(15deg);
             display: inline-block;
             font-size: 1rem;
             color: #fff;
+           
+        }
+        .logosPayment{
+            display: flex;
         }
         .payment-method-compact {
             background: white;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+         
             transition: transform 0.3s ease;
             height: 180px;
             position: relative;
@@ -46,12 +51,12 @@
         }
         .title-parallelogram-compact {
             transform: skew(-15deg);
-            background: rgba(213, 226, 164, 0.7);
+       background-color: var(--primary-color);
             padding: 10px 15px;
             color: #2c3e50;
             margin-right: 15px;
             display: inline-block;
-            border: 1px solid rgba(164, 191, 78, 0.7);
+            border: 1px solid var(--primary-color);
             min-width: 100px;
             text-align: center;
             flex-shrink: 0;
@@ -84,7 +89,7 @@
         }
         .visa-container-compact {
             background: #f8f9fa;
-            border-left: 3px solid rgba(164, 191, 78, 0.7);
+            border-left: 3px solid var(--primary-color);
             padding: 10px;
             margin: 10px 0;
         }
@@ -100,7 +105,7 @@
         }
         .divider-compact {
             height: 1px;
-            background: linear-gradient(to right, transparent, rgba(164, 191, 78, 0.7), transparent);
+            background: linear-gradient(to right, transparent, var(--primary-color), transparent);
             margin: 15px 0;
         }
         .bank-transfer-compact {
@@ -130,4 +135,7 @@
                 height: auto;
                 min-height: 160px;
             }
+        }
+        .bottomTitle{
+            margin-bottom: -50px;
         }

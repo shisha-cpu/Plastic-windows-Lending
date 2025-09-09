@@ -1,8 +1,4 @@
 
-    :root {
-        --primary-color: rgb(213, 226, 164);
-        --primary-color-dark: rgb(164, 191, 78);
-    }
     
     .works-section {
         padding: 60px 0;
@@ -42,7 +38,7 @@
     }
     
     .work-card:hover {
-        transform: translateY(-5px);
+      
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
     }
     
