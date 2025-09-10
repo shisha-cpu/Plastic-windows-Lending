@@ -46,7 +46,7 @@
             <div class="col-md-auto brand-section">
                 <i class="fas fa-bars burger-menu"></i>
                 <div class="logo">LOGO</div>
-                <div class="text-muted small">
+                <div class="text-muted small monileHide">
                     <div>Пластиковые окна и двери</div>
                     <div>в Москве и всей области</div>
                 </div>
@@ -471,7 +471,7 @@
     
     <div class="row hero-content">
       <div class="col-lg-8">
-        <h1 class="display-5 fw-bold mb-4">
+        <h1 class="display-5  fw-bold mb-4">
           Пластиковые окна в Москве под ключ с гарантией
         </h1>
         <p class="lead mb-4">
@@ -727,11 +727,11 @@
             <!-- Пункт 1 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                    <button class="accordion-button collapsed" type="button" data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                         1. Теплое от 9 730 за м²
                     </button>
                 </h2>
-                <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#balconyAccordion">
+                <div id="collapse1" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                     </div>
@@ -741,11 +741,11 @@
             <!-- Пункт 2 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                    <button class="accordion-button collapsed" type="button" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
                         2. Холодное от 7 952 за м²
                     </button>
                 </h2>
-                <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#balconyAccordion">
+                <div id="collapse2" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
                     </div>
@@ -755,11 +755,11 @@
             <!-- Пункт 3 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                    <button class="accordion-button collapsed" type="button" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
                         3. Полутеплое от 8 924 за м²
                     </button>
                 </h2>
-                <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#balconyAccordion">
+                <div id="collapse3" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
                     </div>
@@ -769,11 +769,11 @@
             <!-- Пункт 4 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                    <button class="accordion-button collapsed" type="button" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
                         4. Панорамное от 23 736 за м²
                     </button>
                 </h2>
-                <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#balconyAccordion">
+                <div id="collapse4" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Excepteur sint occaecat cupidatat non proident, sunt in culpa.</p>
                     </div>
@@ -783,11 +783,11 @@
             <!-- Пункт 5 -->
             <div class="accordion-item">
                 <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                    <button class="accordion-button collapsed" type="button" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
                         5. Французское от 23 736 за м²
                     </button>
                 </h2>
-                <div id="collapse5" class="accordion-collapse collapse" data-bs-parent="#balconyAccordion">
+                <div id="collapse5" class="accordion-collapse collapse">
                     <div class="accordion-body">
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                     </div>
@@ -797,7 +797,30 @@
     </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-bs-target');
+            const targetCollapse = document.querySelector(targetId);
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            // Toggle the collapse state
+            if (isExpanded) {
+                targetCollapse.classList.remove('show');
+                button.classList.add('collapsed');
+                button.setAttribute('aria-expanded', 'false');
+            } else {
+                targetCollapse.classList.add('show');
+                button.classList.remove('collapsed');
+                button.setAttribute('aria-expanded', 'true');
+            }
+        });
+    });
+});
+</script>
 <!-- about -->
   <section class="about-section">
         <div class="container">
@@ -807,7 +830,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="about-content">
-                        <h2 class="section-title">О компании</h2>
+                        <h2 class="header-title">О компании</h2>
                         <p>С другой стороны, укрепление и развитие внутренней структуры говорит о возможностях экспериментов, поражающих по своей масштабности и грандиозности. С другой стороны, существующая теория способствует подготовке и реализации стандартных подходов. Прежде всего, <span class="highlight">разбавленное изрядной долей эмпатии</span>, рациональное мышление не оставляет шанса для позиций, занимаемых участниками в отношении поставленных задач.</p>
                         
                         <p>Банальные, но неопровержимые выводы, а также предприниматели в сети интернет формируют глобальную экономическую сеть и при этом – в равной степени предоставлены сами себе. Как принято считать, <span class="highlight">сторонники тоталитаризма в науке</span> освещают чрезвычайно интересные особенности картины в целом, однако конкретные выводы, разумеется, ассоциативно распределены по отраслям.</p>
@@ -817,25 +840,60 @@
             </div>
         </div>
     </section>
-  <section class="photo-section">
-        <div class="container">
-
-                <h1 class="header-title">Наши работы </h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-            <div class="photo-collage">
-                <div class="photo-item"><a href="#img1"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="City Street"></a></div>
-                <div class="photo-item"><a href="#img2"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Woman in Hat"></a></div>
-                <div class="photo-item"><a href="#img3"><img src="https://image.winudf.com/v2/image1/c3Rwcm93YWxscGFwZXIuSG9uZGEuTlNYLldhbGxwYXBlcnMudGhfc2NyZWVuXzBfMTY1NzQ4MzMwM18wMTQ/screen-0.jpg?fakeurl=1&type=.jpg" alt="Red Car"></a></div>
-                <div class="photo-item"><a href="#img4"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Man with Backpack"></a></div>
-                <div class="photo-item topAlt"><a href="#img5"><img src="https://avatars.mds.yandex.net/i?id=d2738082113e18b794086007e3565140_l-5232211-images-thumbs&n=13" alt="Woman with Sunglasses"></a></div>
-
-                <div class="photo-item"><a href="#img7"><img src="https://wp-s.ru/wallpapers/3/16/434976968373022/a-red-haired-girl-alone-with-nature-is-thoughtful.jpg" alt="Woman in Nature"></a></div>
-                <div class="photo-item top"><a href="#img8"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Woman in Red Shirt"></a></div>
-                <div class="photo-item topAlt"><a href="#img9"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Man in Black"></a></div>
-                <div class="photo-item top"><a href="#img10"><img src="https://www.tu-braunschweig.de/fileadmin/Redaktionsgruppen/Institute_Fakultaet_3/Geooekologie/Klimatologie_Bilder/COABS_Symbolbild.jpg" alt="City Street with Trees"></a></div>
-            </div>
+<section class="photo-section">
+    <div class="container">
+        <p class="header-title">Наши работы</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        <div class="photo-collage">
+            <div class="photo-item"><a href="#img1" class="lightbox-link"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="City Street"></a></div>
+            <div class="photo-item"><a href="#img2" class="lightbox-link"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Woman in Hat"></a></div>
+            <div class="photo-item"><a href="#img3" class="lightbox-link"><img src="https://image.winudf.com/v2/image1/c3Rwcm93YWxscGFwZXIuSG9uZGEuTlNYLldhbGxwYXBlcnMudGhfc2NyZWVuXzBfMTY1NzQ4MzMwM18wMTQ/screen-0.jpg?fakeurl=1&type=.jpg" alt="Red Car"></a></div>
+            <div class="photo-item"><a href="#img4" class="lightbox-link"><img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Man with Backpack"></a></div>
+            <div class="photo-item"><a href="#img5" class="lightbox-link"><img src="https://avatars.mds.yandex.net/i?id=d2738082113e18b794086007e3565140_l-5232211-images-thumbs&n=13" alt="Woman with Sunglasses"></a></div>
+            <div class="photo-item"><a href="#img7" class="lightbox-link"><img src="https://wp-s.ru/wallpapers/3/16/434976968373022/a-red-haired-girl-alone-with-nature-is-thoughtful.jpg" alt="Woman in Nature"></a></div>
+            <div class="photo-item"><a href="#img8" class="lightbox-link"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Woman in Red Shirt"></a></div>
+            <div class="photo-item"><a href="#img9" class="lightbox-link"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Man in Black"></a></div>
+            <div class="photo-item"><a href="#img10" class="lightbox-link"><img src="https://www.tu-braunschweig.de/fileadmin/Redaktionsgruppen/Institute_Fakultaet_3/Geooekologie/Klimatologie_Bilder/COABS_Symbolbild.jpg" alt="City Street with Trees"></a></div>
         </div>
-    </section>
+        <!-- Lightbox elements -->
+        <div id="img1" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="City Street">
+        </div>
+        <div id="img2" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Woman in Hat">
+        </div>
+        <div id="img3" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://image.winudf.com/v2/image1/c3Rwcm93YWxscGFwZXIuSG9uZGEuTlNYLldhbGxwYXBlcnMudGhfc2NyZWVuXzBfMTY1NzQ4MzMwM18wMTQ/screen-0.jpg?fakeurl=1&type=.jpg" alt="Red Car">
+        </div>
+        <div id="img4" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Man with Backpack">
+        </div>
+        <div id="img5" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://avatars.mds.yandex.net/i?id=d2738082113e18b794086007e3565140_l-5232211-images-thumbs&n=13" alt="Woman with Sunglasses">
+        </div>
+        <div id="img7" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://wp-s.ru/wallpapers/3/16/434976968373022/a-red-haired-girl-alone-with-nature-is-thoughtful.jpg" alt="Woman in Nature">
+        </div>
+        <div id="img8" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Woman in Red Shirt">
+        </div>
+        <div id="img9" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Man in Black">
+        </div>
+        <div id="img10" class="lightbox">
+            <a href="#" class="close">×</a>
+            <img src="https://www.tu-braunschweig.de/fileadmin/Redaktionsgruppen/Institute_Fakultaet_3/Geooekologie/Klimatologie_Bilder/COABS_Symbolbild.jpg" alt="City Street with Trees">
+        </div>
+    </div>
+</section>
     <!-- Lightbox placeholders with close button -->
     <div id="img1" class="lightbox"><img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="City Street"><a href="#" class="close">×</a></div>
     <div id="img2" class="lightbox"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Woman in Hat"><a href="#" class="close">×</a></div>
@@ -850,118 +908,120 @@
 
 
 <!-- sert -->
-<section class="certificate-section">
-    <div class="container">
-        <div class="row align-items-center">
-            <!-- Левая часть с текстом -->
-            <div class="col-lg-5 text-side">
-                <h2 class="section-title">Награды, дипломы, сертификаты</h2>
-                <p class="section-description">
-                    Мы гордимся нашими достижениями и профессиональным признанием. 
-                    Наши сертификаты подтверждают высокое качество работы и соответствие 
-                    международным стандартам.
-                </p>
-                
-                <div class="achievement-item">
-                    <div class="achievement-icon">
-                        <i class="bi bi-award"></i>
-                    </div>
-                    <div>
-                        <h5>Профессиональное признание</h5>
-                        <p>Награды от ведущих организаций в нашей отрасли</p>
-                    </div>
-                </div>
-                
-                <div class="achievement-item">
-                    <div class="achievement-icon">
-                        <i class="bi bi-mortarboard"></i>
-                    </div>
-                    <div>
-                        <h5>Квалифицированные специалисты</h5>
-                        <p>Дипломы и сертификаты подтверждают нашу экспертизу</p>
-                    </div>
-                </div>
-                
-                <div class="achievement-item">
-                    <div class="achievement-icon">
-                        <i class="bi bi-shield-check"></i>
-                    </div>
-                    <div>
-                        <h5>Гарантия качества</h5>
-                        <p>Сертификаты соответствия международным стандартам</p>
-                    </div>
-                </div>
-                
-                <!-- Индикаторы (точки) по центру -->
-                <div class="custom-indicators-container">
-                    <div class="custom-indicators">
-                        <button type="button" data-bs-target="#certificateCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                        <button type="button" data-bs-target="#certificateCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Правая часть со слайдером -->
-            <div class="col-lg-7 slider-side">
-                <div id="certificateCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-                    <div class="carousel-inner">
-                        <!-- Первая группа из 3 сертификатов -->
-                        <div class="carousel-item active">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="certificate-slide">
-                                        <img src="https://nosoldat.net/wp-content/uploads/0/b/7/0b7c11e3eae18ec6cef171a96a9363f5.jpeg" class="w-100 certificate-img" alt="Сертификат 1">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="certificate-slide">
-                                        <img src="https://avatars.mds.yandex.net/i?id=c83def6adc3f8ddd90b99b6bc23b5f21_l-8498042-images-thumbs&n=13" class="w-100 certificate-img" alt="Диплом 2">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="certificate-slide">
-                                        <img src="https://static.tildacdn.com/tild6331-3431-4338-a563-656234396634/photo.png" class="w-100 certificate-img" alt="Награда 3">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Вторая группа из 1 сертификата (последний) -->
-                        <div class="carousel-item">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="certificate-slide">
-                                        <img src="https://static.tildacdn.com/tild3365-3961-4130-b135-633737333933/Y11AroT4rvPzzXZPWMYx.jpg" class="w-100 certificate-img" alt="Сертификат 4">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <!-- Пустой блок для выравнивания -->
-                                    <div class="certificate-slide"></div>
-                                </div>
-                                <div class="col-md-4">
-                                    <!-- Пустой блок для выравнивания -->
-                                    <div class="certificate-slide"></div>
-                                </div>
-                            </div>
+    <section class="certificate-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Левая часть с текстом -->
+                <div class="col-lg-5 text-side">
+                    <div class="header-with-controls">
+                        <h2 class="header-title">Награды, дипломы, сертификаты</h2>
+                        <!-- Кнопки управления слайдером -->
+                        <div class="slider-controls">
+                            <button class="carousel-control-prev" type="button" data-bs-target="#certificateCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Предыдущий</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#certificateCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Следующий</span>
+                            </button>
                         </div>
                     </div>
                     
-                    <button class="carousel-control-prev" type="button" data-bs-target="#certificateCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Предыдущий</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#certificateCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Следующий</span>
-                    </button>
+                    <p class="section-description">
+                        Мы гордимся нашими достижениями и профессиональным признанием. 
+                        Наши сертификаты подтверждают высокое качество работы и соответствие 
+                        международным стандартам.
+                    </p>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="bi bi-award"></i>
+                        </div>
+                        <div>
+                            <h5>Профессиональное признание</h5>
+                            <p>Награды от ведущих организаций в нашей отрасли</p>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="bi bi-mortarboard"></i>
+                        </div>
+                        <div>
+                            <h5>Квалифицированные специалисты</h5>
+                            <p>Дипломы и сертификаты подтверждают нашу экспертизу</p>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-item">
+                        <div class="achievement-icon">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div>
+                            <h5>Гарантия качества</h5>
+                            <p>Сертификаты соответствия международным стандартам</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Индикаторы (точки) по центру -->
+                    <div class="custom-indicators-container">
+                        <div class="custom-indicators">
+                            <button type="button" data-bs-target="#certificateCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#certificateCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Правая часть со слайдером -->
+                <div class="col-lg-7 slider-side">
+                    <div id="certificateCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+                        <div class="carousel-inner">
+                            <!-- Первая группа из 3 сертификатов -->
+                            <div class="carousel-item active">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="certificate-slide">
+                                            <img src="https://nosoldat.net/wp-content/uploads/0/b/7/0b7c11e3eae18ec6cef171a96a9363f5.jpeg" class="w-100 certificate-img" alt="Сертификат 1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="certificate-slide">
+                                            <img src="https://avatars.mds.yandex.net/i?id=c83def6adc3f8ddd90b99b6bc23b5f21_l-8498042-images-thumbs&n=13" class="w-100 certificate-img" alt="Диплом 2">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="certificate-slide">
+                                            <img src="https://static.tildacdn.com/tild6331-3431-4338-a563-656234396634/photo.png" class="w-100 certificate-img" alt="Награда 3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Вторая группа из 1 сертификата (последний) -->
+                            <div class="carousel-item">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <div class="certificate-slide">
+                                            <img src="https://static.tildacdn.com/tild3365-3961-4130-b135-633737333933/Y11AroT4rvPzzXZPWMYx.jpg" class="w-100 certificate-img" alt="Сертификат 4">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- Пустой блок для выравнивания -->
+                                        <div class="certificate-slide"></div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- Пустой блок для выравнивания -->
+                                        <div class="certificate-slide"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
-
-
-
+    </section>
 
 
 
@@ -1233,7 +1293,7 @@
 
 <section class="stats-section">
     <div class="container">
-        <h2 class="section-title">Наша компания в цифрах</h2>
+        <h2 class="header-title">Наша компания в цифрах</h2>
         
         <div class="row">
             <!-- Первый показатель -->
@@ -1290,7 +1350,7 @@
 <section class="works-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Наши работы</h2>
+            <h2 class="header-title">Наши работы</h2>
             
         </div>
         
@@ -1576,10 +1636,10 @@
 <section class="faq-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Частые вопросы про пластиковые окна</h2>
+            <h2 class="header-title">Частые вопросы про пластиковые окна</h2>
         </div>
         
-        <div class="faq-container">
+        <div class="container">
             <div class="row">
                 <!-- Левый столбец -->
                 <div class="col-lg-6">
@@ -1587,11 +1647,11 @@
                         <!-- Вопрос 1 -->
                         <div class="accordion-item">
                             <h3 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
-                                    <span class="question-number">1</span>
-                                    Почему стоит заказать окна именно у вас?
-                                    <i class="fas fa-chevron-down accordion-icon"></i>
-                                </button>
+                              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+    <span class="question-number">1</span>
+    Почему стоит заказать окна именно у вас?
+    <i class="fas fa-chevron-down accordion-icon"></i>
+</button>
                             </h3>
                             <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
                                 <div class="accordion-body">
@@ -1729,7 +1789,7 @@
 <section class="reviews-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Отзывы о работе со мной</h2>
+            <h2 class="header-title">Отзывы о работе со мной</h2>
             <div class="carousel-controls">
                 <button class="carousel-btn prev-btn">
                     <i class="fas fa-chevron-left"></i>
@@ -1830,7 +1890,7 @@
 <section class="video-reviews-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Видеообзоры и отзывы о наших окнах</h2>
+            <h2 class="header-title">Видеообзоры и отзывы о наших окнах</h2>
             <div class="carousel-controls">
                 <button class="carousel-btn prev-btn" aria-label="Предыдущий слайд">
                     <i class="fas fa-chevron-left"></i>
@@ -1941,91 +2001,155 @@
     </div>
 </section>
 
-
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const videoSlides = document.querySelectorAll('.video-slide');
-    const indicatorsContainer = document.getElementById('carouselIndicators');
-    const prevBtn = document.querySelector('.prev-btn');
-    const nextBtn = document.querySelector('.next-btn');
-    let currentSlide = 0;
-    let slidesToShow = 2;
+    document.addEventListener('DOMContentLoaded', function() {
+    // Reviews Carousel
+    const reviewsSection = document.querySelector('.reviews-section');
+    if (reviewsSection) {
+        const reviews = reviewsSection.querySelectorAll('.review-card');
+        const reviewsPrevBtn = reviewsSection.querySelector('.prev-btn');
+        const reviewsNextBtn = reviewsSection.querySelector('.next-btn');
+        const reviewsIndicatorsContainer = document.createElement('div');
+        reviewsIndicatorsContainer.className = 'custom-indicators';
+        reviewsSection.querySelector('.reviews-container').appendChild(reviewsIndicatorsContainer);
+        
+        let reviewsCurrentIndex = 0;
+        let reviewsVisibleCount = 3;
 
-    // Динамически создаем индикаторы на основе количества слайдов
-    function createIndicators() {
-        indicatorsContainer.innerHTML = '';
-        const totalGroups = Math.ceil(videoSlides.length / slidesToShow);
-        for (let i = 0; i < totalGroups; i++) {
-            const indicator = document.createElement('button');
-            indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
-            indicator.setAttribute('aria-label', `Группа слайдов ${i + 1}`);
-            indicator.addEventListener('click', () => showSlides(i * slidesToShow));
-            indicatorsContainer.appendChild(indicator);
+        function updateReviewsVisibleCount() {
+            reviewsVisibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 3;
+            createReviewsIndicators();
+            showReviews(reviewsCurrentIndex);
         }
-    }
 
-    // Обновление количества отображаемых слайдов
-    function updateSlidesToShow() {
-        slidesToShow = window.innerWidth < 992 ? 1 : 2;
-        createIndicators();
-        showSlides(currentSlide);
-    }
+        function createReviewsIndicators() {
+            reviewsIndicatorsContainer.innerHTML = '';
+            const totalGroups = Math.ceil(reviews.length / reviewsVisibleCount);
+            for (let i = 0; i < totalGroups; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
+                indicator.setAttribute('aria-label', `Группа отзывов ${i + 1}`);
+                indicator.addEventListener('click', () => showReviews(i * reviewsVisibleCount));
+                reviewsIndicatorsContainer.appendChild(indicator);
+            }
+        }
 
-    // Отображение слайдов
-    function showSlides(n) {
-        currentSlide = Math.max(0, Math.min(n, videoSlides.length - slidesToShow));
+        function showReviews(n) {
+            reviewsCurrentIndex = Math.max(0, Math.min(n, reviews.length - reviewsVisibleCount));
+            
+            reviews.forEach((review, index) => {
+                const parent = review.parentElement;
+                parent.style.display = (index >= reviewsCurrentIndex && index < reviewsCurrentIndex + reviewsVisibleCount) ? 'block' : 'none';
+                parent.style.opacity = '0';
+                parent.style.transition = 'opacity 0.5s ease';
+                if (parent.style.display === 'block') {
+                    setTimeout(() => { parent.style.opacity = '1'; }, 10);
+                }
+            });
 
-        // Скрываем все слайды
-        videoSlides.forEach(slide => {
-            slide.style.display = 'none';
-            slide.style.opacity = '0';
-            slide.style.transition = 'opacity 0.5s ease';
+            updateReviewsIndicators();
+            updateReviewsButtonState();
+        }
+
+        function updateReviewsIndicators() {
+            const indicators = reviewsIndicatorsContainer.querySelectorAll('.custom-indicator');
+            const activeIndicator = Math.floor(reviewsCurrentIndex / reviewsVisibleCount);
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndicator);
+            });
+        }
+
+        function updateReviewsButtonState() {
+            reviewsPrevBtn.disabled = reviewsCurrentIndex === 0;
+            reviewsNextBtn.disabled = reviewsCurrentIndex >= reviews.length - reviewsVisibleCount;
+        }
+
+        reviewsPrevBtn.addEventListener('click', () => showReviews(reviewsCurrentIndex - reviewsVisibleCount));
+        reviewsNextBtn.addEventListener('click', () => showReviews(reviewsCurrentIndex + reviewsVisibleCount));
+        window.addEventListener('resize', () => {
+            const previousVisibleCount = reviewsVisibleCount;
+            updateReviewsVisibleCount();
+            if (previousVisibleCount !== reviewsVisibleCount) {
+                reviewsCurrentIndex = Math.floor(reviewsCurrentIndex / previousVisibleCount) * reviewsVisibleCount;
+                showReviews(reviewsCurrentIndex);
+            }
         });
 
-        // Показываем текущие слайды
-        for (let i = currentSlide; i < currentSlide + slidesToShow && i < videoSlides.length; i++) {
-            videoSlides[i].style.display = 'block';
-            setTimeout(() => {
-                videoSlides[i].style.opacity = '1';
-            }, 10);
-        }
-
-        // Обновляем индикаторы и кнопки
-        updateIndicators();
-        updateButtonState();
+        updateReviewsVisibleCount();
     }
 
-    // Обновление индикаторов
-    function updateIndicators() {
-        const indicators = document.querySelectorAll('.custom-indicator');
-        const activeIndicator = Math.floor(currentSlide / slidesToShow);
-        indicators.forEach((indicator, index) => {
-            indicator.classList.toggle('active', index === activeIndicator);
+    // Video Reviews Carousel
+    const videoSection = document.querySelector('.video-reviews-section');
+    if (videoSection) {
+        const videoSlides = videoSection.querySelectorAll('.video-slide');
+        const videoPrevBtn = videoSection.querySelector('.prev-btn');
+        const videoNextBtn = videoSection.querySelector('.next-btn');
+        const videoIndicatorsContainer = videoSection.querySelector('#carouselIndicators');
+        let videoCurrentSlide = 0;
+        let videoSlidesToShow = 2;
+
+        function updateVideoSlidesToShow() {
+            videoSlidesToShow = window.innerWidth < 992 ? 1 : 2;
+            createVideoIndicators();
+            showVideoSlides(videoCurrentSlide);
+        }
+
+        function createVideoIndicators() {
+            videoIndicatorsContainer.innerHTML = '';
+            const totalGroups = Math.ceil(videoSlides.length / videoSlidesToShow);
+            for (let i = 0; i < totalGroups; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
+                indicator.setAttribute('aria-label', `Группа видео ${i + 1}`);
+                indicator.addEventListener('click', () => showVideoSlides(i * videoSlidesToShow));
+                videoIndicatorsContainer.appendChild(indicator);
+            }
+        }
+
+        function showVideoSlides(n) {
+            videoCurrentSlide = Math.max(0, Math.min(n, videoSlides.length - videoSlidesToShow));
+
+            videoSlides.forEach(slide => {
+                slide.style.display = 'none';
+                slide.style.opacity = '0';
+                slide.style.transition = 'opacity 0.5s ease';
+            });
+
+            for (let i = videoCurrentSlide; i < videoCurrentSlide + videoSlidesToShow && i < videoSlides.length; i++) {
+                videoSlides[i].style.display = 'block';
+                setTimeout(() => { videoSlides[i].style.opacity = '1'; }, 10);
+            }
+
+            updateVideoIndicators();
+            updateVideoButtonState();
+        }
+
+        function updateVideoIndicators() {
+            const indicators = videoIndicatorsContainer.querySelectorAll('.custom-indicator');
+            const activeIndicator = Math.floor(videoCurrentSlide / videoSlidesToShow);
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndicator);
+            });
+        }
+
+        function updateVideoButtonState() {
+            videoPrevBtn.disabled = videoCurrentSlide === 0;
+            videoNextBtn.disabled = videoCurrentSlide >= videoSlides.length - videoSlidesToShow;
+        }
+
+        videoPrevBtn.addEventListener('click', () => showVideoSlides(videoCurrentSlide - videoSlidesToShow));
+        videoNextBtn.addEventListener('click', () => showVideoSlides(videoCurrentSlide + videoSlidesToShow));
+        window.addEventListener('resize', () => {
+            const previousSlidesToShow = videoSlidesToShow;
+            updateVideoSlidesToShow();
+            if (previousSlidesToShow !== videoSlidesToShow) {
+                videoCurrentSlide = Math.floor(videoCurrentSlide / previousSlidesToShow) * videoSlidesToShow;
+                showVideoSlides(videoCurrentSlide);
+            }
         });
+
+        updateVideoSlidesToShow();
     }
-
-    // Обновление состояния кнопок
-    function updateButtonState() {
-        prevBtn.disabled = currentSlide === 0;
-        nextBtn.disabled = currentSlide >= videoSlides.length - slidesToShow;
-    }
-
-    // Обработчики событий для кнопок
-    prevBtn.addEventListener('click', () => showSlides(currentSlide - slidesToShow));
-    nextBtn.addEventListener('click', () => showSlides(currentSlide + slidesToShow));
-
-    // Обработчик изменения размера окна
-    window.addEventListener('resize', () => {
-        const previousSlidesToShow = slidesToShow;
-        updateSlidesToShow();
-        if (previousSlidesToShow !== slidesToShow) {
-            currentSlide = Math.floor(currentSlide / previousSlidesToShow) * slidesToShow;
-            showSlides(currentSlide);
-        }
-    });
-
-    // Инициализация карусели
-    updateSlidesToShow();
 });
 </script>
 
@@ -2033,7 +2157,7 @@ document.addEventListener('DOMContentLoaded', function() {
  <section class="promotions-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Выгоды до 50%</h2>
+                <h2 class="header-title">Выгоды до 50%</h2>
                 <div class="header-controls">
                     <button class="carousel-control prev" type="button" data-bs-target="#promotionsCarousel" data-bs-slide="prev">
                         <i class="fas fa-chevron-left"></i>
@@ -2134,154 +2258,90 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
  
 <!-- installers -->
-
-   <section class="installers-section py-5">
-        <div class="container">
-            <h2 class="mb-5 section-title">Для вас работают лучшие монтажники Москвы</h2>
-            
-            <div id="installersCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <!-- Первый слайд -->
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <!-- Карточка 1 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://thumbs.dreamstime.com/b/portrait-happy-cctv-system-installer-close-up-30282115.jpg" class="installer-image" alt="Кольжалов Дмитрий">
-                                        <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Кольжалов Дмитрий</h5>
-                                         <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
-                                    </div>
+<section class="installers-section py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <h2 class="header-title mb-0">Для вас работают лучшие монтажники Москвы</h2>
+            <div class="carousel-controls">
+                <button class="carousel-control-prev position-static" type="button" data-bs-target="#installersCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+                <button class="carousel-control-next position-static" type="button" data-bs-target="#installersCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
+            </div>
+        </div>
+        
+        <div id="installersCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- Первый слайд -->
+                <div class="carousel-item active">
+                    <div class="row">
+                        <!-- Карточка 1 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://thumbs.dreamstime.com/b/portrait-happy-cctv-system-installer-close-up-30282115.jpg" class="installer-image" alt="Кольжалов Дмитрий">
+                                    <div class="experience-badge">с 2007 <br> года</div>
                                 </div>
-                            </div>
-                            
-                            <!-- Карточка 2 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=ДГ" class="installer-image" alt="Дмитриев Геннадий">
-                                        <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Дмитриев Геннадий</h5>
-                                <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Карточка 3 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=НД" class="installer-image" alt="Неясов Дмитрий">
-                                          <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Неясов Дмитрий</h5>
-                                         <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Карточка 4 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=АА" class="installer-image" alt="Адамчук Александр">
-                                         <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Адамчук Александр</h5>
-                                       <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Кольжалов Дмитрий</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Второй слайд (дубликат для демонстрации карусели) -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <!-- Карточка 1 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=ИС" class="installer-image" alt="Иванов Сергей">
-                                      <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Иванов Сергей</h5>
-                                         <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
+                        
+                        <!-- Карточка 2 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=ДГ" class="installer-image" alt="Дмитриев Геннадий">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Дмитриев Геннадий</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Карточка 2 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=ПА" class="installer-image" alt="Петров Алексей">
-                                           <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Петров Алексей</h5>
-                                        <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
+                        </div>
+                        
+                        <!-- Карточка 3 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=НД" class="installer-image" alt="Неясов Дмитрий">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Неясов Дмитрий</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- Карточка 3 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=СМ" class="installer-image" alt="Сидоров Михаил">
-                                   <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Сидоров Михаил</h5>
-                                         <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
-                                    </div>
+                        </div>
+                        
+                        <!-- Карточка 4 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=АА" class="installer-image" alt="Адамчук Александр">
+                                    <div class="experience-badge">с 2007 <br> года</div>
                                 </div>
-                            </div>
-                            
-                            <!-- Карточка 4 -->
-                            <div class="col-md-6 col-lg-3 mb-4">
-                                <div class="card installer-card h-100">
-                                    <div class="installer-image-container">
-                                        <img src="https://placehold.co/150x150/3498db/white?text=КА" class="installer-image" alt="Кузнецов Андрей">
-                                     <div class="experience-badge">с 2007 <br> года</div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="installer-name">Кузнецов Андрей</h5>
-                                        <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
-                                     
-                                        <div class="certificate-badge">
-                                            <i class="fas fa-certificate"></i> Сертификат
-                                        </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Адамчук Александр</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
                                     </div>
                                 </div>
                             </div>
@@ -2289,24 +2349,90 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
                 
-                <button class="carousel-control-prev" type="button" data-bs-target="#installersCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Предыдущий</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#installersCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Следующий</span>
-                </button>
-                
-                <div class="carousel-indicators mt-3">
+                <!-- Второй слайд (дубликат для демонстрации карусели) -->
+                <div class="carousel-item">
+                    <div class="row">
+                        <!-- Карточка 1 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=ИС" class="installer-image" alt="Иванов Сергей">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Иванов Сергей</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Карточка 2 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=ПА" class="installer-image" alt="Петров Алексей">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Петров Алексей</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Карточка 3 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=СМ" class="installer-image" alt="Сидоров Михаил">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Сидоров Михаил</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Карточка 4 -->
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            <div class="card installer-card h-100">
+                                <div class="installer-image-container">
+                                    <img src="https://placehold.co/150x150/3498db/white?text=КА" class="installer-image" alt="Кузнецов Андрей">
+                                    <div class="experience-badge">с 2007 <br> года</div>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="installer-name">Кузнецов Андрей</h5>
+                                    <div class="windows-count">7 654    <p class="windows-label">Установлено окон</p></div>
+                                    
+                                    <div class="certificate-badge">
+                                        <i class="fas fa-certificate"></i> Сертификат
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="carousel-indicators-container">
+                <div class="carousel-indicators">
                     <button type="button" data-bs-target="#installersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                     <button type="button" data-bs-target="#installersCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 </div>
             </div>
-            
-           
         </div>
-    </section>
+    </div>
+</section>
 
 <!-- form-bannner -->
 <section class="measurement-section">
@@ -2892,6 +3018,7 @@ document.addEventListener('DOMContentLoaded', function() {
  <section class="additional-services">
         <div class="container">
             <h1 class="header-title">Дополнительные услуги по отделке</h1>
+            <br>
             <div class="row">
                 <!-- Отделка пластиком -->
                 <div class="col-md-4 mb-4">
@@ -3235,64 +3362,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
 
-<script>
-    // Простой скрипт для навигации между отзывами
-    document.addEventListener('DOMContentLoaded', function() {
-        const reviews = document.querySelectorAll('.review-card');
-        let visibleCount = 3; // Количество видимых отзывов
-        let currentIndex = 0;
-        
-        // Функция для показа отзывов
-        function showReviews() {
-            reviews.forEach((review, index) => {
-                if (index >= currentIndex && index < currentIndex + visibleCount) {
-                    review.parentElement.style.display = 'block';
-                } else {
-                    review.parentElement.style.display = 'none';
-                }
-            });
-        }
-        
-        // Инициализация
-        function init() {
-            // На мобильных устройствах показываем по 1 отзыву
-            if (window.innerWidth < 768) {
-                visibleCount = 1;
-            } 
-            // На планшетах показываем по 2 отзыва
-            else if (window.innerWidth < 992) {
-                visibleCount = 2;
-            } 
-            // На десктопах показываем по 3 отзыва
-            else {
-                visibleCount = 3;
-            }
-            
-            showReviews();
-        }
-        
-        // Обработчики для кнопок навигации
-        document.querySelector('.next-btn').addEventListener('click', function() {
-            if (currentIndex + visibleCount < reviews.length) {
-                currentIndex += visibleCount;
-                showReviews();
-            }
-        });
-        
-        document.querySelector('.prev-btn').addEventListener('click', function() {
-            if (currentIndex - visibleCount >= 0) {
-                currentIndex -= visibleCount;
-            } else {
-                currentIndex = 0;
-            }
-            showReviews();
-        });
-        
-        // Инициализация и обработчик изменения размера окна
-        init();
-        window.addEventListener('resize', init);
-    });
-</script>
+
 
     <!-- lamination js -->
    <script>

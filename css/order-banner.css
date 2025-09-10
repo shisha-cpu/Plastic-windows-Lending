@@ -100,9 +100,7 @@
         font-size: 1rem;
     }
     
-    .narrow-banner {
-        padding: 20px 0;
-    }
+  
     
     .banner-text {
         font-size: 2rem; /* Уменьшаем размер текста для мобильных */

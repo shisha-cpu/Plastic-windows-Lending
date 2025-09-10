@@ -1,59 +1,73 @@
-  .photo-section {
-            margin-bottom: 40px;
-            padding: 50px 0 0 0 ;
-        }
-        .photo-section h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2em;
-            color: #333;
-        }
-        .photo-collage {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 15px;
-            padding: 20px;
-        }
-        .photo-item {
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .photo-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            cursor: pointer;
-        }
-     .top{
-        margin-top: -280px
-     }
-       .topAlt{
-        margin-top: -250px
-     }
-        /* Basic lightbox */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        .lightbox:target {
-            display: flex;
-        }
-        .lightbox img {
-      
-        }
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            color: white;
-            font-size: 30px;
-            text-decoration: none;
-        }
+.photo-section {
+    margin-bottom: 40px;
+    padding: 50px 0 0 0;
+}
+
+
+.photo-collage {
+    column-count: 3; /* Adjust number of columns based on preference */
+    column-gap: 15px;
+    padding: 20px;
+}
+
+.photo-item {
+    break-inside: avoid; /* Prevents images from breaking across columns */
+    margin-bottom: 15px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.photo-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .photo-collage {
+        column-count: 2;
+    }
+}
+
+@media (max-width: 480px) {
+    .photo-collage {
+        column-count: 1;
+    }
+}
+
+/* Lightbox styles */
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.lightbox:target {
+    display: flex;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain; /* Ensures full image is visible without cropping */
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 30px;
+    text-decoration: none;
+}
