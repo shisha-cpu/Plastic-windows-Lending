@@ -1,4 +1,154 @@
-.narrow-banner {
+       .narrow-banner {
+            background:  var(--primary-color);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin: 40px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .banner-content {
+            padding: 40px 0;
+            position: relative;
+            z-index: 20;
+        }
+
+        .banner-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2d3a35;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .banner-subtitle {
+            font-size: 1.1rem;
+            color: #2d3a35;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .project-button{
+            width: 100%;
+            margin:  0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        .banner-btn {
+            background-color: var(--primary-color) !important;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin:  0 auto !important;
+        }
+
+        .banner-btn:hover {
+            background-color: var(--primary-color-dark) !important;
+      
+        }
+
+        .banner-image {
+            height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            z-index: 20;
+        }
+
+        .banner-image img {
+            width: 100%;
+            height: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .banner-text {
+            position: absolute;
+            bottom: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 30rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.15);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .header-container {
+            position: relative;
+            z-index: 25;
+        }
+
+        @media (max-width: 1600px) {
+            .banner-text {
+                font-size: 25rem;
+                bottom: -15%;
+            }
+        }
+
+        @media (max-width: 1400px) {
+            .banner-text {
+                font-size: 20rem;
+                bottom: -10%;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .banner-text {
+                font-size: 18rem;
+                bottom: -8%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .banner-title {
+                font-size: 1.8rem;
+            }
+            
+            .banner-content {
+                text-align: center;
+                margin-bottom: 25px;
+                padding: 30px 0;
+            }
+            
+            .banner-image {
+                height: 250px;
+            }
+            
+            .banner-text {
+                font-size: 15rem;
+                bottom: -5%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .banner-text {
+                font-size: 12rem;
+                bottom: -3%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .banner-title {
+                font-size: 1.5rem;
+            }
+            
+            .banner-subtitle {
+                font-size: 1rem;
+            }
+            
+            .banner-text {
+                font-size: 8rem;
+                bottom: -2%;
+            }
+        }
+        .narrow-banner {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-color-dark) 100%);
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -172,10 +322,10 @@
     cursor: pointer;
 }
 
-.filter-item.active {
-    background-color: #000;
-    color: #fff;
-}
+       .filter-item:hover{
+            background-color: var(--primary-color);
+            color: #FFF;
+         }
 
 .projects {
     margin-top: 40px;
@@ -183,6 +333,7 @@
     grid-template-columns: 1fr;
     gap: 32px;
 }
+.oject-butt{}
 
 @media (min-width: 640px) {
     .projects {
@@ -343,7 +494,9 @@
     font-size: 12px;
     color: #4a4a4a;
 }
-
+.project-note p{
+    margin-top: 15  px !important;
+}
 .project-note i {
     color: var(--primary-color);
 }

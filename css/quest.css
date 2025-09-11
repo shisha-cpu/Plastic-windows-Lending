@@ -1,15 +1,14 @@
 .faq-section {
-  
     background-color: #f5f5f5;
 }
-.container{
+
+.container {
     max-width: 1200px;
 }
-.collapse{
+
+.collapse {
     visibility: visible !important;
 }
-
-
 
 .faq-container {
     max-width: 1200px;
@@ -43,6 +42,12 @@
     background-color: transparent;
     color: #333;
     box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: transparent;
+    outline: none;
 }
 
 .accordion-button::after {

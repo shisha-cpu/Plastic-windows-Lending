@@ -1,35 +1,32 @@
 .calculator-container {
-
   border-radius: 10px;
+}
 
-}
-.title-top{
-  margin-top: 150px;
-}
 .window-preview-container {
   display: flex;
   align-items: center;
   margin-bottom: 30px;
-
+  position: relative;
 }
 
 .vertical-slider-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-right: 20px;
-  height: 300px;
-  position: relative;
+  height: 500px;
+  position: absolute;
+  left: 0;
+  width: 70px;
 }
 
 .vertical-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 250px;
-  height: 20px;
+  width: 290px;
+  height: 15px;
   transform: rotate(-90deg);
   transform-origin: center;
-  margin: 125px 0;
+  margin-top: 250px;
   background: #ddd;
   border-radius: 10px;
   outline: none;
@@ -54,24 +51,15 @@
   border: none;
 }
 
-.slider-value {
-  font-weight: bold;
-  margin: 5px 0;
-  min-width: 60px;
-  text-align: center;
-  position: absolute;
-  left: 50px;
-  transform: translateY(-50%);
-}
-
 .custom-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 100%;
-  height: 10px;
+  width: 85%;
+  height: 15px;
   background: #ddd;
   border-radius: 10px;
   outline: none;
+  margin-left: 30px;
 }
 
 .custom-slider::-webkit-slider-thumb {
@@ -93,15 +81,17 @@
   border: none;
 }
 
-.custom-slider + .slider-value {
+.slider-value {
+  font-weight: bold;
+  min-width: 60px;
+  text-align: center;
   position: absolute;
   transform: translateX(-50%);
-  top: -30px;
 }
 
 .width-slider-container {
-  margin-top: 15px;
-  width: 100%;
+  margin-left: 65px;
+  width: 78%;
   position: relative;
 }
 
@@ -114,7 +104,7 @@
 }
 
 .construction-btn img, .profile-btn img {
-  width: 70px;
+  width: 80px;
   height: 70px;
   object-fit: cover;
   border-radius: 5px;
@@ -129,23 +119,25 @@
 }
 
 .option-item {
-  margin-right: 20px; /* Space between checkboxes */
+  margin-right: 20px;
 }
 
 .additional-services {
   display: flex;
-  flex-direction: row; /* Changed to row */
-  flex-wrap: wrap; /* Allow wrapping if needed */
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
   align-items: flex-start;
   justify-content: flex-start;
-  margin-left: 30px;
+  margin-left: 20px;
 }
 
 .form-check-input {
   width: 20px;
   height: 20px;
   margin-right: 10px;
+  cursor: pointer;
+  outline: none !important;
 }
 
 .form-check-input:checked {
@@ -153,9 +145,12 @@
   border-color: var(--primary-color-dark, #007bff);
 }
 
-.form-check-input:focus {
-  outline: none;
-  box-shadow: none;
+.form-check-input:focus,
+.form-check-input:focus-visible,
+.form-check-input:active {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--primary-color-dark, #007bff);
 }
 
 .price-section {
@@ -189,7 +184,7 @@
 h1, h5 {
   color: #333;
 }
-/* Construction Buttons */
+
 .construction-container {
   display: flex;
   flex-wrap: wrap;
@@ -207,9 +202,8 @@ h1, h5 {
 }
 
 .construction-btn:hover {
-  color: var(--primary-color); /* Blue on hover */
+  color: var(--primary-color);
 }
-
 
 .construction-btn.active::after {
   content: '';
@@ -218,10 +212,9 @@ h1, h5 {
   left: 0;
   width: 100%;
   height: 3px;
-  background-color: #28a745; /* Green underline */
+  background-color: #28a745;
 }
 
-/* Profile Buttons */
 .profile-container {
   display: flex;
   flex-wrap: wrap;
@@ -241,21 +234,19 @@ h1, h5 {
   height: 70px;
   object-fit: cover;
   border-radius: 5px;
-  filter: grayscale(100%); /* Black-and-white by default */
+  filter: grayscale(100%);
   transition: filter 0.3s ease;
 }
 
 .profile-btn:hover img,
 .profile-btn.active img {
-  filter: grayscale(0%); /* Color on hover or when active */
+  filter: grayscale(0%);
 }
 
-/* Remove green border */
 .profile-btn.active {
   border: none;
 }
 
-/* Additional Services */
 .option-item {
   margin-right: 20px;
   padding: 5px;
@@ -263,36 +254,23 @@ h1, h5 {
 }
 
 .option-item:hover {
-  transform: scale(1.1); /* Slight scale-up on hover */
+  transform: scale(1.1);
 }
 
-.form-check-input:checked {
-  background-color: var(--primary-color-dark, #007bff);
-  border-color: var(--primary-color-dark, #007bff);
-  transform: scale(1.1); /* Maintain scale for checked state */
-}
-
-/* Ensure focus styles don't interfere */
-.form-check-input:focus,
-.form-check-input:focus-visible,
-.form-check-input:active {
-  outline: none !important;
-  box-shadow: none !important;
-  border-color: var(--primary-color-dark, #007bff);
-}
 .window-image {
   height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-grow: 1;
+  margin-left: 90px;
+  width: calc(55% - 90px);
   overflow: hidden;
-  
 }
 
 .window-image img {
-  width: 100%;
-  height: 100%;
+  max-width: 65%;
+  max-height: 100%;
   object-fit: contain;
   display: block;
 }
@@ -301,105 +279,4 @@ h1, h5 {
   display: flex;
   flex-direction: column;
   gap: 20px;
-
 }
-
-.window-preview-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-  position: relative;
-}
-
-.vertical-slider-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 300px;
-  position: absolute; /* Position the slider container against the left wall */
-  left: 0; /* Align to the left edge */
-  width: 70px; /* Fixed width for the slider container */
-}
-
-.vertical-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 250px;
-  height: 20px;
-  transform: rotate(-90deg);
-  transform-origin: center;
-  margin: 125px 0;
-  background: #ddd;
-  border-radius: 10px;
-  outline: none;
-}
-
-.vertical-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 30px;
-  height: 30px;
-  background: var(--primary-color-dark, #007bff);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.vertical-slider::-moz-range-thumb {
-  width: 30px;
-  height: 30px;
-  background: var(--primary-color-dark, #007bff);
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-}
-
-.slider-value {
-  font-weight: bold;
-  margin: 5px 0;
-  min-width: 60px;
-  text-align: center;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  top: 20px; /* Adjust to position the value above the slider */
-}
-
-.window-image {
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  margin-left: 90px; /* Offset to account for the slider container width */
-  width: calc(55% - 90px); /* Ensure the image takes the remaining width */
-}
-
-.window-image img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-
-.form-check-input {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-    cursor: pointer;
-    outline: none !important; /* Добавляем базовый сброс outline */
-}
-
-.form-check-input:focus,
-.form-check-input:focus-visible,
-.form-check-input:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border-color: var(--primary-color-dark, #007bff); /* Устанавливаем свою границу */
-}
-
-.form-check-input:checked {
-    background-color: var(--primary-color-dark, #007bff);
-    border-color: var(--primary-color-dark, #007bff);
-}
-

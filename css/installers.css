@@ -196,9 +196,7 @@
         align-self: flex-end;
     }
     
-    .header-title {
-        font-size: 1.8rem;
-    }
+
     
     .installer-card {
         margin-bottom: 2rem;
@@ -232,4 +230,8 @@
         font-size: 8px;
         line-height: 1;
     }
+}
+.installers-section {
+   
+    min-height: 450px;
 }

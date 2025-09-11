@@ -32,10 +32,7 @@
     margin-bottom: 1.5rem;
 }
 
-.accessory-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
-}
+
 
 .accessory-bg {
     position: absolute;
