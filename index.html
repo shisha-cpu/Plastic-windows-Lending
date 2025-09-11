@@ -897,6 +897,450 @@
     </div>
 </section>
 
+<!-- sert js -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Основная функция для настройки карусели
+    function setupCarousel(config) {
+        const {
+            sectionSelector,
+            itemSelector,
+            prevBtnSelector,
+            nextBtnSelector,
+            indicatorsContainerSelector,
+            slidesContainerSelector,
+            visibleCountLogic
+        } = config;
+
+        const section = document.querySelector(sectionSelector);
+        if (!section) {
+            console.warn(`Section ${sectionSelector} not found`);
+            return;
+        }
+
+        const slidesContainer = section.querySelector(slidesContainerSelector);
+        const items = section.querySelectorAll(itemSelector);
+        const prevBtn = section.querySelector(prevBtnSelector);
+        const nextBtn = section.querySelector(nextBtnSelector);
+        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
+
+        if (!slidesContainer || items.length === 0) {
+            console.warn(`Slides container or items not found for ${sectionSelector}`);
+            return;
+        }
+
+        let currentIndex = 0;
+        let visibleCount = visibleCountLogic();
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID = null;
+        const threshold = 50;
+
+        // Обновление количества видимых слайдов
+        function updateVisibleCount() {
+            const oldVisibleCount = visibleCount;
+            visibleCount = visibleCountLogic();
+            
+            // Устанавливаем CSS переменную для стилей
+            slidesContainer.style.setProperty('--visible-count', visibleCount);
+            
+            // Пересчитываем текущий индекс при изменении количества видимых слайдов
+            if (oldVisibleCount !== visibleCount) {
+                currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
+            }
+            
+            // Обновляем ширину слайдов
+            items.forEach(item => {
+                item.style.flex = `0 0 ${100 / visibleCount}%`;
+            });
+            
+            createIndicators();
+            showSlide(currentIndex, false);
+            updateButtonState();
+        }
+
+        // Создание индикаторов
+        function createIndicators() {
+            if (!indicatorsContainer) return;
+            
+            indicatorsContainer.innerHTML = '';
+            const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
+            
+            for (let i = 0; i < totalIndicators; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
+                indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+                indicator.addEventListener('click', () => showSlide(i * visibleCount));
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+
+        // Показать слайд
+        function showSlide(index, animate = true) {
+            const maxIndex = Math.max(0, items.length - visibleCount);
+            currentIndex = Math.max(0, Math.min(index, maxIndex));
+            
+            // Правильный расчет translateX
+            const translateX = -(currentIndex * (100 / visibleCount));
+            prevTranslate = translateX;
+            
+            slidesContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
+            slidesContainer.style.transform = `translateX(${translateX}%)`;
+            
+            updateIndicators();
+            updateButtonState();
+        }
+
+        // Обновление индикаторов
+        function updateIndicators() {
+            if (!indicatorsContainer) return;
+            
+            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+            const activeIndicator = Math.floor(currentIndex / visibleCount);
+            
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndicator);
+            });
+        }
+
+        // Обновление состояния кнопок
+        function updateButtonState() {
+            if (prevBtn) prevBtn.disabled = currentIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
+        }
+
+        // Функции для drag & drop
+        function startDrag(e) {
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+            } else {
+                startX = e.clientX;
+                e.preventDefault();
+            }
+            
+            isDragging = true;
+            slidesContainer.style.transition = 'none';
+            animationID = requestAnimationFrame(animation);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            let currentX;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX;
+            } else {
+                currentX = e.clientX;
+                e.preventDefault();
+            }
+            
+            const deltaX = currentX - startX;
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+            currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+            
+            // Ограничение перетаскивания
+            const maxTranslate = 0;
+            const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
+            
+            // Мягкие границы с отскоком
+            if (currentTranslate > maxTranslate) {
+                currentTranslate = maxTranslate + (currentTranslate - maxTranslate) * 0.3;
+            } else if (currentTranslate < minTranslate) {
+                currentTranslate = minTranslate + (currentTranslate - minTranslate) * 0.3;
+            }
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            cancelAnimationFrame(animationID);
+            
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+            const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
+            
+            if (Math.abs(movedBy) > threshold) {
+                if (movedBy < 0) {
+                    showSlide(currentIndex + 1);
+                } else {
+                    showSlide(currentIndex - 1);
+                }
+            } else {
+                showSlide(currentIndex);
+            }
+        }
+
+        function animation() {
+            slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+            if (isDragging) {
+                animationID = requestAnimationFrame(animation);
+            }
+        }
+
+        // Добавление обработчиков событий
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentIndex - 1);
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentIndex + 1);
+            });
+        }
+        
+        // Mouse events
+        slidesContainer.addEventListener('mousedown', startDrag);
+        slidesContainer.addEventListener('mousemove', drag);
+        slidesContainer.addEventListener('mouseup', endDrag);
+        slidesContainer.addEventListener('mouseleave', endDrag);
+        
+        // Touch events
+        slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+        slidesContainer.addEventListener('touchmove', drag, { passive: false });
+        slidesContainer.addEventListener('touchend', endDrag);
+        
+        // Resize handler with debounce
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateVisibleCount, 250);
+        });
+
+        // Инициализация
+        updateVisibleCount();
+    }
+
+    // Инициализация видео карусели
+    setupCarousel({
+        sectionSelector: '.video-reviews-section',
+        itemSelector: '.video-slide',
+        prevBtnSelector: '.prev-btn',
+        nextBtnSelector: '.next-btn',
+        indicatorsContainerSelector: '.custom-indicators',
+        slidesContainerSelector: '.video-slider',
+        visibleCountLogic: () => {
+            const width = window.innerWidth;
+            if (width < 768) return 1;
+            return 2;
+        }
+    });
+
+    // Инициализация карусели сертификатов
+    setupCarousel({
+        sectionSelector: '.certificate-section',
+        itemSelector: '.certificate-slide',
+        prevBtnSelector: '.carousel-control-prev',
+        nextBtnSelector: '.carousel-control-next',
+        indicatorsContainerSelector: '.custom-indicators',
+        slidesContainerSelector: '.carousel-inner .row',
+        visibleCountLogic: () => {
+            const width = window.innerWidth;
+            if (width < 768) return 1;
+            if (width < 992) return 2;
+            return 3;
+        }
+    });
+
+    // Функционал модального окна для сертификатов
+    const certificateModal = document.getElementById('certificateModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.querySelector('.modal-close');
+
+    function openCertificateModal(imgSrc, imgAlt) {
+        if (!certificateModal || !modalImage) return;
+        
+        modalImage.src = imgSrc;
+        modalImage.alt = imgAlt;
+        certificateModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCertificateModal() {
+        if (!certificateModal) return;
+        
+        certificateModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Обработчики для модального окна сертификатов
+    document.querySelectorAll('.certificate-img').forEach(img => {
+        img.addEventListener('click', function(e) {
+            openCertificateModal(this.src, this.alt);
+        });
+        
+        // Добавляем курсор pointer для изображений
+        img.style.cursor = 'pointer';
+    });
+
+    if (modalClose) {
+        modalClose.addEventListener('click', closeCertificateModal);
+    }
+
+    if (certificateModal) {
+        certificateModal.addEventListener('click', function(e) {
+            if (e.target === certificateModal) {
+                closeCertificateModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && certificateModal.style.display === 'flex') {
+            closeCertificateModal();
+        }
+    });
+
+    // Добавляем CSS для улучшения UX
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Стили для видео слайдера */
+        .video-slider {
+            cursor: grab;
+            user-select: none;
+            touch-action: pan-y;
+            display: flex;
+            width: 100%;
+        }
+        
+        .video-slide {
+            flex: 0 0 calc(100% / var(--visible-count, 2));
+            min-width: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        
+        .video-slider:active {
+            cursor: grabbing;
+        }
+        
+        /* Стили для слайдера сертификатов */
+        .certificate-section .carousel-inner .row {
+            display: flex;
+            width: 100%;
+            transition: transform 0.5s ease;
+        }
+        
+        .certificate-slide {
+            flex: 0 0 calc(100% / var(--visible-count, 3));
+            min-width: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        
+        .certificate-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .certificate-img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Общие стили для индикаторов */
+        .custom-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .custom-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: #ccc;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .custom-indicator.active {
+            background: var(--primary-color-dark);
+        }
+        
+        .carousel-control-prev,
+        .carousel-control-next {
+            opacity: 1;
+        }
+        
+        .carousel-control-prev:disabled,
+        .carousel-control-next:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Стили для модального окна */
+        #certificateModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 767px) {
+            .video-slide,
+            .certificate-slide {
+                flex: 0 0 100% !important;
+            }
+        }
+        
+        @media (min-width: 768px) and (max-width: 991px) {
+            .video-slide {
+                flex: 0 0 50% !important;
+            }
+            .certificate-slide {
+                flex: 0 0 50% !important;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .video-slide {
+                flex: 0 0 50% !important;
+            }
+            .certificate-slide {
+                flex: 0 0 calc(100% / 3) !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
 
 
 
@@ -926,7 +1370,7 @@
           <div class="window-preview-container">
             <div class="vertical-slider-container">
               <input type="range" class="vertical-slider" id="height-slider" min="0.5" max="3" step="0.1" value="1.4">
-              <div class="slider-value" id="height-value">1.4 м</div>
+              <div class="slider-value valueTop" id="height-value">1.4 м</div>
             </div>
             <div class="window-image">
               <img id="window-preview" src="./img/straight.jpg" alt="Предварительный просмотр окна" class="img-fluid">
@@ -934,7 +1378,7 @@
           </div>
           <div class="width-slider-container">
             <input type="range" class="custom-slider" id="width-slider" min="0.5" max="6" step="0.1" value="4.03">
-            <div class="slider-value" id="width-value">4.03 м</div>
+            <div class="slider-value slider-valueRight" id="width-value">4.03 м</div>
           </div>
         </div>
         <!-- Right Half -->
@@ -1495,7 +1939,7 @@
             <h2 class="header-title">Частые вопросы про пластиковые окна</h2>
         </div>
         
-        <div class="container">
+        <div class="">
             <div class="row">
                 <!-- Левый столбец -->
                 <div class="col-lg-6">
@@ -1911,6 +2355,371 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    // Основная функция для настройки карусели
+    function setupCarousel(config) {
+        const {
+            sectionSelector,
+            itemSelector,
+            prevBtnSelector,
+            nextBtnSelector,
+            indicatorsContainerSelector,
+            slidesContainerSelector,
+            visibleCountLogic
+        } = config;
+
+        const section = document.querySelector(sectionSelector);
+        if (!section) {
+            console.warn(`Section ${sectionSelector} not found`);
+            return;
+        }
+
+        const slidesContainer = section.querySelector(slidesContainerSelector);
+        const items = section.querySelectorAll(itemSelector);
+        const prevBtn = section.querySelector(prevBtnSelector);
+        const nextBtn = section.querySelector(nextBtnSelector);
+        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
+
+        if (!slidesContainer || items.length === 0) {
+            console.warn(`Slides container or items not found for ${sectionSelector}`);
+            return;
+        }
+
+        let currentIndex = 0;
+        let visibleCount = visibleCountLogic();
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID = null;
+        const threshold = 50;
+
+        // Обновление количества видимых слайдов
+        function updateVisibleCount() {
+            const oldVisibleCount = visibleCount;
+            visibleCount = visibleCountLogic();
+            
+            // Устанавливаем CSS переменную для стилей
+            slidesContainer.style.setProperty('--visible-count', visibleCount);
+            
+            // Пересчитываем текущий индекс при изменении количества видимых слайдов
+            if (oldVisibleCount !== visibleCount) {
+                currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
+            }
+            
+            // Обновляем ширину слайдов
+            items.forEach(item => {
+                item.style.flex = `0 0 ${100 / visibleCount}%`;
+            });
+            
+            createIndicators();
+            showSlide(currentIndex, false);
+            updateButtonState();
+            
+            console.log(`Visible count: ${visibleCount}, Items: ${items.length}, Max index: ${Math.max(0, items.length - visibleCount)}`);
+        }
+
+        // Создание индикаторов
+        function createIndicators() {
+            if (!indicatorsContainer) return;
+            
+            indicatorsContainer.innerHTML = '';
+            const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
+            
+            for (let i = 0; i < totalIndicators; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
+                indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+                indicator.addEventListener('click', () => showSlide(i * visibleCount));
+                indicatorsContainer.appendChild(indicator);
+            }
+        }
+
+        // Показать слайд
+        function showSlide(index, animate = true) {
+            const maxIndex = Math.max(0, items.length - visibleCount);
+            currentIndex = Math.max(0, Math.min(index, maxIndex));
+            
+            // Правильный расчет translateX
+            const translateX = -(currentIndex * (100 / visibleCount));
+            prevTranslate = translateX;
+            
+            slidesContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
+            slidesContainer.style.transform = `translateX(${translateX}%)`;
+            
+            updateIndicators();
+            updateButtonState();
+            
+            console.log(`Show slide: ${currentIndex}/${maxIndex}, translateX: ${translateX}%`);
+        }
+
+        // Обновление индикаторов
+        function updateIndicators() {
+            if (!indicatorsContainer) return;
+            
+            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+            const activeIndicator = Math.floor(currentIndex / visibleCount);
+            
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndicator);
+            });
+        }
+
+        // Обновление состояния кнопок
+        function updateButtonState() {
+            if (prevBtn) prevBtn.disabled = currentIndex === 0;
+            if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
+        }
+
+        // Функции для drag & drop
+        function startDrag(e) {
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+            } else {
+                startX = e.clientX;
+                e.preventDefault();
+            }
+            
+            isDragging = true;
+            slidesContainer.style.transition = 'none';
+            animationID = requestAnimationFrame(animation);
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            
+            let currentX;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX;
+            } else {
+                currentX = e.clientX;
+                e.preventDefault();
+            }
+            
+            const deltaX = currentX - startX;
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+            currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+            
+            // Ограничение перетаскивания
+            const maxTranslate = 0;
+            const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
+            
+            // Мягкие границы с отскоком
+            if (currentTranslate > maxTranslate) {
+                currentTranslate = maxTranslate + (currentTranslate - maxTranslate) * 0.3;
+            } else if (currentTranslate < minTranslate) {
+                currentTranslate = minTranslate + (currentTranslate - minTranslate) * 0.3;
+            }
+        }
+
+        function endDrag() {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            cancelAnimationFrame(animationID);
+            
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+            const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
+            
+            if (Math.abs(movedBy) > threshold) {
+                if (movedBy < 0) {
+                    showSlide(currentIndex + 1);
+                } else {
+                    showSlide(currentIndex - 1);
+                }
+            } else {
+                showSlide(currentIndex);
+            }
+        }
+
+        function animation() {
+            slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+            if (isDragging) {
+                animationID = requestAnimationFrame(animation);
+            }
+        }
+
+        // Добавление обработчиков событий
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                showSlide(currentIndex - 1);
+            });
+        }
+        
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                showSlide(currentIndex + 1);
+            });
+        }
+        
+        // Mouse events
+        slidesContainer.addEventListener('mousedown', startDrag);
+        slidesContainer.addEventListener('mousemove', drag);
+        slidesContainer.addEventListener('mouseup', endDrag);
+        slidesContainer.addEventListener('mouseleave', endDrag);
+        
+        // Touch events
+        slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+        slidesContainer.addEventListener('touchmove', drag, { passive: false });
+        slidesContainer.addEventListener('touchend', endDrag);
+        
+        // Resize handler with debounce
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateVisibleCount, 250);
+        });
+
+        // Инициализация
+        updateVisibleCount();
+    }
+
+    // Инициализация видео карусели - ТЕПЕРЬ 2 СЛАЙДА В СТРОКУ
+    setupCarousel({
+        sectionSelector: '.video-reviews-section',
+        itemSelector: '.video-slide',
+        prevBtnSelector: '.prev-btn',
+        nextBtnSelector: '.next-btn',
+        indicatorsContainerSelector: '.custom-indicators',
+        slidesContainerSelector: '.video-slider',
+        visibleCountLogic: () => {
+            const width = window.innerWidth;
+            if (width < 768) return 1;   // 1 на мобильных
+            return 2;                    // 2 на планшетах и десктопах
+        }
+    });
+
+    // Функционал модального окна для видео
+    const videoModal = document.getElementById('videoModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const videoWrapper = document.getElementById('videoWrapper');
+    const modalClose = document.getElementById('modalClose');
+    let isModalOpen = false;
+    let isDragging = false;
+
+    function openVideoModal(videoId) {
+        if (!videoId) return;
+        
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://rutube.ru/play/embed/${videoId}`;
+        iframe.allowFullscreen = true;
+        iframe.allow = 'autoplay; fullscreen';
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        
+        videoWrapper.innerHTML = '';
+        videoWrapper.appendChild(iframe);
+        videoModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        isModalOpen = true;
+    }
+
+    function closeVideoModal() {
+        videoModal.classList.remove('active');
+        videoWrapper.innerHTML = '';
+        document.body.style.overflow = '';
+        isModalOpen = false;
+    }
+
+    // Обработчики для модального окна
+    document.querySelectorAll('.video-placeholder').forEach(placeholder => {
+        let dragStartTime = 0;
+        
+        placeholder.addEventListener('mousedown', () => {
+            dragStartTime = Date.now();
+            isDragging = false;
+        });
+        
+        placeholder.addEventListener('mousemove', () => {
+            if (Date.now() - dragStartTime > 50) {
+                isDragging = true;
+            }
+        });
+        
+        placeholder.addEventListener('click', function(e) {
+            const videoId = this.getAttribute('data-video-id');
+            if (videoId && !isDragging) {
+                openVideoModal(videoId);
+            }
+        });
+    });
+
+    if (modalClose) modalClose.addEventListener('click', closeVideoModal);
+    if (modalOverlay) modalOverlay.addEventListener('click', closeVideoModal);
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isModalOpen) {
+            closeVideoModal();
+        }
+    });
+
+    // Добавляем CSS для 2 слайдов в строку
+    const style = document.createElement('style');
+    style.textContent = `
+        .video-slider {
+            cursor: grab;
+            user-select: none;
+            touch-action: pan-y;
+            display: flex;
+            width: 100%;
+        }
+        
+        .video-slide {
+            flex: 0 0 calc(100% / var(--visible-count, 2));
+            min-width: 0;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+        
+        .video-slider:active {
+            cursor: grabbing;
+        }
+        
+        .custom-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .custom-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: none;
+            background: #ccc;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .custom-indicator.active {
+            background: var(--primary-color-dark);
+        }
+        
+        .carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Адаптивность для 2 слайдов */
+        @media (max-width: 767px) {
+            .video-slide {
+                flex: 0 0 100% !important;
+            }
+        }
+        
+        /* Гарантируем 2 слайда на десктопе */
+        @media (min-width: 768px) {
+            .video-slide {
+                flex: 0 0 50% !important;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+});
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -2221,7 +3030,7 @@
 </section>
 
 <!-- Installers Section -->
-<section class=" py-5">
+<section class="installers-section py-5">
     <div class="container  ">
         <div class="d-flex justify-content-between align-items-center mb-5 ">
             <h2 class="header-title mb-0">Для вас работают лучшие монтажники Москвы</h2>
@@ -2384,126 +3193,144 @@
 </section>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Promotions Carousel
-    const promotionsSection = document.querySelector('.promotions-section');
-    if (promotionsSection) {
-        const promotionsRow = promotionsSection.querySelector('.row');
-        const promotions = promotionsSection.querySelectorAll('.promotion-card');
-        const promotionsPrevBtn = promotionsSection.querySelector('.carousel-control.prev');
-        const promotionsNextBtn = promotionsSection.querySelector('.carousel-control.next');
-        const promotionsIndicatorsContainer = promotionsSection.querySelector('.custom-indicators');
+    document.addEventListener('DOMContentLoaded', function () {
+    function setupCarousel(sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector) {
+        const section = document.querySelector(sectionSelector);
+        if (!section) return;
 
-        let promotionsCurrentIndex = 0;
-        let promotionsVisibleCount = 3;
+        const row = section.querySelector('.carousel-inner .row');
+        const items = section.querySelectorAll(itemSelector);
+        const prevBtn = section.querySelector(prevBtnSelector);
+        const nextBtn = section.querySelector(nextBtnSelector);
+        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
 
-        function updatePromotionsVisibleCount() {
-            promotionsVisibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 3;
-            createPromotionsIndicators();
-            showPromotions(promotionsCurrentIndex);
+        let currentIndex = 0;
+        let visibleCount = sectionSelector === '.promotions-section' ? 
+            (window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 3) :
+            (window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 4);
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        const threshold = 50; // Порог для смены слайда (в пикселях)
+
+        function updateVisibleCount() {
+            if (sectionSelector === '.promotions-section') {
+                visibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 3;
+            } else {
+                visibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 4;
+            }
+            createIndicators();
+            showSlide(currentIndex);
         }
 
-        function createPromotionsIndicators() {
-            promotionsIndicatorsContainer.innerHTML = '';
-            const totalIndicators = promotions.length - promotionsVisibleCount + 1;
+        function createIndicators() {
+            indicatorsContainer.innerHTML = '';
+            const totalIndicators = items.length - visibleCount + 1;
             for (let i = 0; i < totalIndicators; i++) {
                 const indicator = document.createElement('button');
                 indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
-                indicator.setAttribute('aria-label', `Акция ${i + 1}`);
-                indicator.addEventListener('click', () => showPromotions(i));
-                promotionsIndicatorsContainer.appendChild(indicator);
+                indicator.setAttribute('aria-label', `${sectionSelector === '.promotions-section' ? 'Акция' : 'Монтажник'} ${i + 1}`);
+                indicator.addEventListener('click', () => showSlide(i));
+                indicatorsContainer.appendChild(indicator);
             }
         }
 
-        function showPromotions(n) {
-            promotionsCurrentIndex = Math.max(0, Math.min(n, promotions.length - promotionsVisibleCount));
-            const translateX = -(promotionsCurrentIndex * (100 / promotionsVisibleCount));
-            promotionsRow.style.transform = `translateX(${translateX}%)`;
-
-            updatePromotionsIndicators();
-            updatePromotionsButtonState();
+        function showSlide(n, animate = true) {
+            currentIndex = Math.max(0, Math.min(n, items.length - visibleCount));
+            const translateX = -(currentIndex * (100 / visibleCount));
+            prevTranslate = translateX;
+            row.style.transition = animate ? 'transform 0.5s ease' : 'none';
+            row.style.transform = `translateX(${translateX}%)`;
+            updateIndicators();
+            updateButtonState();
         }
 
-        function updatePromotionsIndicators() {
-            const indicators = promotionsIndicatorsContainer.querySelectorAll('.custom-indicator');
+        function updateIndicators() {
+            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
             indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === promotionsCurrentIndex);
+                indicator.classList.toggle('active', index === currentIndex);
             });
         }
 
-        function updatePromotionsButtonState() {
-            promotionsPrevBtn.disabled = promotionsCurrentIndex === 0;
-            promotionsNextBtn.disabled = promotionsCurrentIndex >= promotions.length - promotionsVisibleCount;
+        function updateButtonState() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex >= items.length - visibleCount;
         }
 
-        promotionsPrevBtn.addEventListener('click', () => showPromotions(promotionsCurrentIndex - 1));
-        promotionsNextBtn.addEventListener('click', () => showPromotions(promotionsCurrentIndex + 1));
-        window.addEventListener('resize', () => {
-            updatePromotionsVisibleCount();
-        });
+        // Обработчики кнопок
+        prevBtn.addEventListener('click', () => showSlide(currentIndex - 1));
+        nextBtn.addEventListener('click', () => showSlide(currentIndex + 1));
+        window.addEventListener('resize', updateVisibleCount);
 
-        updatePromotionsVisibleCount();
-    }
+        // Обработка перетаскивания мышью
+        row.addEventListener('mousedown', startDragging);
+        row.addEventListener('mousemove', drag);
+        row.addEventListener('mouseup', endDragging);
+        row.addEventListener('mouseleave', endDragging);
 
-    // Installers Carousel
-    const installersSection = document.querySelector('.installers-section');
-    if (installersSection) {
-        const installersRow = installersSection.querySelector('.row');
-        const installers = installersSection.querySelectorAll('.installer-card');
-        const installersPrevBtn = installersSection.querySelector('.carousel-control-prev');
-        const installersNextBtn = installersSection.querySelector('.carousel-control-next');
-        const installersIndicatorsContainer = installersSection.querySelector('.carousel-indicators');
+        // Обработка касаний
+        row.addEventListener('touchstart', startDragging);
+        row.addEventListener('touchmove', drag);
+        row.addEventListener('touchend', endDragging);
 
-        let installersCurrentIndex = 0;
-        let installersVisibleCount = 4;
-
-        function updateInstallersVisibleCount() {
-            installersVisibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 4;
-            createInstallersIndicators();
-            showInstallers(installersCurrentIndex);
+        function startDragging(e) {
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+            } else {
+                startX = e.clientX;
+            }
+            isDragging = true;
+            row.style.transition = 'none';
         }
 
-        function createInstallersIndicators() {
-            installersIndicatorsContainer.innerHTML = '';
-            const totalIndicators = installers.length - installersVisibleCount + 1;
-            for (let i = 0; i < totalIndicators; i++) {
-                const indicator = document.createElement('button');
-                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
-                indicator.setAttribute('aria-label', `Монтажник ${i + 1}`);
-                indicator.addEventListener('click', () => showInstallers(i));
-                installersIndicatorsContainer.appendChild(indicator);
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const deltaX = currentX - startX;
+            const containerWidth = row.parentElement.offsetWidth;
+            const slideWidth = containerWidth / visibleCount;
+            currentTranslate = prevTranslate + (deltaX / slideWidth) * (100 / visibleCount);
+            row.style.transform = `translateX(${currentTranslate}%)`;
+        }
+
+        function endDragging() {
+            if (!isDragging) return;
+            isDragging = false;
+            const containerWidth = row.parentElement.offsetWidth;
+            const slideWidth = containerWidth / visibleCount;
+            const movedBy = (currentTranslate - prevTranslate) * slideWidth / (100 / visibleCount);
+            if (Math.abs(movedBy) > threshold) {
+                if (movedBy < 0) {
+                    showSlide(currentIndex + 1);
+                } else {
+                    showSlide(currentIndex - 1);
+                }
+            } else {
+                showSlide(currentIndex);
             }
         }
 
-        function showInstallers(n) {
-            installersCurrentIndex = Math.max(0, Math.min(n, installers.length - installersVisibleCount));
-            const translateX = -(installersCurrentIndex * (100 / installersVisibleCount));
-            installersRow.style.transform = `translateX(${translateX}%)`;
-
-            updateInstallersIndicators();
-            updateInstallersButtonState();
-        }
-
-        function updateInstallersIndicators() {
-            const indicators = installersIndicatorsContainer.querySelectorAll('.custom-indicator');
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === installersCurrentIndex);
-            });
-        }
-
-        function updateInstallersButtonState() {
-            installersPrevBtn.disabled = installersCurrentIndex === 0;
-            installersNextBtn.disabled = installersCurrentIndex >= installers.length - installersVisibleCount;
-        }
-
-        installersPrevBtn.addEventListener('click', () => showInstallers(installersCurrentIndex - 1));
-        installersNextBtn.addEventListener('click', () => showInstallers(installersCurrentIndex + 1));
-        window.addEventListener('resize', () => {
-            updateInstallersVisibleCount();
-        });
-
-        updateInstallersVisibleCount();
+        updateVisibleCount();
     }
+
+    // Инициализация слайдеров
+    setupCarousel(
+        '.promotions-section',
+        '.promotion-card',
+        '.carousel-control.prev',
+        '.carousel-control.next',
+        '.custom-indicators'
+    );
+
+    setupCarousel(
+        '.installers-section',
+        '.installer-card',
+        '.carousel-control-prev',
+        '.carousel-control-next',
+        '.carousel-indicators-container .carousel-indicators'
+    );
 });
 </script>
 <!-- form-bannner -->
@@ -3370,56 +4197,512 @@ document.addEventListener('DOMContentLoaded', function () {
 </section>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('partnersContainer');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+    document.addEventListener('DOMContentLoaded', function () {
+    // Функция для настройки бесконечной карусели логотипов
+    function setupInfiniteLogoCarousel() {
+        const logosContainer = document.getElementById('partnersContainer');
+        const logosRow = logosContainer.querySelector('.logos-row');
+        const logoCards = logosContainer.querySelectorAll('.logo-card');
+        
+        if (!logosContainer || !logosRow || logoCards.length === 0) return;
+        
+        // Клонируем логотипы для бесконечной анимации
+        const originalLogos = Array.from(logoCards);
+        const cloneLogos = originalLogos.map(logo => logo.cloneNode(true));
+        
+        // Добавляем клоны в конец
+        cloneLogos.forEach(clone => {
+            logosRow.appendChild(clone);
+        });
+        
+        // Настройка анимации
+        let animationSpeed = 1; // Скорость анимации (пикселей за кадр)
+        let animationId;
+        let isPaused = false;
+        
+        function animateLogos() {
+            if (isPaused) return;
+            
+            logosContainer.scrollLeft += animationSpeed;
+            
+            // Если доскролили до конца клонов, возвращаемся к началу
+            if (logosContainer.scrollLeft >= logosRow.scrollWidth / 2) {
+                logosContainer.scrollLeft = 0;
+            }
+            
+            animationId = requestAnimationFrame(animateLogos);
+        }
+        
+        // Запуск анимации
+        function startAnimation() {
+            if (!animationId) {
+                animationId = requestAnimationFrame(animateLogos);
+            }
+        }
+        
+        // Остановка анимации
+        function stopAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+        
+        // Обработчики для паузы при наведении
+        logosContainer.addEventListener('mouseenter', () => {
+            isPaused = true;
+            stopAnimation();
+            logosContainer.style.cursor = 'grab';
+        });
+        
+        logosContainer.addEventListener('mouseleave', () => {
+            isPaused = false;
+            startAnimation();
+            logosContainer.style.cursor = 'grab';
+        });
+        
+        // Функциональность перетаскивания мышью
+        let isDragging = false;
+        let startX;
+        let startScrollLeft;
+        
+        logosContainer.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX - logosContainer.offsetLeft;
+            startScrollLeft = logosContainer.scrollLeft;
+            logosContainer.style.cursor = 'grabbing';
+            stopAnimation();
+        });
+        
+        logosContainer.addEventListener('mouseup', () => {
+            isDragging = false;
+            logosContainer.style.cursor = 'grab';
+            startAnimation();
+        });
+        
+        logosContainer.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            e.preventDefault();
+            const x = e.pageX - logosContainer.offsetLeft;
+            const walk = (x - startX) * 2;
+            logosContainer.scrollLeft = startScrollLeft - walk;
+        });
+        
+        // Функциональность для сенсорных устройств
+        logosContainer.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].pageX - logosContainer.offsetLeft;
+            startScrollLeft = logosContainer.scrollLeft;
+            stopAnimation();
+        }, { passive: true });
+        
+        logosContainer.addEventListener('touchend', () => {
+            isDragging = false;
+            startAnimation();
+        });
+        
+        logosContainer.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const x = e.touches[0].pageX - logosContainer.offsetLeft;
+            const walk = (x - startX) * 2;
+            logosContainer.scrollLeft = startScrollLeft - walk;
+        }, { passive: true });
+        
+        // Адаптивная скорость анимации
+        function updateAnimationSpeed() {
+            const width = window.innerWidth;
+            if (width < 768) {
+                animationSpeed = 0.5; // Медленнее на мобильных
+            } else {
+                animationSpeed = 1; // Быстрее на десктопе
+            }
+        }
+        
+        window.addEventListener('resize', updateAnimationSpeed);
+        updateAnimationSpeed();
+        
+        // Запускаем анимацию
+        startAnimation();
+        
+        // Добавляем CSS стили
+        const style = document.createElement('style');
+        style.textContent = `
+            .logos-container {
+                overflow: hidden;
+                width: 100%;
+                position: relative;
+                cursor: grab;
+            }
+            
+            .logos-row {
+                display: flex;
+                width: max-content;
+                animation: none; /* Отключаем CSS анимацию, используем JS */
+            }
+            
+            .logo-card {
+                flex: 0 0 auto;
+                padding: 15px 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .logo-image {
+                max-width: 120px;
+                max-height: 60px;
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                filter: grayscale(100%);
+                opacity: 0.7;
+                transition: all 0.3s ease;
+            }
+            
+            .logo-image:hover {
+                filter: grayscale(0%);
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            
+            .logos-container:active {
+                cursor: grabbing;
+            }
+            
+            /* Адаптивность */
+            @media (max-width: 768px) {
+                .logo-card {
+                    padding: 10px 15px;
+                }
+                
+                .logo-image {
+                    max-width: 100px;
+                    max-height: 50px;
+                }
+            }
+            
+            @media (max-width: 480px) {
+                .logo-card {
+                    padding: 8px 12px;
+                }
+                
+                .logo-image {
+                    max-width: 80px;
+                    max-height: 40px;
+                }
+            }
+            
+            /* Скрываем scrollbar */
+            .logos-container::-webkit-scrollbar {
+                display: none;
+            }
+            
+            .logos-container {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        `;
+        document.head.appendChild(style);
+    }
     
-    // Функциональность перетаскивания мышью
-    container.addEventListener('mousedown', (e) => {
-        isDown = true;
-        startX = e.pageX - container.offsetLeft;
-        scrollLeft = container.scrollLeft;
-        container.style.cursor = 'grabbing';
+    // Инициализация всех каруселей
+    setupCarousel({
+        sectionSelector: '.video-reviews-section',
+        itemSelector: '.video-slide',
+        prevBtnSelector: '.prev-btn',
+        nextBtnSelector: '.next-btn',
+        indicatorsContainerSelector: '.custom-indicators',
+        slidesContainerSelector: '.video-slider',
+        visibleCountLogic: () => {
+            const width = window.innerWidth;
+            if (width < 768) return 1;
+            return 2;
+        }
+    });
+
+    setupCarousel({
+        sectionSelector: '.certificate-section',
+        itemSelector: '.certificate-slide',
+        prevBtnSelector: '.carousel-control-prev',
+        nextBtnSelector: '.carousel-control-next',
+        indicatorsContainerSelector: '.custom-indicators',
+        slidesContainerSelector: '.carousel-inner .row',
+        visibleCountLogic: () => {
+            const width = window.innerWidth;
+            if (width < 768) return 1;
+            if (width < 992) return 2;
+            return 3;
+        }
     });
     
-    container.addEventListener('mouseleave', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
+    // Инициализация бесконечной карусели логотипов
+    setupInfiniteLogoCarousel();
+
+    // ... остальной код для модальных окон и т.д.
+    // Функционал модального окна для сертификатов
+    const certificateModal = document.getElementById('certificateModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.querySelector('.modal-close');
+
+    function openCertificateModal(imgSrc, imgAlt) {
+        if (!certificateModal || !modalImage) return;
+        
+        modalImage.src = imgSrc;
+        modalImage.alt = imgAlt;
+        certificateModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCertificateModal() {
+        if (!certificateModal) return;
+        
+        certificateModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Обработчики для модального окна сертификатов
+    document.querySelectorAll('.certificate-img').forEach(img => {
+        img.addEventListener('click', function(e) {
+            openCertificateModal(this.src, this.alt);
+        });
+        
+        // Добавляем курсор pointer для изображений
+        img.style.cursor = 'pointer';
     });
-    
-    container.addEventListener('mouseup', () => {
-        isDown = false;
-        container.style.cursor = 'grab';
+
+    if (modalClose) {
+        modalClose.addEventListener('click', closeCertificateModal);
+    }
+
+    if (certificateModal) {
+        certificateModal.addEventListener('click', function(e) {
+            if (e.target === certificateModal) {
+                closeCertificateModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && certificateModal.style.display === 'flex') {
+            closeCertificateModal();
+        }
     });
-    
-    container.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - container.offsetLeft;
-        const walk = (x - startX) * 2; // Скорость прокрутки
-        container.scrollLeft = scrollLeft - walk;
-    });
-    
-    // Функциональность для сенсорных устройств
-    container.addEventListener('touchstart', (e) => {
-        isDown = true;
-        startX = e.touches[0].pageX - container.offsetLeft;
-        scrollLeft = container.scrollLeft;
-    }, { passive: true });
-    
-    container.addEventListener('touchend', () => {
-        isDown = false;
-    });
-    
-    container.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        const x = e.touches[0].pageX - container.offsetLeft;
-        const walk = (x - startX) * 2;
-        container.scrollLeft = scrollLeft - walk;
-    }, { passive: true });
 });
+
+// Основная функция для настройки карусели (добавляем если не объявлена)
+function setupCarousel(config) {
+    const {
+        sectionSelector,
+        itemSelector,
+        prevBtnSelector,
+        nextBtnSelector,
+        indicatorsContainerSelector,
+        slidesContainerSelector,
+        visibleCountLogic
+    } = config;
+
+    const section = document.querySelector(sectionSelector);
+    if (!section) {
+        console.warn(`Section ${sectionSelector} not found`);
+        return;
+    }
+
+    const slidesContainer = section.querySelector(slidesContainerSelector);
+    const items = section.querySelectorAll(itemSelector);
+    const prevBtn = section.querySelector(prevBtnSelector);
+    const nextBtn = section.querySelector(nextBtnSelector);
+    const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
+
+    if (!slidesContainer || items.length === 0) {
+        console.warn(`Slides container or items not found for ${sectionSelector}`);
+        return;
+    }
+
+    let currentIndex = 0;
+    let visibleCount = visibleCountLogic();
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID = null;
+    const threshold = 50;
+
+    // Обновление количества видимых слайдов
+    function updateVisibleCount() {
+        const oldVisibleCount = visibleCount;
+        visibleCount = visibleCountLogic();
+        
+        // Устанавливаем CSS переменную для стилей
+        slidesContainer.style.setProperty('--visible-count', visibleCount);
+        
+        // Пересчитываем текущий индекс при изменении количества видимых слайдов
+        if (oldVisibleCount !== visibleCount) {
+            currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
+        }
+        
+        // Обновляем ширину слайдов
+        items.forEach(item => {
+            item.style.flex = `0 0 ${100 / visibleCount}%`;
+        });
+        
+        createIndicators();
+        showSlide(currentIndex, false);
+        updateButtonState();
+    }
+
+    // Создание индикаторов
+    function createIndicators() {
+        if (!indicatorsContainer) return;
+        
+        indicatorsContainer.innerHTML = '';
+        const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
+        
+        for (let i = 0; i < totalIndicators; i++) {
+            const indicator = document.createElement('button');
+            indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
+            indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+            indicator.addEventListener('click', () => showSlide(i * visibleCount));
+            indicatorsContainer.appendChild(indicator);
+        }
+    }
+
+    // Показать слайд
+    function showSlide(index, animate = true) {
+        const maxIndex = Math.max(0, items.length - visibleCount);
+        currentIndex = Math.max(0, Math.min(index, maxIndex));
+        
+        // Правильный расчет translateX
+        const translateX = -(currentIndex * (100 / visibleCount));
+        prevTranslate = translateX;
+        
+        slidesContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
+        slidesContainer.style.transform = `translateX(${translateX}%)`;
+        
+        updateIndicators();
+        updateButtonState();
+    }
+
+    // Обновление индикаторов
+    function updateIndicators() {
+        if (!indicatorsContainer) return;
+        
+        const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+        const activeIndicator = Math.floor(currentIndex / visibleCount);
+        
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === activeIndicator);
+        });
+    }
+
+    // Обновление состояния кнопок
+    function updateButtonState() {
+        if (prevBtn) prevBtn.disabled = currentIndex === 0;
+        if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
+    }
+
+    // Функции для drag & drop
+    function startDrag(e) {
+        if (e.type === 'touchstart') {
+            startX = e.touches[0].clientX;
+        } else {
+            startX = e.clientX;
+            e.preventDefault();
+        }
+        
+        isDragging = true;
+        slidesContainer.style.transition = 'none';
+        animationID = requestAnimationFrame(animation);
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        
+        let currentX;
+        if (e.type === 'touchmove') {
+            currentX = e.touches[0].clientX;
+        } else {
+            currentX = e.clientX;
+            e.preventDefault();
+        }
+        
+        const deltaX = currentX - startX;
+        const containerWidth = slidesContainer.parentElement.offsetWidth;
+        currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+        
+        // Ограничение перетаскивания
+        const maxTranslate = 0;
+        const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
+        
+        // Мягкие границы с отскоком
+        if (currentTranslate > maxTranslate) {
+            currentTranslate = maxTranslate + (currentTranslate - maxTranslate) * 0.3;
+        } else if (currentTranslate < minTranslate) {
+            currentTranslate = minTranslate + (currentTranslate - minTranslate) * 0.3;
+        }
+    }
+
+    function endDrag() {
+        if (!isDragging) return;
+        
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        
+        const containerWidth = slidesContainer.parentElement.offsetWidth;
+        const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
+        
+        if (Math.abs(movedBy) > threshold) {
+            if (movedBy < 0) {
+                showSlide(currentIndex + 1);
+            } else {
+                showSlide(currentIndex - 1);
+            }
+        } else {
+            showSlide(currentIndex);
+        }
+    }
+
+    function animation() {
+        slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+        if (isDragging) {
+            animationId = requestAnimationFrame(animation);
+        }
+    }
+
+    // Добавление обработчиков событий
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            showSlide(currentIndex - 1);
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            showSlide(currentIndex + 1);
+        });
+    }
+    
+    // Mouse events
+    slidesContainer.addEventListener('mousedown', startDrag);
+    slidesContainer.addEventListener('mousemove', drag);
+    slidesContainer.addEventListener('mouseup', endDrag);
+    slidesContainer.addEventListener('mouseleave', endDrag);
+    
+    // Touch events
+    slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+    slidesContainer.addEventListener('touchmove', drag, { passive: false });
+    slidesContainer.addEventListener('touchend', endDrag);
+    
+    // Resize handler with debounce
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateVisibleCount, 250);
+    });
+
+    // Инициализация
+    updateVisibleCount();
+}
 </script>
 
 
@@ -3756,105 +5039,6 @@ document.addEventListener('DOMContentLoaded', function () {
             updatePreview();
         });
     </script>
-<!-- sert js -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const certificateSection = document.querySelector('.certificate-section');
-    if (certificateSection) {
-        const certificatesRow = certificateSection.querySelector('.carousel-inner .row');
-        const certificates = certificateSection.querySelectorAll('.certificate-slide');
-        const certPrevBtn = certificateSection.querySelector('.carousel-control-prev');
-        const certNextBtn = certificateSection.querySelector('.carousel-control-next');
-        const certIndicatorsContainer = certificateSection.querySelector('.custom-indicators');
-        const modal = document.getElementById('certificateModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalClose = document.querySelector('.modal-close');
-
-        let certCurrentIndex = 0;
-        let certVisibleCount = 3;
-
-        function updateCertVisibleCount() {
-            certVisibleCount = window.innerWidth < 768 ? 1 : window.innerWidth < 992 ? 2 : 3;
-            createCertIndicators();
-            showCertificates(certCurrentIndex);
-        }
-
-        function createCertIndicators() {
-            certIndicatorsContainer.innerHTML = '';
-            const totalIndicators = certificates.length - certVisibleCount + 1;
-            for (let i = 0; i < totalIndicators; i++) {
-                const indicator = document.createElement('button');
-                indicator.className = 'custom-indicator' + (i === 0 ? ' active' : '');
-                indicator.setAttribute('aria-label', `Сертификат ${i + 1}`);
-                indicator.addEventListener('click', () => showCertificates(i));
-                certIndicatorsContainer.appendChild(indicator);
-            }
-        }
-
-        function showCertificates(n) {
-            certCurrentIndex = Math.max(0, Math.min(n, certificates.length - certVisibleCount));
-            const translateX = -(certCurrentIndex * (100 / certVisibleCount));
-            certificatesRow.style.transform = `translateX(${translateX}%)`;
-
-            updateCertIndicators();
-            updateCertButtonState();
-        }
-
-        function updateCertIndicators() {
-            const indicators = certIndicatorsContainer.querySelectorAll('.custom-indicator');
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === certCurrentIndex);
-            });
-        }
-
-        function updateCertButtonState() {
-            certPrevBtn.disabled = certCurrentIndex === 0;
-            certNextBtn.disabled = certCurrentIndex >= certificates.length - certVisibleCount;
-        }
-
-        certPrevBtn.addEventListener('click', () => showCertificates(certCurrentIndex - 1));
-        certNextBtn.addEventListener('click', () => showCertificates(certCurrentIndex + 1));
-
-        // Handle image clicks to open modal
-        certificates.forEach(slide => {
-            const img = slide.querySelector('.certificate-img');
-            if (img) {
-                img.addEventListener('click', () => {
-                    modalImage.src = img.src;
-                    modalImage.alt = img.alt;
-                    modal.style.display = 'flex';
-                });
-            }
-        });
-
-        // Close modal on close button click
-        modalClose.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        // Close modal on outside click
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-
-        // Close modal on Escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && modal.style.display === 'flex') {
-                modal.style.display = 'none';
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            updateCertVisibleCount();
-        });
-
-        // Initial setup
-        updateCertVisibleCount();
-    }
-});
-</script>
 
 
 

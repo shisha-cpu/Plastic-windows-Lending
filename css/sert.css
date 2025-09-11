@@ -1,6 +1,6 @@
 
 .certificate-section {
-    padding: 80px 0;
+   margin-top: -20px;
     position: relative;
 }
 
@@ -15,6 +15,7 @@
 .slider-controls {
     display: flex;
     gap: 15px;
+    margin-right: -140px;
   
 }
 
