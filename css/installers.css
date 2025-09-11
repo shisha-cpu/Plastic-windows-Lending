@@ -44,7 +44,7 @@
 .installer-name {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #2c3e50;
+    color: #333;
     margin-bottom: 0.5rem;
 }
 
@@ -161,7 +161,7 @@
 
 .carousel-indicators .active {
     background-color: var(--primary-color);
-    transform: scale(1.2);
+  
     width: 10px;
     height: 10px;
 }

@@ -12,14 +12,14 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
         .project-card:hover {
-            transform: translateY(-5px);
+             0
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         .project-image img {
             transition: transform 0.5s ease;
         }
         .project-card:hover .project-image img {
-            transform: scale(1.05);
+             
         }
         .border-custom {
             border-color: var(--primary-color);

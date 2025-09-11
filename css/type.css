@@ -5,8 +5,8 @@
   text-align: left; /* выравнивание слева */
   position: relative;
   padding-bottom: 15px;
-  font-size: 35px;
-  margin-left: 5px;
+  font-size: 1.9rem;
+  
 }
 
 .header-title:after {
@@ -14,8 +14,8 @@
   position: absolute;
   bottom: 0;
   left: 0; /* линия тоже слева */
-  width: 200px; /* длина линии */
-  height: 15px; /* толщина линии */
+  width: 130px; /* длина линии */
+  height: 5px; /* толщина линии */
   background: var(--primary-color);
 }
 
@@ -34,7 +34,7 @@
 }
 
 .glass-card:hover {
-  transform: translateY(-5px);
+   0
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -75,7 +75,7 @@
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
-  color: #000; 
+  color: #ffffff; 
   padding: 0.6rem 1.5rem;
   font-weight: 500;
   font-size: 16px !important;
@@ -85,9 +85,9 @@
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color-dark);
   border-color: var(--primary-color);
-  color: #2c3e50;
+  color: #ffffff;
 }
 .card-body-text{
     margin-top: -30px;

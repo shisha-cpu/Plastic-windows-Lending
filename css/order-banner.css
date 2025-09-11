@@ -41,8 +41,8 @@
 
 .banner-btn:hover {
     background-color: #3a4b42;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+ 
+  
 }
 
 .banner-image {
@@ -105,4 +105,245 @@
     .banner-text {
         font-size: 2rem; /* Уменьшаем размер текста для мобильных */
     }
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding: 0 24px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 0 32px;
+    }
+}
+
+.header {
+    padding-top: 24px;
+    text-align: center;
+}
+
+.header-title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
+@media (min-width: 640px) {
+    .header-title {
+        font-size: 2rem;
+    }
+}
+
+.highlight {
+    font-weight: 800;
+
+}
+
+.filters {
+    margin-top: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 400;
+    user-select: none;
+}
+
+@media (min-width: 640px) {
+    .filters {
+        font-size: 14px;
+    }
+}
+
+.filter-item {
+    padding: 8px 16px;
+    border-radius: 9999px;
+    background-color: #f3f3f3;
+    color: #9b9b9b;
+    cursor: pointer;
+}
+
+.filter-item.active {
+    background-color: #000;
+    color: #fff;
+}
+
+.projects {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+}
+
+@media (min-width: 640px) {
+    .projects {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 1024px) {
+    .projects {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+.project-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.project-image {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.project-image img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 30px;
+}
+
+.badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background-color: #8a2be2;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 4px 12px;
+}
+
+.badge.hit {
+    top: 56px;
+    background-color: #6abf2a;
+}
+
+.project-title {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-title h2 {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.2;
+    max-width: 70%;
+}
+
+.divider {
+    border-bottom: 2px solid #000;
+    width: 25%;
+}
+
+.project-details {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    color: #4a4a4a;
+    font-size: 12px;
+}
+
+@media (min-width: 640px) {
+    .project-details {
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+}
+
+.project-details div {
+    margin-bottom: 8px;
+}
+
+@media (min-width: 640px) {
+    .project-details div {
+        margin-bottom: 0;
+    }
+}
+
+.separator {
+    border-color: #e5e5e5;
+    margin-top: 16px;
+}
+
+.project-price {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (min-width: 640px) {
+    .project-price {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.project-price .price-details {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+@media (min-width: 640px) {
+    .project-price .price-details {
+        gap: 24px;
+    }
+}
+
+.discount {
+    background-color: #e60026;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 2px 8px;
+}
+
+.old-price {
+    color: #b3b3b3;
+  
+    user-select: none;
+}
+
+.new-price {
+    font-size: 22px;
+    font-weight: 800;
+    user-select: none;
+}
+
+.price-request {
+    color: #b3b3b3;
+    font-weight: 400;
+}
+
+.project-note {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #4a4a4a;
+}
+
+.project-note i {
+    color: var(--primary-color);
 }

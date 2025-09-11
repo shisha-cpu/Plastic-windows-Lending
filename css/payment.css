@@ -1,17 +1,17 @@
  .payment-section-unique {
-            padding: 40px 0;
+        
             font-family: 'Arial', sans-serif;
         }
         .payment-title-unique {
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 25px;
-            color: #2c3e50;
+            color: #333;
             text-align: center;
         }
         .prepayment-badge-unique {
             background-color: var(--primary-color);
-            color: #2c3e50;
+            color: #333;
             padding: 6px 12px;
             font-weight: bold;
             transform: skew(-15deg);
@@ -40,10 +40,7 @@
             position: relative;
             overflow: hidden;
         }
-        .payment-method-compact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
+
         .method-content-compact {
             display: flex;
             align-items: flex-start;
@@ -53,7 +50,7 @@
             transform: skew(-15deg);
        background-color: var(--primary-color);
             padding: 10px 15px;
-            color: #2c3e50;
+            color: #333;
             margin-right: 15px;
             display: inline-block;
             border: 1px solid var(--primary-color);
@@ -89,7 +86,7 @@
             height: 100%;
         }
         .visa-container-compact {
-            background: #f8f9fa;
+            background: #f5f5f5;
             border-left: 3px solid var(--primary-color);
             padding: 10px;
             margin: 10px 0;
@@ -113,16 +110,15 @@
             background: white;
             border-radius: 8px;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+
             transition: transform 0.3s ease;
             height: 180px;
             position: relative;
             overflow: hidden;
         }
-        .bank-transfer-compact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-        }
+.payment-icon{
+    margin-right: 10px;
+}
         @media (max-width: 768px) {
             .method-content-compact {
                 flex-direction: column;

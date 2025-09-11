@@ -1,19 +1,12 @@
 
-    
-    .works-section {
-        padding: 60px 0;
-     
-    }
-    
-    .section-header {
 
-        margin-bottom: 40px;
-    }
+    
+
     
     .section-title {
         font-size: 2.2rem;
         font-weight: 700;
-        color: #2c3e50;
+        color: #333;
         margin-bottom: 15px;
     }
     
@@ -56,7 +49,7 @@
     }
     
     .work-card:hover .work-image img {
-        transform: scale(1.05);
+         
     }
     
     .work-content {
@@ -69,7 +62,7 @@
     .work-title {
         font-size: 1.2rem;
         font-weight: 600;
-        color: #2c3e50;
+        color: #333;
         margin-bottom: 8px;
     }
     
@@ -89,7 +82,7 @@
     }
     
     .work-btn {
-        background-color: var(--primary-color-dark);
+        background-color: var(--primary-color);
         color: white;
         border: none;
         padding: 8px 20px;
@@ -105,9 +98,9 @@
     }
     
     .work-btn:hover {
-        background-color: var(--primary-color);
-        color: #2c3e50;
-        transform: translateY(-2px);
+        background-color: var(--primary-color-dark) !important;
+        color: #ffffff;
+         
     }
     
     /* Адаптивность */
@@ -133,10 +126,7 @@
     }
     
     @media (max-width: 768px) {
-        .works-section {
-            padding: 40px 0;
-        }
-        
+
         .section-title {
             font-size: 1.8rem;
         }

@@ -1,20 +1,13 @@
     .promotions-section {
-            padding: 80px 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            
+            
             position: relative;
         }
         
         .container {
             max-width: 1200px;
         }
-        
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-            padding: 0 15px;
-        }
+
         
         .section-title {
             font-size: 2.5rem;
@@ -47,7 +40,7 @@
             background-color: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
-            transform: scale(1.05);
+             
         }
         
         .promotion-card {
@@ -65,7 +58,7 @@
         }
         
         .promotion-card:hover {
-            transform: translateY(-5px);
+             0
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
         
@@ -93,7 +86,7 @@
         }
         
         .promotion-btn {
-            background-color: var(--primary-color-dark);
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -106,8 +99,8 @@
         }
         
         .promotion-btn:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
+            background-color: var(--primary-color-dark);
+             
             box-shadow: 0 6px 12px rgba(0,0,0,0.3);
         }
         
@@ -152,7 +145,7 @@
         
         .custom-indicators button.active {
             background-color: rgba(46, 204, 113, 0.2);
-            transform: scale(1.2);
+          
         }
         
         .custom-indicators button.active::before {

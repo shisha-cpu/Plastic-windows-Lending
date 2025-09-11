@@ -1,258 +1,189 @@
-        .certificate-section {
-            padding: 80px 0;
-            position: relative;
-        }
- 
-        .header-with-controls {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 50px;
-            width: 100%;
-    
-        }
-        
-        .header-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0;
-            color: #2c3e50;
-            flex: 1;
-        }
-        
-        .slider-controls {
-            display: flex;
-            gap: 5px;
-            margin-right: -700px;
-        }
-        
-        .slider-controls .carousel-control-prev,
-        .slider-controls .carousel-control-next {
-            position: static;
-            width: 40px;
-            height: 40px;
-            border:1px solid #b4afaf;
-            background: transparent;
-            border-radius: 50%;
-            opacity: 1;
-            transition: all 0.3s ease;
-        }
-        
-        .slider-controls .carousel-control-prev:hover,
-        .slider-controls .carousel-control-next:hover {
-            background-color: var(--primary-color);
-        }
-        
-        .slider-controls .carousel-control-prev-icon,
-        .slider-controls .carousel-control-next-icon {
-            width: 20px;
-            height: 20px;
-        
-            filter: invert(0);
-        }
-        .slider-controls .carousel-control-prev-icon,
-.slider-controls .carousel-control-next-icon {
-    filter: invert(1); /* Делает иконки белыми */
-    transition: filter 0.3s ease; /* Плавное изменение цвета */
+
+.certificate-section {
+    padding: 80px 0;
+    position: relative;
 }
+
+.header-with-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    width: 50svw;
+}
+
+.slider-controls {
+    display: flex;
+    gap: 15px;
+  
+}
+
+.slider-controls .carousel-control-prev,
+.slider-controls .carousel-control-next {
+    position: static;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #b4afaf;
+    background: transparent;
+    border-radius: 50%;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.slider-controls .carousel-control-prev:hover,
+.slider-controls .carousel-control-next:hover {
+    background-color: var(--primary-color, #007bff);
+}
+
+.slider-controls .carousel-control-prev-icon,
+.slider-controls .carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+    filter: invert(0);
+}
+
 .slider-controls .carousel-control-prev:hover .carousel-control-prev-icon,
 .slider-controls .carousel-control-next:hover .carousel-control-next-icon {
-    filter: invert(0.5); /* Делает иконки серыми при наведении */
+    filter: invert(0.5);
 }
-        .section-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 25px;
-        }
 
-        /* Фиксированная высота для контейнера слайдера */
-        #certificateCarousel {
-            height: 250px;
-            overflow: hidden;
-        }
+.slider-controls .carousel-control-prev:disabled,
+.slider-controls .carousel-control-next:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
-        .carousel-inner {
-            height: 100%;
-        }
+.section-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 25px;
+}
 
-        .certificate-slide {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.carousel-inner {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    height: 350px; /* Fixed height for the carousel */
+}
 
-        .certificate-img {
-            height: 200px;
-            width: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .certificate-img:hover {
-            transform: scale(1.03);
-        }
+.carousel-inner .row {
+    display: flex;
+    flex-wrap: nowrap;
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+}
 
-        /* Контейнер для центрирования индикаторов */
-        .custom-indicators-container {
-            display: flex;
-            justify-content: center;
-            margin-top: -80px;
-    
-        }
+.certificate-slide {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
 
-        /* Кастомные индикаторы по центру */
-        .custom-indicators {
-            display: flex;
-            gap: 12px;
-            padding-left: 0;
-        }
+.certificate-img {
+    height: 350px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
 
-        .custom-indicators button {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            border: none;
-            background-color: #ddd;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
+.certificate-img:hover {
+    transform: scale(1.05);
+}
 
-        .custom-indicators button.active {
-            background-color: var(--primary-color);
-            transform: scale(1.2);
-        }
+.custom-indicators-container {
+    display: flex;
+    justify-content: center;
+    margin-top: -120px;
 
-        .custom-indicators button:hover {
-            background-color: var(--primary-color-dark);
-            transform: scale(1.1);
-        }
+}
 
-        /* Стили для кнопок навигации - обрезанные */
-        .slider-side .carousel-control-prev, 
-        .slider-side .carousel-control-next {
-            width: 35px;
-            height: 35px;
-            background-color: rgba(108, 117, 125, 0.7);
-            border-radius: 50%;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
+.custom-indicators {
+    display: flex;
+    gap: 12px;
+    padding-left: 0;
+}
 
-        /* Левая кнопка - обрезана справа */
-        .slider-side .carousel-control-prev {
-            left: 0;
-            border-radius: 50% 0 0 50%;
-            width: 25px;
-            padding-right: 10px;
-        }
+.custom-indicators button {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: none;
+    background-color: #ddd;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-        /* Правая кнопка - обрезана слева */
-        .slider-side .carousel-control-next {
-            right: 0;
-            border-radius: 0 50% 50% 0;
-            width: 25px;
-            padding-left: 10px;
-        }
+.custom-indicators button.active {
+    background-color: var(--primary-color, #007bff);
+}
 
-        .slider-side .carousel-control-prev:hover, 
-        .slider-side .carousel-control-next:hover {
-            background-color: var(--primary-color);
-            opacity: 1;
-        }
+.custom-indicators button:hover {
+    background-color: var(--primary-color-dark, #0056b3);
+}
 
-        .slider-side .carousel-control-prev-icon, 
-        .slider-side .carousel-control-next-icon {
-            width: 16px;
-            height: 16px;
-            background-size: 100% 100%;
-        }
+.achievement-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: flex-start;
+}
 
-        /* Правый блок со слайдером */
-        .slider-side {
-            position: relative;
-            overflow: hidden;
-        }
+.achievement-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color, #007bff);
+    margin-right: 15px;
+    flex-shrink: 0;
+}
 
-        .achievement-item {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .achievement-icon {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
+.col-lg-4,
+.col-md-6 {
+    padding: 10px;
+}
 
-        @media (max-width: 992px) {
-            .certificate-section .row {
-                flex-direction: column-reverse;
-            }
-            
-            .header-with-controls {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            
-            .slider-controls {
-                margin: 15px 0 0 0;
-            }
-            
-            .text-side {
-                margin-top: 40px;
-                text-align: center;
-            }
-            
-            .achievement-item {
-                justify-content: center;
-            }
-            
-            #certificateCarousel {
-                height: 200px;
-            }
-            
-            .certificate-img {
-                height: 150px;
-            }
-            
-            .slider-side .carousel-control-prev {
-                left: 5px;
-            }
-            
-            .slider-side .carousel-control-next {
-                right: 5px;
-            }
-        }
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
 
-        @media (max-width: 768px) {
-            #certificateCarousel {
-                height: 180px;
-            }
-            
-            .certificate-img {
-                height: 130px;
-            }
-            
-            .slider-side .carousel-control-prev {
-                left: 2px;
-            }
-            
-            .slider-side .carousel-control-next {
-                right: 2px;
-            }
-            
-            .header-title {
-                font-size: 2rem;
-            }
-        }
+.modal-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    color: #fff;
+    cursor: pointer;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.modal-close:hover {
+    color: #ccc;
+}

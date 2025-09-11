@@ -15,7 +15,7 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: #333;
             padding-bottom: 8px;
             border-bottom: 2px solid var(--primary-color);
         }
@@ -38,7 +38,7 @@
         }
         
         .color-option:hover {
-            transform: translateY(-5px);
+             0
         }
         
         .color-sample {
@@ -54,13 +54,13 @@
         .color-option.active .color-sample {
             border-color: var(--primary-color-dark);
             box-shadow: 0 0 0 3px var(--primary-color);
-            transform: scale(1.1);
+     
         }
         
         .color-name {
             font-size: 0.85rem;
             text-align: center;
-            color: #2c3e50;
+            color: #333;
             font-weight: 500;
         }
         
@@ -81,7 +81,7 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 25px;
-            color: #2c3e50;
+            color: #333;
         }
         
         .window-preview {

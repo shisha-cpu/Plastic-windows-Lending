@@ -1,23 +1,18 @@
         :root {
 
-            --text-dark: #2c3e50;
+            --text-dark: #333;
             --text-gray: #6c757d;
             --card-gray: #f0f2f5;
             --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
 .reviews-section {
-            padding: 80px 0;
+     
             background-color: #fff;
         }
         .container{
             max-width: 1200px;
         }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
+
         
         .section-title {
             font-size: 2.2rem;
@@ -68,7 +63,7 @@
         }
         
         .review-card:hover {
-            transform: translateY(-5px);
+             0
         }
         
         .author-header {

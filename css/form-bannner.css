@@ -19,6 +19,7 @@
 .measurement-higlight {
     background-color: rgb(19, 138, 67);
     padding: 10px;
+    color: #fff !important;
 }
 
 .content-container {
@@ -68,8 +69,8 @@
     color: rgba(0, 0, 0, 0.7);
 }
 
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+.btn-primary-form {
+  background-color: #2d3a35;
     border: none;
     border-radius: 8px;
     padding: 0.75rem 2rem;
@@ -79,7 +80,14 @@
     letter-spacing: 0.5px;
     width: 100%;
     transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    color: #fff !important  ;
+
+}
+.form-check-input{
+    border: 1px solid #2d3a35 ;
+}
+.btn-primary-form:hover{
+   background-color: #3a4b42;
 }
 
 .whatsapp-icon {
