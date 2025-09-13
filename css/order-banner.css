@@ -1,8 +1,8 @@
        .narrow-banner {
             background:  var(--primary-color);
-            border-radius: 12px;
+            border-radius: 0 !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin: 40px 0;
+         
             overflow: hidden;
             position: relative;
         }
@@ -35,19 +35,19 @@
             justify-content: center;
         }
         .banner-btn {
-            background-color: var(--primary-color) !important;
+            background-color: var(--black) !important;
             color: white;
             border: none;
             padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 600;
+            border-radius: 10px !important;
+            font-weight: 500;
             font-size: 1.1rem;
             transition: all 0.3s ease;
             margin:  0 auto !important;
         }
 
         .banner-btn:hover {
-            background-color: var(--primary-color-dark) !important;
+            background-color: var(--grey) !important;
       
         }
 
@@ -70,8 +70,9 @@
             position: absolute;
             bottom: -20%;
             left: 50%;
+            top: 52%;
             transform: translateX(-50%);
-            font-size: 30rem;
+            font-size: 21rem;
             font-weight: 800;
             color: rgba(255, 255, 255, 0.15);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
@@ -257,17 +258,8 @@
     }
 }
 
-.container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 16px;
-}
 
-@media (min-width: 640px) {
-    .container {
-        padding: 0 24px;
-    }
-}
+
 
 @media (min-width: 1024px) {
     .container {
@@ -280,16 +272,9 @@
     text-align: center;
 }
 
-.header-title {
-    font-size: 1.5rem;
-    line-height: 1.2;
-}
 
-@media (min-width: 640px) {
-    .header-title {
-        font-size: 2rem;
-    }
-}
+
+
 
 .highlight {
     font-weight: 800;
@@ -300,8 +285,8 @@
     margin-top: 32px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     gap: 8px;
     font-size: 12px;
     font-weight: 400;
@@ -320,6 +305,7 @@
     background-color: #f3f3f3;
     color: #9b9b9b;
     cursor: pointer;
+    border:  0 !important;
 }
 
        .filter-item:hover{
@@ -382,19 +368,7 @@
     background-color: #6abf2a;
 }
 
-.project-title {
-    margin-top: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
-.project-title h2 {
-    font-size: 18px;
-    font-weight: 800;
-    line-height: 1.2;
-    max-width: 70%;
-}
 
 .divider {
     border-bottom: 2px solid #000;
@@ -499,4 +473,87 @@
 }
 .project-note i {
     color: var(--primary-color);
+}
+
+/* Сдвиг бейджей к левому краю (пункт 30) */
+.badge {
+    position: absolute;
+    top: 16px;
+    left: 0; /* Прижать к левому краю */
+    background-color: #8a2be2;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 0 9999px 9999px 0; /* Скругление только справа */
+    padding: 4px 12px;
+    margin-left: 0; /* Убрать лишние отступы */
+}
+
+.badge.hit {
+    top: 56px;
+    left: 0; /* Прижать к левому краю */
+    background-color: #6abf2a;
+    border: none; /* Убрать обводку (пункт 31) */
+    border-radius: 0 9999px 9999px 0; /* Скругление только справа */
+}
+
+/* Стили для футера с текстом и кнопкой (пункт 32) */
+.project-footer {
+    margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.project-note {
+    flex: 1; /* Занимает доступное пространство */
+    font-size: 12px;
+    color: #4a4a4a;
+
+    
+    border-radius: 8px;
+    text-align: left;
+}
+
+.project-note p {
+    margin: 0 !important; /* Убрать лишние отступы */
+}
+
+.project-button {
+    flex: 0 0 auto; /* Фиксированная ширина для кнопки */
+    display: flex;
+    justify-content: flex-end;
+}
+
+.banner-btn {
+
+    color: white;
+    border: none;
+    padding: 10px 20px; /* Размер кнопки */
+    border-radius: 8px !important; /* Прямоугольная кнопка */
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.banner-btn:hover {
+    background-color: var(--grey) !important; /* Цвет при наведении */
+}
+
+/* Адаптивность */
+@media (max-width: 640px) {
+    .project-footer {
+        flex-direction: column; /* Вертикальное расположение на маленьких экранах */
+        align-items: stretch;
+    }
+
+    .project-note {
+        text-align: center; /* Центрировать текст */
+    }
+
+    .project-button {
+        justify-content: center;
+        margin-top: 8px;
+    }
 }

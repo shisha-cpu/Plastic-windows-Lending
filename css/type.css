@@ -1,14 +1,17 @@
 .header-title {
-  color: #333;
+  color: #212529;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   text-align: left; /* выравнивание слева */
   position: relative;
   padding-bottom: 15px;
   font-size: 1.9rem;
   
 }
+.btn:active {
+  background-color: var(--primary-color-dark) !important; /* Фирменный цвет при клике */
 
+}
 .header-title:after {
   content: '';
   position: absolute;
@@ -32,7 +35,7 @@
 }
 
 .glass-card:hover {
-   0
+   
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
@@ -53,14 +56,14 @@
 
 .glass-title {
   font-weight: 700;
-  color: #000; /* черный текст */
+  color: #212529; /* черный текст */
   text-align: center; /* по центру */
   margin-bottom: 10px;
-  font-size: 23px;
+  font-size: 1.5rem;
 }
 
 .glass-price {
-  color: #000; 
+  color: #212529; 
   font-weight: 600;
   font-size: 1.2rem;
   margin-bottom: 15px;

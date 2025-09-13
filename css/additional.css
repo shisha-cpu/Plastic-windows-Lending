@@ -49,7 +49,7 @@
 
 .service-card:hover {
     box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-    border: 2px solid rgb(19, 138, 67);
+   
 }
 
 .service-name {

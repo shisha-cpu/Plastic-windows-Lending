@@ -3,7 +3,7 @@
 }
 
 .section-title {
-    color: #333;
+    color: #212529;
     position: relative;
     padding-bottom: 15px;
     font-weight: 700;
@@ -45,9 +45,7 @@
     transition: transform 0.5s ease;
 }
 
-.accessory-card:hover .accessory-bg {
-    transform: scale(1.05); /* Added slight zoom effect on hover for better UX */
-}
+
 
 .accessory-overlay {
     position: absolute;

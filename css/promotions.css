@@ -18,7 +18,15 @@
             display: flex;
             gap: 12px;
         }
-        
+        .carousel-control.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.installer-image {
+    -webkit-user-drag: none; /* Prevent dragging in WebKit browsers */
+    user-drag: none; /* Standard property */
+    pointer-events: none; /* Disable pointer events on images to prevent interaction */
+}
         .header-controls .carousel-control {
             width: 40px;
             height: 40px;
@@ -87,7 +95,7 @@
             color: white;
             border: none;
             padding: 12px 25px;
-            border-radius: 50px;
+            border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
         

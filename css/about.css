@@ -1,8 +1,5 @@
-        .about-section {
-            padding: 3px 0;
-              background-color: #f5f5f5; /* Added gray background */
-        }
-        
+
+        .background-grey {background-color: #f5f5f5 !important}
         .about-content {
             padding-right: 30px;
         }
@@ -19,7 +16,7 @@
             position: relative;
             margin-bottom: 30px;
             padding-bottom: 15px;
-            color: #333;
+            color: #212529;
         }
         
         .section-title::after {

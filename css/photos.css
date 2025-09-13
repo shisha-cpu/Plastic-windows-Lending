@@ -1,134 +1,146 @@
+        .photo-section {
+            padding: 20px;
+        }
 
+ 
 
+        .photo-collage {
+            column-count: 3;
+            column-gap: 15px;
+        }
 
-.photo-collage {
-    column-count: 3; /* Adjust number of columns based on preference */
-    column-gap: 15px;
+        .photo-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+        }
 
-}
+        .photo-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-.photo-item {
-    break-inside: avoid; /* Prevents images from breaking across columns */
-    margin-bottom: 15px;
-    border-radius: 10px;
-    overflow: hidden;
-    display: inline-block;
-    width: 100%;
-}
+        .photo-item:hover img {
+            transform: scale(1.1);
+        }
 
-.photo-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    cursor: pointer;
-}
+        @media (max-width: 768px) {
+            .photo-collage {
+                column-count: 2;
+            }
+        }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .photo-collage {
-        column-count: 2;
-    }
-}
+        @media (max-width: 480px) {
+            .photo-collage {
+                column-count: 1;
+            }
+        }
 
-@media (max-width: 480px) {
-    .photo-collage {
-        column-count: 1;
-    }
-}
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
 
-/* Lightbox styles */
-.lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+        .lightbox.active {
+            display: flex;
+        }
 
-.lightbox:target {
-    display: flex;
-}
+        .lightbox-content {
+            position: relative;
+            text-align: center;
+            max-height: 100vh; /* Restrict content height to fit within viewport */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Add padding to ensure space for controls */
+        }
 
-.lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain; /* Ensures full image is visible without cropping */
-}
+        .lightbox img {
+            max-width: 80%; /* Keep horizontal size reasonable */
+            max-height: 100vh; /* Further reduced to ensure vertical images fit */
+            object-fit: contain;
+            z-index: 1001;
+            margin: 10px 0; /* Reduced margin to fit within content */
+        }
 
-.close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    font-size: 30px;
-    text-decoration: none;
-}
+        .close {
+            position: absolute;
+            top: 10px; /* Adjusted to stay within viewport */
+            right: 10px;
+            color: white;
+            font-size: 30px;
+            text-decoration: none;
+            z-index: 1002;
+        }
 
-/* Image zoom effect on hover */
-.photo-item {
-    break-inside: avoid;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    overflow: hidden;
-    display: inline-block;
-    width: 100%;
-    position: relative; /* Ensure positioning context for image */
-}
+        .close:hover {
+            color: #ccc;
+        }
 
-.photo-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    cursor: pointer;
-    transition: transform 0.3s ease; /* Smooth zoom transition */
-}
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 40px;
+            text-decoration: none;
+            z-index: 1002;
+            cursor: pointer;
+        }
 
-.photo-item:hover img {
-    transform: scale(1.1); /* Scale up image by 10% on hover */
-}
+        .prev-btn {
+            left: 10px; /* Adjusted for consistency */
+        }
 
-/* Lightbox styles */
-.lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+        .next-btn {
+            right: 10px;
+        }
 
-.lightbox:target {
-    display: flex;
-}
+        .nav-btn:hover {
+            color: #ccc;
+        }
 
-.lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-    position: relative;
-    z-index: 1001; /* Ensure image is above background */
-}
+        .lightbox-caption {
+            color: white;
+            margin-top: 5px; /* Reduced to save vertical space */
+            font-size: 16px;
+            max-width: 80%; /* Align with image width */
+        }
 
-.close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    color: white;
-    font-size: 30px;
-    text-decoration: none;
-    z-index: 1002; /* Ensure close button is clickable */
-}
+        /* Responsive adjustments for smaller screens */
+        @media (max-height: 600px) {
+            .lightbox img {
+                max-height: 70vh; /* Further reduce for small viewports */
+            }
 
-/* Optional: Add subtle animation to close button */
-.close:hover {
-    color: #ccc;
-}
+            .close {
+                font-size: 24px; /* Smaller close button for small screens */
+                top: 5px;
+                right: 5px;
+            }
+
+            .nav-btn {
+                font-size: 30px; /* Smaller nav buttons */
+            }
+
+            .lightbox-caption {
+                font-size: 14px; /* Smaller caption */
+                margin-top: 3px;
+            }
+        }

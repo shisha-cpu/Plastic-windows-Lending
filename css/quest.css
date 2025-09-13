@@ -1,18 +1,8 @@
-.faq-section {
-    background-color: #f5f5f5;
-}
-
-.container {
-    max-width: 1200px;
-}
-
-.collapse {
-    visibility: visible !important;
-}
 
 .faq-container {
     max-width: 1200px;
     margin: 0 auto;
+    border-radius: 0 !important;
 }
 
 .accordion-item {
@@ -21,26 +11,27 @@
     border-radius: 0;
     margin-bottom: 0;
     box-shadow: none;
-    overflow: visible;
+    overflow: hidden;
     border-bottom: 1px solid #ddd;
 }
 
 .accordion-button {
     background-color: transparent;
-    color: #333;
+    color: #212529;
     font-weight: 400;
     font-size: 1.1rem;
-    padding: 20px 15px;
     border: none;
     box-shadow: none;
     position: relative;
     display: flex;
     align-items: flex-start;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
 }
 
 .accordion-button:not(.collapsed) {
     background-color: transparent;
-    color: #333;
+    color: #212529;
     box-shadow: none;
 }
 
@@ -61,7 +52,7 @@
     transform: translateY(-50%);
     transition: transform 0.3s ease;
     font-size: 14px;
-    color: #333;
+    color: #212529;
 }
 
 .accordion-button:not(.collapsed) .accordion-icon {
@@ -72,8 +63,8 @@
     display: inline-flex;
     width: 28px;
     height: 28px;
-    background-color: #e9ecef;
-    color: #333;
+    background-color: var(--primary-color, #007bff);
+    color: #ffffff;
     border-radius: 50%;
     text-align: center;
     align-items: center;
@@ -85,43 +76,43 @@
     margin-top: 2px;
 }
 
-.accordion-button:not(.collapsed) .question-number {
-    background-color: #e9ecef;
-    color: #333;
-}
-
 .accordion-body {
     background: transparent;
-    padding: 0 15px 20px 58px;
     color: #6c757d;
     line-height: 1.6;
     border: none;
     box-shadow: none;
+    padding: 0 1.25rem 1rem 1.25rem;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
 }
 
-.accordion-body p {
-    margin: 0;
+.accordion-collapse.show .accordion-body {
+    opacity: 1;
+}
+
+.accordion-collapse {
+    overflow: hidden;
+    height: 0;
+    transition: height 0.4s ease-in-out;
+}
+
+.accordion-collapse.show {
+    height: auto;
 }
 
 /* Адаптивность */
 @media (max-width: 992px) {
-    .faq-section {
-        padding: 60px 0;
-    }
     .section-title {
         font-size: 2.2rem;
     }
 }
 
 @media (max-width: 768px) {
-    .faq-section {
-        padding: 50px 0;
-    }
     .section-title {
         font-size: 2rem;
     }
     .accordion-button {
-        padding: 15px;
         font-size: 1rem;
     }
     .question-number {
@@ -140,7 +131,6 @@
         font-size: 1.8rem;
     }
     .accordion-button {
-        padding: 12px 15px;
         font-size: 0.95rem;
     }
     .accordion-body {

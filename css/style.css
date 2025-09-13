@@ -2,6 +2,8 @@
 :root {
     --primary-color: rgb(19, 138, 67);
     --primary-color-dark: rgb(15, 110, 54);
+    --black:#212529;
+    --grey :#555;
 }
 
 body {
@@ -9,11 +11,28 @@ body {
     margin: 0;
     overflow-x: hidden;
 }
-
-.container {
-    padding: 80px 0 !important;
+.text-grey{
+    color: var(--grey) !important;
 }
-
+.container {
+    max-width: 1200px;
+    padding: 80px 0 !important;
+   
+}
+.btnText {
+    color: #fff;
+     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+     font-weight: 500 !important;
+     font-size: 16px !important;
+}
+.card-title{
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;    
+}
+.card-title h2{
+    font-size: 1.4rem !important;
+    font-weight: 600 !important;    
+}
 .container-custom {
     margin: 0 auto;
     padding: 0 15px;
@@ -97,7 +116,7 @@ body {
     white-space: nowrap;
     position: relative;
     padding: 0.5rem 1rem;
-    color: #333;
+    color: #212529;
     text-decoration: none;
 }
 
@@ -117,7 +136,7 @@ body {
     border: 1px solid var(--primary-color);
     background-color: transparent;
     transition: all 0.3s;
-    color: #000;
+    color: #212529;
     text-transform: none !important;
 }
 
@@ -147,7 +166,15 @@ body {
     justify-content: center;
     gap: 1rem;
 }
-
+.fa-whatsapp{
+    position: relative;
+   top: 4px; 
+}
+.header {
+    position: relative;
+    z-index: 1003; /* Выше чем нижнее меню */
+    background: white; /* Чтобы перекрывало контент под ним */
+}
 .top-nav .dropdown-menu {
     min-width: 220px;
     left: 50%;
@@ -156,6 +183,7 @@ body {
     border: none;
     border-radius: 0.5rem;
     padding: 1rem;
+
 }
 
 .bottom-nav-container {
@@ -175,7 +203,7 @@ body {
     display: block;
     text-align: center;
     padding: 1rem 0;
-    color: #333;
+    color: #212529;
     text-decoration: none;
     font-size: 0.9rem;
 }
@@ -238,7 +266,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: #333;
+    color: #212529;
     border-bottom: 1px solid #e9ecef;
     padding-bottom: 0.5rem;
 }
@@ -253,7 +281,7 @@ body {
 }
 
 .mega-menu-column a:hover {
-    color: #000;
+    color: #212529;
     padding-left: 5px;
 }
 
@@ -284,10 +312,10 @@ body {
     left: 0;
 }
 
-.mobile-menu .accordion-button {
+.mobile-menu {
     background: none;
     border: none;
-    color: #333;
+    color: #212529;
     padding: 0.75rem 0;
     font-size: 1rem;
     font-weight: 500;
@@ -303,7 +331,7 @@ body {
 
 .mobile-menu .accordion-button:not(.collapsed) {
     background: #f5f5f5;
-    color: #000;
+    color: #212529;
 }
 
 .mobile-menu .accordion-button:focus {
@@ -324,7 +352,7 @@ body {
 }
 
 .mobile-menu .accordion-body a:hover {
-    color: #000;
+    color: #212529;
 }
 
 .mobile-menu .mega-menu-column {
@@ -434,3 +462,5 @@ body {
     border-bottom: 1px solid #eee;
     margin-bottom: 15px;
 }
+
+

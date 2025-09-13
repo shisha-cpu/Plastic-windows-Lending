@@ -6,12 +6,12 @@
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 25px;
-            color: #333;
+            color: #212529;
             text-align: center;
         }
         .prepayment-badge-unique {
             background-color: var(--primary-color);
-            color: #333;
+            color: #212529;
             padding: 6px 12px;
             font-weight: bold;
             transform: skew(-15deg);
@@ -50,7 +50,7 @@
             transform: skew(-15deg);
        background-color: var(--primary-color);
             padding: 10px 15px;
-            color: #333;
+            color: #212529;
             margin-right: 15px;
             display: inline-block;
             border: 1px solid var(--primary-color);

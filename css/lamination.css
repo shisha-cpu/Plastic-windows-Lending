@@ -1,16 +1,14 @@
+
 .constructor-container {
-    background: white;
-    border-radius: 15px;
-    padding: 30px;
-    width: 100%; /* Full width of the container */
-    margin: 0; /* Remove any default margins to align with header */
+    width: 100%;
+    margin: 0;
 }
 
 .option-title {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 20px;
-    color: #333;
+    color: #212529;
     padding-bottom: 8px;
     border-bottom: 2px solid rgb(19, 138, 67);
 }
@@ -20,7 +18,7 @@
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 30px;
-    justify-content: flex-start; /* Align colors to the left */
+    justify-content: flex-start;
 }
 
 .color-option {
@@ -34,7 +32,7 @@
 
 .color-option:hover .color-sample {
     border-color: rgb(19, 138, 67);
-    box-shadow: 0 0 5px rgba(19, 138, 67, 0.5);
+  
 }
 
 .color-sample {
@@ -44,54 +42,45 @@
     margin-bottom: 8px;
     border: 2px solid #ddd;
     transition: all 0.3s ease;
-    /* Removed box-shadow */
 }
 
 .color-option.active .color-sample {
     border-color: rgb(19, 138, 67);
-    box-shadow: 0 0 0 3px rgba(19, 138, 67, 0.5);
+    
 }
 
 .color-name {
     font-size: 0.85rem;
     text-align: center;
-    color: #333;
+    color: #212529;
     font-weight: 500;
 }
 
 .preview-container {
-    background: #f9f9f9;
     border-radius: 15px;
     padding: 30px;
     text-align: center;
     border: 1px solid #eee;
-    /* Removed box-shadow */
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.preview-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 25px;
-    color: #333;
-}
-
 .window-preview {
     width: 100%;
     margin: 0 auto;
     position: relative;
+    flex-grow: 1;
 }
 
 .window-image {
     width: 100%;
-    height: auto;
+    height: 100%;
     border-radius: 8px;
-    /* Removed box-shadow */
     transition: opacity 0.3s ease;
     margin-left: 0px;
+    object-fit: cover;
 }
 
 .image-loading {
@@ -99,15 +88,28 @@
     filter: blur(2px);
 }
 
-.selection-result {
+.selection-text {
+    margin-top: 25px;
+    padding: 15px;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.consultation-button {
     margin-top: 25px;
     padding: 15px;
     background: rgb(19, 138, 67);
     color: white;
+    border: none;
     border-radius: 8px;
     font-weight: 500;
     font-size: 1.1rem;
-    /* Removed box-shadow */
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.consultation-button:hover {
+    background: rgb(15, 110, 53);
 }
 
 .options-column {
@@ -138,4 +140,3 @@
         height: 50px;
     }
 }
-

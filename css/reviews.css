@@ -10,13 +10,6 @@
             margin-bottom: 30px;
         }
 
-        .header-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin: 0;
-        }
-
         .carousel-controls {
             display: flex;
             gap: 10px;
@@ -76,9 +69,7 @@
             flex-direction: column;
         }
 
-        .review-card:hover {
-            transform: translateY(-5px);
-        }
+      
 
         .author-header {
             display: flex;
@@ -255,11 +246,7 @@
             .reviews-section, .video-reviews-section {
                 padding: 60px 0;
             }
-            
-            .header-title {
-                font-size: 1.8rem;
-            }
-            
+       
             .video-thumbnail {
                 height: 250px;
             }

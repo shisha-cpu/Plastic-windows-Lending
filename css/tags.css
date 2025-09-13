@@ -26,14 +26,14 @@
 }
 
 .tag-item:hover {
-    border-color: #000000; 
-    color: #000000; 
+    border-color: #212529000; 
+    color: #212529000; 
 
 }
 
 .tag-item.active {
-    border-color: #000000; /* Site's standard black for active state */
-    color: #000000; /* Site's standard black text for active state */
+    border-color: #212529000; /* Site's standard black for active state */
+    color: #212529000; /* Site's standard black text for active state */
 
 }
 
