@@ -63,7 +63,7 @@
 .service-price {
     font-size: 20px;
     color: white;
-   
+    text-shadow: 0 2px 4px rgba(0,0,0,0.7);
     position: absolute;
     bottom: 25px;
     left: 25px;
@@ -90,3 +90,5 @@
         margin-bottom: 20px;
     }
 }
+
+

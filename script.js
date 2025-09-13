@@ -5,28 +5,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const bottomNav = document.querySelector('.bottom-nav');
     let activeMegaMenu = null;
 
-    // Function to hide all mega menus
+    function isMobile() {
+        return window.innerWidth < 768;
+    }
+
     function hideAllMegaMenus() {
-        navItems.forEach(item => {
-            const megaMenu = item.querySelector('.mega-menu');
-            if (megaMenu) {
-                megaMenu.style.display = 'none';
-            }
-        });
-        activeMegaMenu = null;
+        if (!isMobile()) {
+            navItems.forEach(item => {
+                const megaMenu = item.querySelector('.mega-menu');
+                if (megaMenu) {
+                    megaMenu.style.display = 'none';
+                }
+            });
+            activeMegaMenu = null;
+        }
     }
 
-    // Function to hide all dropdown menus
     function hideAllDropdownMenus() {
-        topNavItems.forEach(item => {
-            const dropdownMenu = item.querySelector('.dropdown-menu');
-            if (dropdownMenu) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
+        if (!isMobile()) {
+            topNavItems.forEach(item => {
+                const dropdownMenu = item.querySelector('.dropdown-menu');
+                if (dropdownMenu) {
+                    dropdownMenu.style.display = 'none';
+                }
+            });
+        }
     }
 
-    // Function to check if mouse is inside an element
     function isMouseInsideElement(event, element) {
         if (!element) return false;
         const rect = element.getBoundingClientRect();
@@ -43,98 +48,109 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hover events for bottom navigation items
     navItems.forEach(item => {
         item.addEventListener('mouseenter', function() {
-            const megaMenu = this.querySelector('.mega-menu');
-            if (megaMenu) {
-                hideAllMegaMenus(); // Сначала скрываем все остальные меню
-                const bottomNavRect = bottomNav.getBoundingClientRect();
-                const bottomNavBottom = bottomNavRect.bottom;
-                megaMenu.style.top = `${bottomNavBottom - 2}px`;
-                megaMenu.style.display = 'block';
-                activeMegaMenu = megaMenu;
+            if (!isMobile()) {
+                const megaMenu = this.querySelector('.mega-menu');
+                if (megaMenu) {
+                    hideAllMegaMenus();
+                    const bottomNavRect = bottomNav.getBoundingClientRect();
+                    const bottomNavBottom = bottomNavRect.bottom;
+                    megaMenu.style.top = `${bottomNavBottom - 2}px`;
+                    megaMenu.style.display = 'block';
+                    activeMegaMenu = megaMenu;
+                }
             }
         });
 
         item.addEventListener('mouseleave', function(event) {
-            const megaMenu = this.querySelector('.mega-menu');
-            if (megaMenu) {
-                // Проверяем, не находится ли мышь внутри мега-меню
-                setTimeout(() => {
-                    if (!isMouseInsideElement(event, megaMenu)) {
-                        megaMenu.style.display = 'none';
-                        if (activeMegaMenu === megaMenu) {
-                            activeMegaMenu = null;
+            if (!isMobile()) {
+                const megaMenu = this.querySelector('.mega-menu');
+                if (megaMenu) {
+                    setTimeout(() => {
+                        if (!isMouseInsideElement(event, megaMenu)) {
+                            megaMenu.style.display = 'none';
+                            if (activeMegaMenu === megaMenu) {
+                                activeMegaMenu = null;
+                            }
                         }
-                    }
-                }, 100);
+                    }, 100);
+                }
             }
         });
     });
 
-    // Добавляем обработчики для самого мега-меню
     document.querySelectorAll('.mega-menu').forEach(megaMenu => {
         megaMenu.addEventListener('mouseenter', function() {
-            // При входе в мега-меню оставляем его открытым
-            this.style.display = 'block';
+            if (!isMobile()) {
+                this.style.display = 'block';
+            }
         });
 
         megaMenu.addEventListener('mouseleave', function() {
-            // При выходе из мега-меню скрываем его
-            this.style.display = 'none';
-            if (activeMegaMenu === this) {
-                activeMegaMenu = null;
+            if (!isMobile()) {
+                this.style.display = 'none';
+                if (activeMegaMenu === this) {
+                    activeMegaMenu = null;
+                }
             }
         });
     });
 
-    // Hover events for top navigation items
     topNavItems.forEach(item => {
         const dropdownMenu = item.querySelector('.dropdown-menu');
         if (dropdownMenu) {
             item.addEventListener('mouseenter', function() {
-                dropdownMenu.style.display = 'block';
+                if (!isMobile()) {
+                    dropdownMenu.style.display = 'block';
+                }
             });
 
             item.addEventListener('mouseleave', function(event) {
-                // Delay hiding to allow checking if mouse enters dropdown
-                setTimeout(() => {
-                    if (!isMouseInsideElement(event, dropdownMenu)) {
-                        dropdownMenu.style.display = 'none';
-                    }
-                }, 100);
+                if (!isMobile()) {
+                    setTimeout(() => {
+                        if (!isMouseInsideElement(event, dropdownMenu)) {
+                            dropdownMenu.style.display = 'none';
+                        }
+                    }, 100);
+                }
             });
 
-            // Keep dropdown open if mouse enters it
             dropdownMenu.addEventListener('mouseenter', function() {
-                dropdownMenu.style.display = 'block';
+                if (!isMobile()) {
+                    dropdownMenu.style.display = 'block';
+                }
             });
 
-            // Hide dropdown when mouse leaves it
             dropdownMenu.addEventListener('mouseleave', function() {
-                dropdownMenu.style.display = 'none';
+                if (!isMobile()) {
+                    dropdownMenu.style.display = 'none';
+                }
             });
         }
     });
 
-    // Изменяем обработчик скролла - теперь он не закрывает активное мега-меню
-    window.addEventListener('scroll', function(event) {
-        // Не скрываем мега-меню при скролле, если оно активно
-        hideAllDropdownMenus(); // Только выпадающие меню скрываем
-        
-        // Обновляем позицию активного мега-меню при скролле
-        if (activeMegaMenu) {
+    window.addEventListener('scroll', function() {
+        if (!isMobile() && activeMegaMenu) {
             const bottomNavRect = bottomNav.getBoundingClientRect();
             const bottomNavBottom = bottomNavRect.bottom;
             activeMegaMenu.style.top = `${bottomNavBottom - 2}px`;
         }
+        hideAllDropdownMenus();
     });
 
-    // Track mouse position for scroll handling
+    window.addEventListener('resize', function() {
+        hideAllMegaMenus();
+        hideAllDropdownMenus();
+        if (isMobile()) {
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        }
+    });
+
     window.addEventListener('mousemove', function(event) {
         window.lastMouseX = event.clientX;
         window.lastMouseY = event.clientY;
     });
 
-    // Mobile menu handling
     const burgerMenu = document.querySelector('.burger-menu');
     const mobileMenu = document.querySelector('.mobile-menu');
     const mobileOverlay = document.querySelector('.mobile-overlay');
@@ -150,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
             accordionItem.innerHTML = `
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}">
-                        ${link.textContent}
+                        ${link.textContent.replace(' <span class="arrow"><i class="fas fa-chevron-down"></i></span>', '')}
                     </button>
                 </h2>
                 <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
