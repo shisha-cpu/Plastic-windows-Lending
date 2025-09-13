@@ -1,9 +1,4 @@
 
-.faq-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    border-radius: 0 !important;
-}
 
 .accordion-item {
     background: transparent;
@@ -25,8 +20,9 @@
     position: relative;
     display: flex;
     align-items: flex-start;
-    padding: 1rem 1.25rem;
     cursor: pointer;
+    padding: 1.25rem;
+    transition: background-color 0.3s ease;
 }
 
 .accordion-button:not(.collapsed) {
@@ -78,17 +74,19 @@
 
 .accordion-body {
     background: transparent;
-    color: #6c757d;
+    color: var(--grey, #6c757d);
     line-height: 1.6;
     border: none;
     box-shadow: none;
     padding: 0 1.25rem 1rem 1.25rem;
     opacity: 0;
-    transition: opacity 0.4s ease-in-out;
+    transform: translateY(-10px);
+    transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
 .accordion-collapse.show .accordion-body {
     opacity: 1;
+    transform: translateY(0);
 }
 
 .accordion-collapse {
@@ -114,6 +112,7 @@
     }
     .accordion-button {
         font-size: 1rem;
+        padding: 1rem;
     }
     .question-number {
         width: 25px;
@@ -132,6 +131,7 @@
     }
     .accordion-button {
         font-size: 0.95rem;
+        padding: 0.75rem;
     }
     .accordion-body {
         padding: 0 15px 15px 15px;

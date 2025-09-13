@@ -1,95 +1,129 @@
+
+
+    .header-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 130px;
+      height: 5px;
+      background: var(--primary-color);
+    }
+
 .header-title {
   color: #212529;
   font-weight: 700;
   margin-bottom: 40px;
-  text-align: left; /* выравнивание слева */
+  text-align: left;
   position: relative;
   padding-bottom: 15px;
-  font-size: 1.9rem;
-  
 }
-.btn:active {
-  background-color: var(--primary-color-dark) !important; /* Фирменный цвет при клике */
 
+.header-title h2 {
+     color: #212529;
+      text-align: left;
+      position: relative;
+      font-size: 1.9rem;
+      font-weight: 700;
 }
+
 .header-title:after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: 0; /* линия тоже слева */
-  width: 130px; /* длина линии */
-  height: 5px; /* толщина линии */
+  left: 0;
+  width: 130px;
+  height: 5px;
   background: var(--primary-color);
 }
 
+.header-title p {
+  margin: 10px 0 0 0;
+  font-size: 1rem;
+  color: #555;
+}
+    .glass-card {
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 100%;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      padding: 15px;
+      position: relative;
+    }
 
+    .glass-card:hover {
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+    }
 
-.glass-card {
-  border-radius: 10px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  height: 100%;
-  border: none;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  padding: 15px;
-}
+    .profile-img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 220px;
+      margin-bottom: 15px;
+    }
 
-.glass-card:hover {
-   
-  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
-}
+    .card-img-profile {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      background-color: #ffffff;
+    }
 
-.glass-imgVeka {
-  height: 220px;
-  object-fit: contain; /* вместо cover */
-  width: 100%;
-  margin-bottom: 15px;
-  background-color: #ffffff; /* фон, если картинка не займет всю область */
-}
-.glass-img {
-  height: 200px;
-  object-fit: cover; /* вместо cover */
-  width: 100%;
-  margin-bottom: 15px;
-  background-color: #ffffff; /* фон, если картинка не займет всю область */
-}
+    .card-logo {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 60px;
+      height: auto;
+      object-fit: contain;
+    }
 
-.glass-title {
-  font-weight: 700;
-  color: #212529; /* черный текст */
-  text-align: center; /* по центру */
-  margin-bottom: 10px;
-  font-size: 1.5rem;
-}
+    .glass-title {
+      font-weight: 700;
+      color: #212529;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
 
-.glass-price {
-  color: #212529; 
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-  text-align: center; /* по центру */
-}
-.price-higlit{
-   font-size: 1.3rem;
-     font-weight: 700;
-}
-.btn-primary {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-  color: #ffffff; 
-  padding: 0.6rem 1.5rem;
-  font-weight: 500;
-  font-size: 16px !important;
-  border-radius: 10px !important;
-  transition: all 0.3s ease;
-  display: block;
-}
+    .glass-price {
+      color: #212529;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      text-align: center;
+    }
 
-.btn-primary:hover {
-  background-color: var(--primary-color-dark);
-  border-color: var(--primary-color);
-  color: #ffffff;
-}
-.card-body-text{
-    margin-top: -30px;
-}
+    .price-higlit {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #ffffff;
+      padding: 0.6rem 1.5rem;
+      font-weight: 500;
+      font-size: 16px !important;
+      border-radius: 10px !important;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-color-dark);
+      border-color: var(--primary-color);
+      color: #ffffff;
+    }
+
+    .btn:active {
+      background-color: var(--primary-color-dark) !important;
+    }
+
+    .card-body-text {
+      margin-top: -30px;
+    }

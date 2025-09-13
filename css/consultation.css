@@ -77,7 +77,7 @@
 }
 .privacy-text {
     font-size: 0.85rem;
-    color: #6c757d;
+    color: var(--grey);
     text-align: center;
     margin-top: 25px;
     line-height: 1.5;

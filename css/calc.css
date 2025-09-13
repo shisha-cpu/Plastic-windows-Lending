@@ -188,25 +188,24 @@
   background-color: var(--primary-color-dark, #007bff);
 }
 
-h1, h5 {
-  color: #212529;
-}
+
 
 .construction-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   padding-left: 5px !important;
+    padding-bottom: 20px ;
 }
 .construction-subtitle{
   padding-left: 5px !important;
-  padding-bottom: 10px;
+
 }
 .construction-btn {
   background-color: transparent;
   border: none;
  
-  font-size: 16px;
+  font-size: 1rem;
   color: #212529;
   position: relative;
   transition: color 0.3s ease;

@@ -25,7 +25,7 @@
     bottom: -5px;
     left: 30%;
     transform: translateX(-50%);
-    background: linear-gradient(135deg, #6c757d, #495057); /* Changed to grey gradient */
+    background: linear-gradient(135deg, var(--grey), #495057); /* Changed to grey gradient */
     color: white;
     border-radius: 50%;
     font-size: 15px;
@@ -59,7 +59,7 @@
 }
 
 .windows-label {
-    color: #6c757d;
+    color: var(--grey);
     margin-top: 10px;
     margin-left: 10px;
     font-size: 0.9rem;

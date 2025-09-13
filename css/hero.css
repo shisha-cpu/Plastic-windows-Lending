@@ -59,7 +59,7 @@
       background: #fff;
       border: none;
       padding: 18px 20px;
-      font-size: 18px;
+      font-size: 1rem;
       border-radius: 8px;
     }
 
@@ -209,7 +209,7 @@ h2{
       
       .name-input, .consultation-btn {
         padding: 15px;
-        font-size: 16px;
+        font-size: 1rem;
       }
       
       .rating-content {

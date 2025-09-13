@@ -1,9 +1,8 @@
-
 :root {
     --primary-color: rgb(19, 138, 67);
     --primary-color-dark: rgb(15, 110, 54);
-    --black:#212529;
-    --grey :#555;
+    --black: #212529;
+    --grey: #555;
 }
 
 body {
@@ -11,28 +10,33 @@ body {
     margin: 0;
     overflow-x: hidden;
 }
-.text-grey{
+
+.text-grey {
     color: var(--grey) !important;
 }
+
 .container {
     max-width: 1200px;
     padding: 80px 0 !important;
-   
 }
+
 .btnText {
     color: #fff;
-     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
-     font-weight: 500 !important;
-     font-size: 16px !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
 }
-.card-title{
+
+.card-title {
     font-size: 1.4rem !important;
     font-weight: 700 !important;    
 }
-.card-title h2{
+
+.card-title h2 {
     font-size: 1.4rem !important;
     font-weight: 600 !important;    
 }
+
 .container-custom {
     margin: 0 auto;
     padding: 0 15px;
@@ -40,9 +44,14 @@ body {
 
 .header-container {
     max-width: 1200px !important;
-    margin: 0 auto;
-    padding:  0 ;
 
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+   
 }
 
 .btn {
@@ -51,8 +60,9 @@ body {
 
 .header {
     border-bottom: 1px solid #e9ecef;
- padding:  0 !important;
+ 
     overflow-x: hidden;
+     padding: 20px 0  ;
 }
 
 .profile-container {
@@ -101,7 +111,8 @@ body {
     display: flex;
     justify-content: flex-end;
     flex-shrink: 0;
-    margin-top: 20px;
+    align-self: center; /* Center vertically */
+    margin-bottom: 0; /* Remove bottom margin */
 }
 
 .contact-info {
@@ -110,6 +121,7 @@ body {
     justify-content: flex-end;
     flex-wrap: nowrap;
     gap: 0.5rem;
+  
 }
 
 .nav-link {
@@ -138,6 +150,7 @@ body {
     transition: all 0.3s;
     color: #212529;
     text-transform: none !important;
+    padding: 10 15px;
 }
 
 .bottom-nav-link .arrow {
@@ -166,15 +179,18 @@ body {
     justify-content: center;
     gap: 1rem;
 }
-.fa-whatsapp{
+
+.fa-whatsapp {
     position: relative;
-   top: 4px; 
+    top: 4px; 
 }
+
 .header {
     position: relative;
     z-index: 1003; /* Выше чем нижнее меню */
     background: white; /* Чтобы перекрывало контент под ним */
 }
+
 .top-nav .dropdown-menu {
     min-width: 220px;
     left: 50%;
@@ -183,7 +199,6 @@ body {
     border: none;
     border-radius: 0.5rem;
     padding: 1rem;
-
 }
 
 .bottom-nav-container {
@@ -191,7 +206,10 @@ body {
 }
 
 .bottom-nav-items {
+    width: 84%;
     display: flex;
+    justify-content: space-between;
+   
 }
 
 .bottom-nav-item {
@@ -462,5 +480,177 @@ body {
     border-bottom: 1px solid #eee;
     margin-bottom: 15px;
 }
+.header {
+    border-bottom: 1px solid #e9ecef;
+    padding: 20px 0;
+    width: 100%;
+    background: white;
+    position: relative;
+    z-index: 1003;
+}
 
+.header-container {
+    width: 100%;
+    max-width: none !important; /* Remove max-width restriction */
+    margin: 0;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; /* Remove red background for clarity */
+}
 
+.header .row {
+    width: 100%;
+    margin: 0; /* Override Bootstrap's negative margins */
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+/* Ensure columns have no padding */
+.brand-section,
+.nav-section,
+.contact-section {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Optional: If you want to keep a max-width but ensure no side padding */
+@media (min-width: 1200px) {
+    .header-container {
+        max-width: 1200px !important; /* Restore max-width if needed */
+        margin: 0 auto;
+    }
+}
+/* Bottom Navigation Styles */
+.bottom-nav {
+    width: 100%;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    position: relative;
+    z-index: 1002;
+}
+
+.header-container {
+    width: 100%;
+    max-width: none !important; /* Remove max-width restriction */
+    margin: 0;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+}
+
+.bottom-nav-items {
+    width: 100%; /* Changed from 84% to 100% to remove side padding */
+    display: flex;
+    justify-content: space-between;
+    margin: 0;
+}
+
+.bottom-nav-item {
+    flex: 1;
+    position: relative;
+}
+
+.bottom-nav-link {
+    display: block;
+    text-align: center;
+    padding: 1rem 0;
+    color: #212529;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.bottom-nav-link.calc-btn {
+    border-right: none;
+    font-weight: 500;
+}
+
+.bottom-nav-item:last-child .bottom-nav-link {
+    border-right: none;
+}
+
+.mega-menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    z-index: 1002;
+    padding: 2rem 0;
+    display: none;
+    border-top: 1px solid #e9ecef;
+}
+
+.mega-menu-content {
+    width: 100%;
+    max-width: none !important; /* Remove max-width restriction */
+    margin: 0;
+    padding: 0;
+}
+
+.mega-menu-column {
+    padding-left: 0; /* Remove side padding */
+    padding-right: 0;
+    min-width: 250px;
+    flex: 1;
+}
+
+.mega-menu-column h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 0.5rem;
+}
+
+.mega-menu-column a {
+    display: block;
+    padding: 0.5rem 0;
+    color: #666;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: normal;
+}
+
+.mega-menu-column a:hover {
+    color: #212529;
+    padding-left: 5px;
+}
+
+.bottom-nav-link:hover {
+    color: var(--primary-color);
+}
+
+.bottom-nav-link .arrow {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+.bottom-nav-link .arrow i {
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.hover-bg:hover {
+    background-color: #f5f5f5;
+}
+
+/* Optional: Restore max-width for larger screens if centered layout is desired */
+@media (min-width: 1200px) {
+    .header-container {
+        max-width: 1200px !important;
+        margin: 0 auto;
+    }
+    .mega-menu-content {
+        max-width: 1200px !important;
+        margin: 0 auto;
+    }
+}

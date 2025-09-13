@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const topNavItems = document.querySelectorAll('.top-nav .nav-item');
     const header = document.querySelector('.header');
     const bottomNav = document.querySelector('.bottom-nav');
+    let activeMegaMenu = null;
 
     // Function to hide all mega menus
     function hideAllMegaMenus() {
@@ -12,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 megaMenu.style.display = 'none';
             }
         });
+        activeMegaMenu = null;
     }
 
     // Function to hide all dropdown menus
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to check if mouse is inside an element
     function isMouseInsideElement(event, element) {
+        if (!element) return false;
         const rect = element.getBoundingClientRect();
         const mouseX = event.clientX;
         const mouseY = event.clientY;
@@ -42,17 +45,43 @@ document.addEventListener('DOMContentLoaded', function() {
         item.addEventListener('mouseenter', function() {
             const megaMenu = this.querySelector('.mega-menu');
             if (megaMenu) {
+                hideAllMegaMenus(); // Сначала скрываем все остальные меню
                 const bottomNavRect = bottomNav.getBoundingClientRect();
                 const bottomNavBottom = bottomNavRect.bottom;
                 megaMenu.style.top = `${bottomNavBottom - 2}px`;
                 megaMenu.style.display = 'block';
+                activeMegaMenu = megaMenu;
             }
         });
 
-        item.addEventListener('mouseleave', function() {
+        item.addEventListener('mouseleave', function(event) {
             const megaMenu = this.querySelector('.mega-menu');
             if (megaMenu) {
-                megaMenu.style.display = 'none';
+                // Проверяем, не находится ли мышь внутри мега-меню
+                setTimeout(() => {
+                    if (!isMouseInsideElement(event, megaMenu)) {
+                        megaMenu.style.display = 'none';
+                        if (activeMegaMenu === megaMenu) {
+                            activeMegaMenu = null;
+                        }
+                    }
+                }, 100);
+            }
+        });
+    });
+
+    // Добавляем обработчики для самого мега-меню
+    document.querySelectorAll('.mega-menu').forEach(megaMenu => {
+        megaMenu.addEventListener('mouseenter', function() {
+            // При входе в мега-меню оставляем его открытым
+            this.style.display = 'block';
+        });
+
+        megaMenu.addEventListener('mouseleave', function() {
+            // При выходе из мега-меню скрываем его
+            this.style.display = 'none';
+            if (activeMegaMenu === this) {
+                activeMegaMenu = null;
             }
         });
     });
@@ -86,19 +115,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle scroll event to keep dropdown open if mouse is inside
+    // Изменяем обработчик скролла - теперь он не закрывает активное мега-меню
     window.addEventListener('scroll', function(event) {
-        hideAllMegaMenus(); // Hide mega menus as before
-        topNavItems.forEach(item => {
-            const dropdownMenu = item.querySelector('.dropdown-menu');
-            if (dropdownMenu && dropdownMenu.style.display === 'block') {
-                // Get current mouse position
-                const mouseEvent = { clientX: window.lastMouseX, clientY: window.lastMouseY };
-                if (!isMouseInsideElement(mouseEvent, dropdownMenu) && !isMouseInsideElement(mouseEvent, item)) {
-                    dropdownMenu.style.display = 'none';
-                }
-            }
-        });
+        // Не скрываем мега-меню при скролле, если оно активно
+        hideAllDropdownMenus(); // Только выпадающие меню скрываем
+        
+        // Обновляем позицию активного мега-меню при скролле
+        if (activeMegaMenu) {
+            const bottomNavRect = bottomNav.getBoundingClientRect();
+            const bottomNavBottom = bottomNavRect.bottom;
+            activeMegaMenu.style.top = `${bottomNavBottom - 2}px`;
+        }
     });
 
     // Track mouse position for scroll handling
@@ -136,25 +163,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    burgerMenu.addEventListener('click', function() {
-        mobileMenu.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-    });
+    if (burgerMenu) {
+        burgerMenu.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
+    }
 
-    mobileOverlay.addEventListener('click', function() {
-        mobileMenu.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-    });
-
-    mobileMenu.querySelectorAll('.accordion-body a').forEach(link => {
-        link.addEventListener('click', function() {
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', function() {
             mobileMenu.classList.remove('active');
             mobileOverlay.classList.remove('active');
         });
-    });
+    }
 
-    mobileMenu.querySelector('.calc-btn').addEventListener('click', function() {
-        mobileMenu.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-    });
+    if (mobileMenu) {
+        mobileMenu.querySelectorAll('.accordion-body a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        });
+
+        const mobileCalcBtn = mobileMenu.querySelector('.calc-btn');
+        if (mobileCalcBtn) {
+            mobileCalcBtn.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            });
+        }
+    }
 });

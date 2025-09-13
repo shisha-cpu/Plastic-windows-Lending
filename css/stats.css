@@ -1,87 +1,82 @@
 .stats-section {
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+}
 
-            background-color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 25px 15px;
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-        
+.stat-item {
+    text-align: center;
 
-        .stat-icon {
-            font-size: 2.8rem;
-            margin-bottom: 15px;
-      
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            font-weight: 500;
-             text-align: left;
-            letter-spacing: 0.5px;
-            color: #212529;
-            text-align: left;
-        }
-        
-        .stats-divider {
-            width: 14svw;
-            height: 2px;
-            background-color: #212529;
-            margin: 15px auto;
-            border-radius: 2px;
-        }
-        
-        /* Анимация счетчиков */
-        @keyframes countUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .count-animation {
-            animation: countUp 1.5s ease-out forwards;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 992px) {
-            .stat-item {
-                margin-bottom: 20px;
-            }
-            
-            .stat-number {
-                font-size: 2rem;
-            }
-        }
-        
-        @media (max-width: 576px) {
-         
-            .stat-number {
-                font-size: 1.8rem;
-            }
-            
-            .stat-label {
-                font-size: 0.95rem;
-            }
-            
-            .stat-icon {
-                font-size: 2.2rem;
-            }
-        }
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    margin: 10px 0;
+}
+
+.stat-icon {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.stat-label {
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-align: left;
+    letter-spacing: 0.5px;
+    color: #212529;
+}
+
+.stats-divider {
+    width: 100%;
+    height: 4px;
+    background-color: #212529;
+    margin: 15px 0;
+    border-radius: 2px;
+}
+
+/* Анимация счетчиков */
+@keyframes countUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.count-animation {
+    animation: countUp 1.5s ease-out forwards;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .stat-item {
+        margin-bottom: 20px;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-label {
+        font-size: 0.95rem;
+    }
+    
+    .stat-icon {
+        font-size: 2.2rem;
+    }
+}

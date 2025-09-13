@@ -97,7 +97,7 @@
         }
         .note-compact {
             font-size: 0.8rem;
-            color: #6c757d;
+            color: var(--grey);
             margin-top: 8px;
             font-style: italic;
         }

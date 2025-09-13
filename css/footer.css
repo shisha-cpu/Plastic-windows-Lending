@@ -29,10 +29,6 @@
     color: rgb(19, 138, 67);
 }
 
-.contact-info {
-    margin-bottom: 25px;
-}
-
 .phone-number {
     font-size: 1.5rem;
     font-weight: 700;
@@ -43,7 +39,7 @@
 
 .work-hours {
     font-size: 0.9rem;
-    color: #6c757d;
+    color: var(--grey);
     margin-bottom: 20px;
 }
 
@@ -71,29 +67,16 @@
     margin-bottom: 20px;
 }
 
-.footer-bottom {
-    background-color: transparent;
-    padding: 20px 0;
-    margin-top: 40px;
-}
-
-.copyright {
-    color: #6c757d;
-    font-size: 0.9rem;
-    text-align: center;
-    width: 100%;
-}
-
 .footer-info {
-    color: #6c757d;
+    color: var(--grey);
     font-size: 0.9rem;
     margin-bottom: 8px;
 }
 
 .footer-info a {
-    color: #6c757d;
+    color: var(--grey);
     text-decoration: none;
-    border-bottom: 1px dashed #6c757d;
+    border-bottom: 1px dashed var(--grey);
 }
 
 .footer-info a:hover {
@@ -102,7 +85,7 @@
 }
 
 .company-description {
-    color: #6c757d;
+    color: var(--grey);
     font-size: 0.9rem;
     margin-bottom: 20px;
     line-height: 1.5;
@@ -110,6 +93,13 @@
 
 .text-left {
     text-align: left !important;
+}
+
+.Footer-contact-info {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+ 
 }
 
 @media (max-width: 992px) {
