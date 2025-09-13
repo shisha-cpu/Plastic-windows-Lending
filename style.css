@@ -24,7 +24,7 @@ body {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    overflow: hidden;
+ 
     padding: 80px 0 !important;
 }
 
@@ -2482,6 +2482,7 @@ body {
     .windows-count { font-size: 1.8rem; }
     .header-title h2 { font-size: 2.2rem; }
     .photo-collage { column-count: 2; }
+    .container{overflow-x: hidden; padding: 80px 10px !important;}
 }
 
 @media (max-width: 768px) {
@@ -2630,10 +2631,7 @@ body {
     box-shadow: 0 5px 15px var(--shadow-medium);
 }
 
-.promotion-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px var(--shadow-dark);
-}
+
 
 .promotion-content {
     text-align: center;
@@ -2641,12 +2639,13 @@ body {
     padding: 30px;
     position: relative;
     z-index: 2;
-    background: rgba(0, 0, 0, 0.4);
+   
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
+   
 }
 
 .promotion-title {
@@ -3681,13 +3680,14 @@ body {
     display: block;
 }
 
+
 .btn-primary:hover {
     background: var(--primary-color-dark);
     border-color: var(--primary-color-dark);
 }
 
 .btn:active {
-    background: var(--primary-color-dark);
+    background: var(--primary-color-dark) !important;
 }
 
 /* video-reviews */
@@ -3768,6 +3768,9 @@ body {
     .quiz-sidebar { padding-left: 0; margin-top: 2rem; }
     .video-thumbnail { height: 300px; }
     .author-photo { width: 70px; height: 70px; font-size: 1.8rem; }
+    .prepayment-title{
+    margin-bottom: 40px !important;
+}
 }
 
 @media (max-width: 768px) {
