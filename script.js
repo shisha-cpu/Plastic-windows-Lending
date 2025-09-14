@@ -863,163 +863,148 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(style);
     };
 
-    const setupInfiniteLogoCarousel = () => {
-        const logosContainer = document.getElementById('partnersContainer');
-        const logosRow = logosContainer.querySelector('.logos-row');
-        const logoCards = logosContainer.querySelectorAll('.logo-card');
-        if (!logosContainer || !logosRow || logoCards.length === 0) return;
+const setupInfiniteLogoCarousel = () => {
+    const logosContainer = document.getElementById('partnersContainer');
+    const logosRow = logosContainer.querySelector('.logos-row');
+    const logoCards = logosContainer.querySelectorAll('.logo-card');
+    if (!logosContainer || !logosRow || logoCards.length === 0) return;
 
-        Array.from(logoCards).forEach(logo => logosRow.appendChild(logo.cloneNode(true)));
+    // Удаляем все дубликаты
+    const allLogos = logosRow.querySelectorAll('.logo-card');
+    if (allLogos.length > logoCards.length) {
+        for (let i = logoCards.length; i < allLogos.length; i++) {
+            allLogos[i].remove();
+        }
+    }
 
-        let animationSpeed = window.innerWidth < 768 ? 0.5 : 1;
-        let isPaused = false;
-        let isDragging = false;
-        let startX;
-        let startScrollLeft;
-        let animationId;
+    // Полностью отключаем CSS анимацию и переходим на JS управление
+    logosRow.style.animation = 'none';
+    logosContainer.style.overflowX = 'auto';
+    logosContainer.style.cursor = 'grab';
 
-        const animateLogos = () => {
-            if (isPaused) return;
-            logosContainer.scrollLeft += animationSpeed;
-            if (logosContainer.scrollLeft >= logosRow.scrollWidth / 2) {
-                logosContainer.scrollLeft = 0;
-            }
-            animationId = requestAnimationFrame(animateLogos);
-        };
+    let isDragging = false;
+    let startX;
+    let startScrollLeft;
+    let velocity = 0;
+    let lastX;
+    let lastTime;
+    let autoScrollInterval;
 
-        const startAnimation = () => {
-            if (!animationId) animationId = requestAnimationFrame(animateLogos);
-        };
-
-        const stopAnimation = () => {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-            }
-        };
-
-        logosContainer.addEventListener('mouseenter', () => {
-            isPaused = true;
-            stopAnimation();
-            logosContainer.style.cursor = 'grab';
-        });
-
-        logosContainer.addEventListener('mouseleave', () => {
-            isPaused = false;
-            startAnimation();
-            logosContainer.style.cursor = 'grab';
-        });
-
-        logosContainer.addEventListener('mousedown', event => {
-            isDragging = true;
-            startX = event.pageX - logosContainer.offsetLeft;
-            startScrollLeft = logosContainer.scrollLeft;
-            logosContainer.style.cursor = 'grabbing';
-            stopAnimation();
-        });
-
-        logosContainer.addEventListener('mouseup', () => {
-            isDragging = false;
-            logosContainer.style.cursor = 'grab';
-            startAnimation();
-        });
-
-        logosContainer.addEventListener('mousemove', event => {
-            if (!isDragging) return;
-            event.preventDefault();
-            const x = event.pageX - logosContainer.offsetLeft;
-            logosContainer.scrollLeft = startScrollLeft - (x - startX) * 2;
-        });
-
-        logosContainer.addEventListener('touchstart', event => {
-            isDragging = true;
-            startX = event.touches[0].pageX - logosContainer.offsetLeft;
-            startScrollLeft = logosContainer.scrollLeft;
-            stopAnimation();
-        }, { passive: true });
-
-        logosContainer.addEventListener('touchend', () => {
-            isDragging = false;
-            startAnimation();
-        });
-
-        logosContainer.addEventListener('touchmove', event => {
-            if (!isDragging) return;
-            const x = event.touches[0].pageX - logosContainer.offsetLeft;
-            logosContainer.scrollLeft = startScrollLeft - (x - startX) * 2;
-        }, { passive: true });
-
-        window.addEventListener('resize', () => {
-            animationSpeed = window.innerWidth < 768 ? 0.5 : 1;
-        });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            .logos-container {
-                overflow: hidden;
-                width: 100%;
-                position: relative;
-                cursor: grab;
-            }
-            .logos-row {
-                display: flex;
-                width: max-content;
-            }
-            .logo-card {
-                flex: 0 0 auto;
-                padding: 15px 25px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            .logo-image {
-                max-width: 120px;
-                max-height: 60px;
-                width: auto;
-                height: auto;
-                object-fit: contain;
-                filter: grayscale(100%);
-                opacity: 0.7;
-                transition: all 0.3s ease;
-                pointer-events: none;
-            }
-            .logo-image:hover {
-                filter: grayscale(0%);
-                opacity: 1;
-            }
-            .logos-container:active {
-                cursor: grabbing;
-            }
-            @media (max-width: 768px) {
-                .logo-card {
-                    padding: 10px 15px;
-                }
-                .logo-image {
-                    max-width: 100px;
-                    max-height: 50px;
+    const startAutoScroll = () => {
+        stopAutoScroll();
+        autoScrollInterval = setInterval(() => {
+            if (!isDragging) {
+                logosContainer.scrollLeft += 1;
+                
+                // Возвращаем в начало при достижении конца
+                if (logosContainer.scrollLeft >= logosRow.scrollWidth / 2) {
+                    logosContainer.scrollLeft = 0;
                 }
             }
-            @media (max-width: 480px) {
-                .logo-card {
-                    padding: 8px 12px;
-                }
-                .logo-image {
-                    max-width: 80px;
-                    max-height: 40px;
-                }
-            }
-            .logos-container::-webkit-scrollbar {
-                display: none;
-            }
-            .logos-container {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        `;
-        document.head.appendChild(style);
-
-        startAnimation();
+        }, 20);
     };
+
+    const stopAutoScroll = () => {
+        if (autoScrollInterval) {
+            clearInterval(autoScrollInterval);
+            autoScrollInterval = null;
+        }
+    };
+
+    const handleDragStart = (clientX) => {
+        isDragging = true;
+        startX = clientX - logosContainer.getBoundingClientRect().left;
+        startScrollLeft = logosContainer.scrollLeft;
+        velocity = 0;
+        lastX = clientX;
+        lastTime = Date.now();
+        stopAutoScroll();
+        logosContainer.style.cursor = 'grabbing';
+        logosContainer.style.scrollBehavior = 'auto';
+    };
+
+    const handleDragMove = (clientX) => {
+        if (!isDragging) return;
+
+        const x = clientX - logosContainer.getBoundingClientRect().left;
+        const walk = (x - startX) * 2;
+        logosContainer.scrollLeft = startScrollLeft - walk;
+
+        // Рассчитываем скорость для инерции
+        const currentTime = Date.now();
+        const deltaX = clientX - lastX;
+        const deltaTime = currentTime - lastTime;
+
+        if (deltaTime > 0) {
+            velocity = deltaX / deltaTime;
+        }
+
+        lastX = clientX;
+        lastTime = currentTime;
+    };
+
+    const handleDragEnd = () => {
+        if (!isDragging) return;
+
+        isDragging = false;
+        logosContainer.style.cursor = 'grab';
+        logosContainer.style.scrollBehavior = 'smooth';
+
+        // Применяем инерцию
+        if (Math.abs(velocity) > 0.1) {
+            const inertia = velocity * 100;
+            logosContainer.scrollBy({
+                left: -inertia,
+                behavior: 'smooth'
+            });
+        }
+
+        // Возобновляем автоскролл через 2 секунды
+        setTimeout(startAutoScroll, 2000);
+    };
+
+    // Мышь события
+    logosContainer.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleDragStart(e.clientX);
+    });
+
+    logosContainer.addEventListener('mousemove', (e) => {
+        handleDragMove(e.clientX);
+    });
+
+    logosContainer.addEventListener('mouseup', handleDragEnd);
+    logosContainer.addEventListener('mouseleave', handleDragEnd);
+
+    // Touch события
+    logosContainer.addEventListener('touchstart', (e) => {
+        handleDragStart(e.touches[0].clientX);
+    }, { passive: true });
+
+    logosContainer.addEventListener('touchmove', (e) => {
+        handleDragMove(e.touches[0].clientX);
+    }, { passive: true });
+
+    logosContainer.addEventListener('touchend', handleDragEnd);
+    logosContainer.addEventListener('touchcancel', handleDragEnd);
+
+    // Предотвращаем выделение текста при перетаскивании
+    logosContainer.addEventListener('dragstart', (e) => {
+        e.preventDefault();
+    });
+
+    // Запускаем автоскролл
+    startAutoScroll();
+
+    // Останавливаем автоскролл при скрытии вкладки
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopAutoScroll();
+        } else {
+            startAutoScroll();
+        }
+    });
+};
 
     const setupSimpleLogoCarousel = () => {
         const logosSection = document.querySelector('.logos-section');
