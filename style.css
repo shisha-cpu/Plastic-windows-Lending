@@ -3597,7 +3597,8 @@ background: var(--hover-bg);
    
     position: relative;
 }
-.card-body-text, {
+
+.card-body-text{
     margin-top: -40px;
 }
 
