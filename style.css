@@ -140,12 +140,12 @@ body {
 }
 
 .bottom-nav {
-    background: var(--white);
-    border-top: 1px solid var(--light-grey);
-    position: relative;
+    width: 100%;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    position: relative; 
     z-index: 1002;
 }
-
 .bottom-nav-items {
     display: flex;
     justify-content: space-between;
@@ -184,25 +184,28 @@ body {
     transition: transform 0.2s ease;
 }
 
+.page-wrapper {
+    position: relative;
+}
+
 .mega-menu {
-    position: fixed;
-    left: 0;
-    right: 0;
-    width: 100%;
-    background: var(--white);
-    box-shadow: 0 0.5rem 1rem var(--shadow-dark);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+
+    background: rgb(255, 255, 255);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
     z-index: 1002;
-    padding: 2rem 0;
     display: none;
-    border-top: 1px solid var(--light-grey);
+    border-top: 1px solid #e9ecef;
+    top: 143px; /* Или вычисляем через JS */
 }
 
-.mega-menu-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0;
+/* Убираем относительное позиционирование у всех родителей */
+.header, .bottom-nav, .bottom-nav-item {
+    position: static;
 }
-
 .mega-menu-column {
     padding: 0 15px;
     min-width: 250px;
@@ -216,7 +219,7 @@ body {
     border-bottom: 1px solid var(--light-grey);
     padding-bottom: 0.5rem;
     margin-bottom: 1rem;
-}
+    }
 
 .mega-menu-column a {
     display: block;

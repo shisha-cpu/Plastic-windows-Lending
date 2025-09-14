@@ -38,77 +38,74 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dropdownMenu) dropdownMenu.style.display = 'none';
         });
     };
+const setupNavigation = () => {
+    navItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            if (isMobile()) return;
+            const megaMenu = item.querySelector('.mega-menu');
+            if (megaMenu) {
+                hideAllMegaMenus();
+                megaMenu.style.display = 'block'; // Show the menu without adjusting top
+                activeMegaMenu = megaMenu;
+            }
+        });
 
-    const setupNavigation = () => {
-        navItems.forEach(item => {
+        item.addEventListener('mouseleave', event => {
+            if (isMobile()) return;
+            const megaMenu = item.querySelector('.mega-menu');
+            if (megaMenu) {
+                setTimeout(() => {
+                    if (!isMouseInsideElement(event, megaMenu)) {
+                        megaMenu.style.display = 'none';
+                        if (activeMegaMenu === megaMenu) activeMegaMenu = null;
+                    }
+                }, 100);
+            }
+        });
+    });
+
+    document.querySelectorAll('.mega-menu').forEach(megaMenu => {
+        megaMenu.addEventListener('mouseenter', () => {
+            if (isMobile()) return;
+            megaMenu.style.display = 'block';
+        });
+
+        megaMenu.addEventListener('mouseleave', () => {
+            if (isMobile()) return;
+            megaMenu.style.display = 'none';
+            if (activeMegaMenu === megaMenu) activeMegaMenu = null;
+        });
+    });
+
+    topNavItems.forEach(item => {
+        const dropdownMenu = item.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
             item.addEventListener('mouseenter', () => {
                 if (isMobile()) return;
-                const megaMenu = item.querySelector('.mega-menu');
-                if (megaMenu) {
-                    hideAllMegaMenus();
-                    const bottomNavRect = bottomNav.getBoundingClientRect();
-                    megaMenu.style.top = `${bottomNavRect.bottom - 2}px`;
-                    megaMenu.style.display = 'block';
-                    activeMegaMenu = megaMenu;
-                }
+                dropdownMenu.style.display = 'block';
             });
 
             item.addEventListener('mouseleave', event => {
                 if (isMobile()) return;
-                const megaMenu = item.querySelector('.mega-menu');
-                if (megaMenu) {
-                    setTimeout(() => {
-                        if (!isMouseInsideElement(event, megaMenu)) {
-                            megaMenu.style.display = 'none';
-                            if (activeMegaMenu === megaMenu) activeMegaMenu = null;
-                        }
-                    }, 100);
-                }
+                setTimeout(() => {
+                    if (!isMouseInsideElement(event, dropdownMenu)) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                }, 100);
             });
-        });
 
-        document.querySelectorAll('.mega-menu').forEach(megaMenu => {
-            megaMenu.addEventListener('mouseenter', () => {
+            dropdownMenu.addEventListener('mouseenter', () => {
                 if (isMobile()) return;
-                megaMenu.style.display = 'block';
+                dropdownMenu.style.display = 'block';
             });
 
-            megaMenu.addEventListener('mouseleave', () => {
+            dropdownMenu.addEventListener('mouseleave', () => {
                 if (isMobile()) return;
-                megaMenu.style.display = 'none';
-                if (activeMegaMenu === megaMenu) activeMegaMenu = null;
+                dropdownMenu.style.display = 'none';
             });
-        });
-
-        topNavItems.forEach(item => {
-            const dropdownMenu = item.querySelector('.dropdown-menu');
-            if (dropdownMenu) {
-                item.addEventListener('mouseenter', () => {
-                    if (isMobile()) return;
-                    dropdownMenu.style.display = 'block';
-                });
-
-                item.addEventListener('mouseleave', event => {
-                    if (isMobile()) return;
-                    setTimeout(() => {
-                        if (!isMouseInsideElement(event, dropdownMenu)) {
-                            dropdownMenu.style.display = 'none';
-                        }
-                    }, 100);
-                });
-
-                dropdownMenu.addEventListener('mouseenter', () => {
-                    if (isMobile()) return;
-                    dropdownMenu.style.display = 'block';
-                });
-
-                dropdownMenu.addEventListener('mouseleave', () => {
-                    if (isMobile()) return;
-                    dropdownMenu.style.display = 'none';
-                });
-            }
-        });
-    };
+        }
+    });
+};
 
     const setupMobileMenu = () => {
         navItems.forEach((item, index) => {
@@ -160,28 +157,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    const setupWindowEvents = () => {
-        window.addEventListener('scroll', () => {
-            if (isMobile() || !activeMegaMenu) return;
-            const bottomNavRect = bottomNav.getBoundingClientRect();
-            activeMegaMenu.style.top = `${bottomNavRect.bottom - 2}px`;
-            hideAllDropdownMenus();
-        });
+const setupWindowEvents = () => {
+    window.addEventListener('resize', () => {
+        hideAllMegaMenus();
+        hideAllDropdownMenus();
+        if (isMobile()) {
+            mobileMenu.classList.remove('active');
+            mobileOverlay.classList.remove('active');
+        }
+    });
 
-        window.addEventListener('resize', () => {
-            hideAllMegaMenus();
-            hideAllDropdownMenus();
-            if (isMobile()) {
-                mobileMenu.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-            }
-        });
-
-        window.addEventListener('mousemove', event => {
-            window.lastMouseX = event.clientX;
-            window.lastMouseY = event.clientY;
-        });
-    };
+    window.addEventListener('mousemove', event => {
+        window.lastMouseX = event.clientX;
+        window.lastMouseY = event.clientY;
+    });
+};
 
     const setupLightbox = () => {
         const lightbox = document.getElementById('lightbox');
