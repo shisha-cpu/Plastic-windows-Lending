@@ -38,7 +38,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"/>
     <!-- <link rel="stylesheet" href="./css/cost.css"> -->
-<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' 'inline-speculation-rules' chrome-extension://d54c7dc9-4315-4aa3-9bfc-bd967cc117f6/">
+    
 </head>
 <body>
 <header class="header">
@@ -928,7 +928,7 @@
     </div>
 </section>
 
-<!-- sert js -->
+
 
 
 
@@ -1233,8 +1233,8 @@
                 <span class="badge top-10">ТОП 10</span>
                 <span class="badge hit">Хит</span>
             </div>
-            <div class=" card-title">
-                <h2 >Каркасный дом ПБ-30</h2>
+            <div >
+                <h2 class=" card-title">Каркасный дом ПБ-30</h2>
                 <div class="divider"></div>
             </div>
             <div class="project-details">
@@ -1271,8 +1271,8 @@
             <div class="project-image">
                 <img alt="Дом из кирпича П-54" src="https://storage.googleapis.com/a1aa/image/a7c16de9-10f8-4d40-9e20-e10a219cb636.jpg"/>
             </div>
-            <div class="project-title card-title">
-                <h2>Дом из кирпича П-54</h2>
+            <div class="project-title ">
+                <h2 class="card-title">Дом из кирпича П-54</h2>
                 <div class="divider"></div>
             </div>
             <div class="project-details">
@@ -1302,8 +1302,8 @@
             <div class="project-image">
                 <img alt="Каркасный дом ПБ-30" src="https://storage.googleapis.com/a1aa/image/d5103a5f-66dd-4484-326d-3b8c8dda9fcb.jpg"/>
             </div>
-            <div class="project-title card-title">
-                <h2>Каркасный дом ПБ-30</h2>
+            <div class="project-title ">
+                <h2 class="card-title">Каркасный дом ПБ-30</h2>
                 <div class="divider"></div>
             </div>
             <div class="project-details">
@@ -1605,7 +1605,7 @@
           
             </div>
             
-            <div class="custom-indicators" id="reviewsIndicators"></div>
+            <!-- <div class="custom-indicators" id="reviewsIndicators"></div> -->
         </div>
     </div>
 </section>
@@ -1632,28 +1632,27 @@
         <div class="reviews-container ">
             <div class="video-slider" id="videoSlider">
                 <!-- Видео 1 -->
-                <div class="video-slide">
-                    <div class="video-container background-grey">
-                        <div class="video-placeholder" data-video-id="0e69b45e4ee399c38af30d6be2f87ab5">
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" alt="Видео отзыв" class="video-thumbnail">
-                            <div class="play-button">
-                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="40" cy="40" r="40" fill="var(--primary-color-dark)" fill-opacity="0.8"/>
-                                    <path d="M52 40L34 28V52L52 40Z" fill="white"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="card-padding">
-                            <h3 class="card-title">Остекление балкона в квартире семьи Ивановых в Москве</h3>
-                            <p class="video-description">Семья Ивановых давно мечтала о теплом и уютном балконе. И вот — их мечта осуществилась. Они заказали остекление балкона с выносом в нашей компании.</p>
-                            <div class="client-info">
-                                <div class="client-name">Александр Иванов</div>
-                                <div class="client-location">г. Москва, остекление балкона с выносом</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
+<div class="video-slide">
+    <div class="video-container background-grey">
+        <div class="video-placeholder" data-video-id="0e69b45e4ee399c38af30d6be2f87ab5">
+            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80" alt="Видео отзыв" class="video-thumbnail">
+            <div class="play-button">
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="40" r="40" fill="var(--primary-color-dark)" fill-opacity="0.8"/>
+                    <path d="M52 40L34 28V52L52 40Z" fill="white"/>
+                </svg>
+            </div>
+        </div>
+        <div class="card-padding">
+            <h3 class="card-title">Остекление балкона в квартире семьи Ивановых в Москве</h3>
+            <p class="video-description">Семья Ивановых давно мечтала о теплом и уютном балконе. И вот — их мечта осуществилась. Они заказали остекление балкона с выносом в нашей компании.</p>
+            <div class="client-info">
+                <div class="client-name">Александр Иванов</div>
+                <div class="client-location">г. Москва, остекление балкона с выносом</div>
+            </div>
+        </div>
+    </div>
+</div>
                 <!-- Видео 2 -->
                 <div class="video-slide">
                     <div class="video-container background-grey">
@@ -2111,7 +2110,7 @@
                             <div class="col-lg-4">
                                 <div class="quiz-sidebar">
                                     <div class="expert-card">
-                                        <img src="https://via.placeholder.com/80" alt="Михаил Прохин" class="expert-image">
+                                        <img src="" alt="Михаил Прохин" class="expert-image">
                                         <h3 class="expert-name">Михаил Прохин</h3>
                                         <p class="expert-position">Главный инженер компании</p>
                                         <div class="expert-message">

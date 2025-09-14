@@ -268,121 +268,216 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const setupCertificateModal = () => {
-        const certificateModal = document.getElementById('certificateModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalClose = document.querySelector('.modal-close');
-        const modalContent = document.querySelector('.modal-content');
+const setupCertificateModal = () => {
+    const certificateModal = document.getElementById('certificateModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalClose = document.querySelector('.modal-close');
+    const modalContent = document.querySelector('.modal-content');
 
-        const openCertificateModal = (imgSrc, imgAlt) => {
-            if (!certificateModal || !modalImage) return;
-            modalImage.src = imgSrc;
-            modalImage.alt = imgAlt;
-            certificateModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        };
+    // Переменные для отслеживания движения мыши
+    let isDragging = false;
+    let startX, startY;
+    let clickStartTime = 0;
 
-        const closeCertificateModal = () => {
-            if (!certificateModal) return;
-            certificateModal.style.display = 'none';
-            document.body.style.overflow = '';
-            modalImage.src = '';
-        };
-
-        document.querySelectorAll('.certificate-img').forEach(img => {
-            img.style.cursor = 'pointer';
-            img.addEventListener('click', () => openCertificateModal(img.src, img.alt));
-        });
-
-        modalClose.addEventListener('click', event => {
-            event.stopPropagation();
-            closeCertificateModal();
-        });
-
-        modalContent.addEventListener('click', event => {
-            if (event.target !== modalImage && event.target !== modalClose) {
-                closeCertificateModal();
-            }
-        });
-
-        modalImage.addEventListener('click', event => event.stopPropagation());
-
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && certificateModal.style.display === 'flex') {
-                closeCertificateModal();
-            }
-        });
+    const openCertificateModal = (imgSrc, imgAlt) => {
+        if (!certificateModal || !modalImage || isDragging) return;
+        modalImage.src = imgSrc;
+        modalImage.alt = imgAlt;
+        certificateModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
     };
 
-    const setupVideoModal = () => {
-        const videoModal = document.getElementById('videoModal');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const videoWrapper = document.getElementById('videoWrapper');
-        const modalClose = document.getElementById('modalClose');
-        const modalContent = document.querySelector('.modal-content');
-        let isModalOpen = false;
+    const closeCertificateModal = () => {
+        if (!certificateModal) return;
+        certificateModal.style.display = 'none';
+        document.body.style.overflow = '';
+        modalImage.src = '';
+    };
 
-        const openVideoModal = videoId => {
-            if (!videoId) return;
-            const iframe = document.createElement('iframe');
-            iframe.src = `https://rutube.ru/play/embed/${videoId}`;
-            iframe.allowFullscreen = true;
-            iframe.allow = 'autoplay; fullscreen';
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            videoWrapper.innerHTML = '';
-            videoWrapper.appendChild(iframe);
+    document.querySelectorAll('.certificate-img').forEach(img => {
+        img.style.cursor = 'pointer';
+        
+        // Отслеживаем начало клика
+        img.addEventListener('mousedown', (e) => {
+            isDragging = false;
+            startX = e.clientX;
+            startY = e.clientY;
+            clickStartTime = Date.now();
+        });
+
+        // Отслеживаем движение мыши
+        img.addEventListener('mousemove', (e) => {
+            if (startX !== undefined && startY !== undefined) {
+                const diffX = Math.abs(e.clientX - startX);
+                const diffY = Math.abs(e.clientY - startY);
+                
+                // Если движение превышает порог - считаем это перетаскиванием
+                if (diffX > 5 || diffY > 5) {
+                    isDragging = true;
+                }
+            }
+        });
+
+        // Обработка клика
+        img.addEventListener('click', (e) => {
+            const clickDuration = Date.now() - clickStartTime;
+            
+            // Открываем модалку только если не было драга и клик был коротким
+            if (!isDragging && clickDuration < 200) {
+                openCertificateModal(img.src, img.alt);
+            }
+            isDragging = false;
+        });
+
+        // Сбрасываем при уходе мыши с изображения
+        img.addEventListener('mouseleave', () => {
+            isDragging = false;
+            startX = undefined;
+            startY = undefined;
+        });
+    });
+
+    // Закрытие модалки
+    modalClose.addEventListener('click', event => {
+        event.stopPropagation();
+        closeCertificateModal();
+    });
+
+    // Закрытие при клике на затемненный фон (саму модалку)
+    certificateModal.addEventListener('click', event => {
+        if (event.target === certificateModal) {
+            closeCertificateModal();
+        }
+    });
+
+    // Закрытие при клике на modal-content (вне изображения)
+    if (modalContent) {
+        modalContent.addEventListener('click', event => {
+            // Проверяем, что клик был не по самому изображению
+            if (!event.target.closest('.modal-image')) {
+                closeCertificateModal();
+            }
+        });
+    }
+
+    // Закрытие по ESC
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && certificateModal.style.display === 'flex') {
+            closeCertificateModal();
+        }
+    });
+};
+const setupVideoModal = () => {
+    const videoModal = document.getElementById('videoModal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const videoWrapper = document.getElementById('videoWrapper');
+    const modalClose = document.getElementById('modalClose');
+    const modalContent = document.querySelector('.modal-content');
+    let isModalOpen = false;
+
+    const openVideoModal = (videoId) => {
+        if (!videoId) {
+            console.warn('No video ID provided for modal');
+            videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка: Видео недоступно, отсутствует ID.</p>';
             videoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             isModalOpen = true;
+            return;
+        }
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://rutube.ru/play/embed/${videoId}?skinColor=000000`; // Added skinColor to ensure consistent styling
+        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media'); // Use setAttribute to avoid CSP issues with allow
+        iframe.setAttribute('allowfullscreen', ''); // Explicitly set allowfullscreen
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        iframe.onerror = () => {
+            console.error(`Failed to load RuTube video with ID: ${videoId}`);
+            videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка загрузки видео. Пожалуйста, попробуйте позже.</p>';
+            videoModal.classList.add('active');
+            isModalOpen = true;
         };
-
-        const closeVideoModal = () => {
-            videoModal.classList.remove('active');
-            videoWrapper.innerHTML = '';
-            document.body.style.overflow = '';
-            isModalOpen = false;
-        };
-
-        document.querySelectorAll('.video-placeholder').forEach(placeholder => {
-            let dragStartTime = 0;
-            let isDragging = false;
-
-            placeholder.addEventListener('mousedown', () => {
-                dragStartTime = Date.now();
-                isDragging = false;
-            });
-
-            placeholder.addEventListener('mousemove', () => {
-                if (Date.now() - dragStartTime > 50) isDragging = true;
-            });
-
-            placeholder.addEventListener('click', () => {
-                if (isDragging) return;
-                const videoId = placeholder.getAttribute('data-video-id');
-                if (videoId) openVideoModal(videoId);
-            });
-        });
-
-        modalClose.addEventListener('click', event => {
-            event.stopPropagation();
-            closeVideoModal();
-        });
-
-        modalOverlay.addEventListener('click', closeVideoModal);
-
-        videoModal.addEventListener('click', event => {
-            if (event.target === videoModal) closeVideoModal();
-        });
-
-        modalContent.addEventListener('click', event => event.stopPropagation());
-
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && isModalOpen) closeVideoModal();
-        });
+        videoWrapper.innerHTML = ''; // Clear previous content
+        videoWrapper.appendChild(iframe);
+        videoModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        isModalOpen = true;
     };
 
+    const closeVideoModal = () => {
+        videoModal.classList.remove('active');
+        videoWrapper.innerHTML = '';
+        document.body.style.overflow = '';
+        isModalOpen = false;
+    };
+
+    document.querySelectorAll('.video-placeholder').forEach(placeholder => {
+        let dragStartTime = 0;
+        let isDragging = false;
+
+        placeholder.addEventListener('mousedown', (e) => {
+            dragStartTime = Date.now();
+            isDragging = false;
+            e.stopPropagation(); // Prevent carousel drag
+        });
+
+        placeholder.addEventListener('mousemove', (e) => {
+            if (Date.now() - dragStartTime > 200) {
+                isDragging = true;
+            }
+        });
+
+        placeholder.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent carousel click handling
+            if (isDragging) return;
+            const videoId = placeholder.getAttribute('data-video-id');
+            openVideoModal(videoId);
+        });
+
+        placeholder.addEventListener('mouseup', (e) => {
+            e.stopPropagation(); // Prevent carousel drag end
+        });
+
+        // Touch events for mobile
+        placeholder.addEventListener('touchstart', (e) => {
+            dragStartTime = Date.now();
+            isDragging = false;
+            e.stopPropagation();
+        }, { passive: false });
+
+        placeholder.addEventListener('touchmove', (e) => {
+            if (Date.now() - dragStartTime > 200) {
+                isDragging = true;
+            }
+        }, { passive: false });
+
+        placeholder.addEventListener('touchend', (e) => {
+            e.stopPropagation();
+            if (!isDragging) {
+                const videoId = placeholder.getAttribute('data-video-id');
+                openVideoModal(videoId);
+            }
+        });
+    });
+
+    modalClose?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        closeVideoModal();
+    });
+
+    modalOverlay?.addEventListener('click', closeVideoModal);
+
+    videoModal?.addEventListener('click', (event) => {
+        if (event.target === videoModal) closeVideoModal();
+    });
+
+    modalContent?.addEventListener('click', (event) => event.stopPropagation());
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && isModalOpen) closeVideoModal();
+    });
+};
     const setupCalculator = () => {
         const heightSlider = document.getElementById('height-slider');
         const widthSlider = document.getElementById('width-slider');
@@ -540,197 +635,201 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const setupAccordion = () => {
-        const accordionButtons = document.querySelectorAll('.accordion-button');
+const setupAccordion = () => {
+    const accordionButtons = document.querySelectorAll('.accordion-button');
 
-        accordionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const targetId = button.getAttribute('data-bs-target');
-                const targetCollapse = document.querySelector(targetId);
-                const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                const accordion = button.closest('.accordion');
-                const parentId = targetCollapse.getAttribute('data-bs-parent');
+    accordionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetId = button.getAttribute('data-bs-target');
+            const targetCollapse = document.querySelector(targetId);
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
-                if (parentId) {
-                    const parent = document.querySelector(parentId);
-                    parent.querySelectorAll('.accordion-collapse.show').forEach(item => {
-                        if (item !== targetCollapse && item.classList.contains('show')) {
-                            item.style.height = `${item.scrollHeight}px`;
-                            requestAnimationFrame(() => {
-                                item.style.height = '0';
-                                item.querySelector('.accordion-body').style.opacity = '0';
-                                item.querySelector('.accordion-body').style.transform = 'translateY(-10px)';
-                                item.classList.remove('show');
-                                parent.querySelector(`[data-bs-target="#${item.id}"]`).classList.add('collapsed');
-                            });
-                        }
-                    });
-                }
-
-                if (isExpanded) {
-                    targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
-                    requestAnimationFrame(() => {
-                        targetCollapse.style.height = '0';
-                        targetCollapse.querySelector('.accordion-body').style.opacity = '0';
-                        targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(-10px)';
-                        targetCollapse.classList.remove('show');
-                        button.classList.add('collapsed');
-                        button.setAttribute('aria-expanded', 'false');
-                    });
-                } else {
-                    button.classList.remove('collapsed');
-                    button.setAttribute('aria-expanded', 'true');
-                    targetCollapse.classList.add('show');
+            // Убираем логику закрытия других элементов
+            if (isExpanded) {
+                // Закрываем текущий элемент
+                targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
+                requestAnimationFrame(() => {
                     targetCollapse.style.height = '0';
-                    requestAnimationFrame(() => {
-                        targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
-                        targetCollapse.querySelector('.accordion-body').style.opacity = '1';
-                        targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(0)';
-                    });
-                }
-
-                targetCollapse.addEventListener('transitionend', () => {
-                    if (targetCollapse.classList.contains('show')) {
-                        targetCollapse.style.height = 'auto';
-                    }
-                }, { once: true });
-            });
-        });
-    };
-
-    const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
-        const section = document.querySelector(sectionSelector);
-        if (!section) return;
-
-        const slidesContainer = section.querySelector(slidesContainerSelector);
-        const items = section.querySelectorAll(itemSelector);
-        const prevBtn = section.querySelector(prevBtnSelector);
-        const nextBtn = section.querySelector(nextBtnSelector);
-        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
-        if (!slidesContainer || items.length === 0) return;
-
-        let currentIndex = 0;
-        let visibleCount = visibleCountLogic();
-        let isDragging = false;
-        let startX = 0;
-        let currentTranslate = 0;
-        let prevTranslate = 0;
-        let animationId = null;
-        const threshold = 50;
-
-        const updateVisibleCount = () => {
-            const oldVisibleCount = visibleCount;
-            visibleCount = visibleCountLogic();
-            slidesContainer.style.setProperty('--visible-count', visibleCount);
-            if (oldVisibleCount !== visibleCount) {
-                currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
-            }
-            items.forEach(item => {
-                item.style.flex = `0 0 ${100 / visibleCount}%`;
-            });
-            createIndicators();
-            showSlide(currentIndex, false);
-            updateButtonState();
-        };
-
-        const createIndicators = () => {
-            if (!indicatorsContainer) return;
-            indicatorsContainer.innerHTML = '';
-            const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
-            for (let i = 0; i < totalIndicators; i++) {
-                const indicator = document.createElement('button');
-                indicator.className = `custom-indicator${i === 0 ? ' active' : ''}`;
-                indicator.setAttribute('aria-label', `Slide ${i + 1}`);
-                indicator.addEventListener('click', () => showSlide(i * visibleCount));
-                indicatorsContainer.appendChild(indicator);
-            }
-        };
-
-        const showSlide = (index, animate = true) => {
-            currentIndex = Math.max(0, Math.min(index, Math.max(0, items.length - visibleCount)));
-            const translateX = -(currentIndex * (100 / visibleCount));
-            prevTranslate = translateX;
-            slidesContainer.style.transition = animate ? 'transform 0.5s ease' : 'none';
-            slidesContainer.style.transform = `translateX(${translateX}%)`;
-            updateIndicators();
-            updateButtonState();
-        };
-
-        const updateIndicators = () => {
-            if (!indicatorsContainer) return;
-            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
-            const activeIndicator = Math.floor(currentIndex / visibleCount);
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === activeIndicator);
-            });
-        };
-
-        const updateButtonState = () => {
-            if (prevBtn) prevBtn.disabled = currentIndex === 0;
-            if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
-        };
-
-        const startDrag = event => {
-            startX = event.type === 'touchstart' ? event.touches[0].clientX : event.clientX;
-            if (event.type !== 'touchstart') event.preventDefault();
-            isDragging = true;
-            slidesContainer.style.transition = 'none';
-            animationId = requestAnimationFrame(animation);
-        };
-
-        const drag = event => {
-            if (!isDragging) return;
-            const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
-            if (event.type !== 'touchmove') event.preventDefault();
-            const deltaX = currentX - startX;
-            const containerWidth = slidesContainer.parentElement.offsetWidth;
-            currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
-            const maxTranslate = 0;
-            const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
-            if (currentTranslate > maxTranslate) {
-                currentTranslate = maxTranslate + (currentTranslate - maxTranslate) * 0.3;
-            } else if (currentTranslate < minTranslate) {
-                currentTranslate = minTranslate + (currentTranslate - minTranslate) * 0.3;
-            }
-        };
-
-        const endDrag = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            cancelAnimationFrame(animationId);
-            const containerWidth = slidesContainer.parentElement.offsetWidth;
-            const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
-            if (Math.abs(movedBy) > threshold) {
-                showSlide(movedBy < 0 ? currentIndex + 1 : currentIndex - 1);
+                    targetCollapse.querySelector('.accordion-body').style.opacity = '0';
+                    targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(-10px)';
+                    targetCollapse.classList.remove('show');
+                    button.classList.add('collapsed');
+                    button.setAttribute('aria-expanded', 'false');
+                });
             } else {
-                showSlide(currentIndex);
+                // Открываем текущий элемент
+                button.classList.remove('collapsed');
+                button.setAttribute('aria-expanded', 'true');
+                targetCollapse.classList.add('show');
+                targetCollapse.style.height = '0';
+                requestAnimationFrame(() => {
+                    targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
+                    targetCollapse.querySelector('.accordion-body').style.opacity = '1';
+                    targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(0)';
+                });
             }
-        };
 
-        const animation = () => {
-            slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
-            if (isDragging) animationId = requestAnimationFrame(animation);
-        };
-
-        prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
-        nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
-
-        slidesContainer.addEventListener('mousedown', startDrag);
-        slidesContainer.addEventListener('mousemove', drag);
-        slidesContainer.addEventListener('mouseup', endDrag);
-        slidesContainer.addEventListener('mouseleave', endDrag);
-        slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
-        slidesContainer.addEventListener('touchmove', drag, { passive: false });
-        slidesContainer.addEventListener('touchend', endDrag);
-
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(updateVisibleCount, 250);
+            targetCollapse.addEventListener('transitionend', () => {
+                if (targetCollapse.classList.contains('show')) {
+                    targetCollapse.style.height = 'auto';
+                }
+            }, { once: true });
         });
+    });
+};
 
-        updateVisibleCount();
+const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
+  const section = document.querySelector(sectionSelector);
+  if (!section) return;
+
+  const slidesContainer = section.querySelector(slidesContainerSelector);
+  const items = section.querySelectorAll(itemSelector);
+  const prevBtn = section.querySelector(prevBtnSelector);
+  const nextBtn = section.querySelector(nextBtnSelector);
+  const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
+  if (!slidesContainer || items.length === 0) return;
+
+  let currentIndex = 0;
+  let visibleCount = visibleCountLogic();
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  const threshold = 50;
+  let lastFrameTime = 0;
+  let autoScrollTimer;
+
+  const updateVisibleCount = () => {
+    const oldVisibleCount = visibleCount;
+    visibleCount = visibleCountLogic();
+    slidesContainer.style.setProperty('--visible-count', visibleCount);
+    if (oldVisibleCount !== visibleCount) {
+      currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
+      showSlide(currentIndex, false);
+    }
+    items.forEach(item => {
+      item.style.flex = `0 0 ${100 / visibleCount}%`;
+    });
+    createIndicators();
+    updateButtonState();
+  };
+
+  const createIndicators = () => {
+    if (!indicatorsContainer) return;
+    indicatorsContainer.innerHTML = '';
+    const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
+    for (let i = 0; i < totalIndicators; i++) {
+      const indicator = document.createElement('button');
+      indicator.className = `custom-indicator${i === Math.floor(currentIndex / visibleCount) ? ' active' : ''}`;
+      indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+      indicator.addEventListener('click', () => showSlide(i * visibleCount));
+      indicatorsContainer.appendChild(indicator);
+    }
+  };
+
+  const showSlide = (index, animate = true) => {
+    currentIndex = Math.max(0, Math.min(index, Math.max(0, items.length - visibleCount)));
+    const translateX = -(currentIndex * (100 / visibleCount));
+    prevTranslate = translateX;
+    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
+    slidesContainer.style.transform = `translateX(${translateX}%)`;
+    updateIndicators();
+    updateButtonState();
+  };
+
+  const updateIndicators = () => {
+    if (!indicatorsContainer) return;
+    const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+    const activeIndicator = Math.floor(currentIndex / visibleCount);
+    indicators.forEach((indicator, index) => {
+      indicator.classList.toggle('active', index === activeIndicator);
+    });
+  };
+
+  const updateButtonState = () => {
+    if (prevBtn) prevBtn.disabled = currentIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
+  };
+
+  const throttle = (callback, limit) => {
+    return function (...args) {
+      const now = performance.now();
+      if (now - lastFrameTime >= limit) {
+        callback(...args);
+        lastFrameTime = now;
+      }
     };
+  };
+
+  const startDrag = event => {
+    if (event.type === 'touchstart') {
+      startX = event.touches[0].clientX;
+    } else {
+      event.preventDefault();
+      startX = event.clientX;
+    }
+    isDragging = true;
+    slidesContainer.style.transition = 'none';
+    clearInterval(autoScrollTimer); // Pause auto-scroll on drag start
+  };
+
+  const drag = throttle(event => {
+    if (!isDragging) return;
+    const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+    if (event.type !== 'touchmove') event.preventDefault();
+    const deltaX = currentX - startX;
+    const containerWidth = slidesContainer.parentElement.offsetWidth;
+    currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+    const maxTranslate = 0;
+    const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
+    currentTranslate = Math.max(minTranslate, Math.min(maxTranslate, currentTranslate));
+    slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+  }, 16); // Throttle to ~60fps
+
+  const endDrag = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    const containerWidth = slidesContainer.parentElement.offsetWidth;
+    const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
+    if (Math.abs(movedBy) > threshold) {
+      showSlide(movedBy < 0 ? currentIndex + 1 : currentIndex - 1);
+    } else {
+      showSlide(currentIndex);
+    }
+    // Resume auto-scroll after 2 seconds
+    setTimeout(startAutoScroll, 2000);
+  };
+
+  const startAutoScroll = () => {
+    clearInterval(autoScrollTimer);
+    autoScrollTimer = setInterval(() => {
+      if (!isDragging) showSlide(currentIndex + 1);
+    }, 5000);
+  };
+
+  prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
+  nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
+
+  slidesContainer.addEventListener('mousedown', startDrag);
+  slidesContainer.addEventListener('mousemove', drag);
+  slidesContainer.addEventListener('mouseup', endDrag);
+  slidesContainer.addEventListener('mouseleave', endDrag);
+  slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+  slidesContainer.addEventListener('touchmove', drag, { passive: false });
+  slidesContainer.addEventListener('touchend', endDrag);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(updateVisibleCount, 250);
+  });
+
+  updateVisibleCount();
+  startAutoScroll();
+
+  slidesContainer.addEventListener('mouseenter', () => clearInterval(autoScrollTimer));
+  slidesContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
+};
 
     const setupCarousels = () => {
         setupCarousel({
@@ -1045,174 +1144,195 @@ const setupInfiniteLogoCarousel = () => {
         updateVisibleCount();
     };
 
-    const setupQuiz = () => {
-        const questions = [
-            {
-                question: "Какой тип дома вас интересует?",
-                options: [
-                    { text: "Каркасный дом", value: 500000 },
-                    { text: "Дом из бруса", value: 750000 },
-                    { text: "Кирпичный дом", value: 1000000 },
-                    { text: "Газобетонный дом", value: 900000 }
-                ],
-                note: "Выбор материала влияет на стоимость, долговечность и теплопроводность дома."
-            },
-            {
-                question: "Какая площадь дома вам нужна?",
-                options: [
-                    { text: "До 50 м²", value: 300000 },
-                    { text: "50-80 м²", value: 450000 },
-                    { text: "80-120 м²", value: 600000 },
-                    { text: "Более 120 м²", value: 800000 }
-                ],
-                note: "Чем больше площадь, тем выше стоимость строительства и материалов."
-            },
-            {
-                question: "Сколько этажей планируете?",
-                options: [
-                    { text: "Один этаж", value: 400000 },
-                    { text: "Два этажа", value: 600000 },
-                    { text: "Два этажа с мансардой", value: 550000 }
-                ],
-                note: "Двухэтажные дома требуют дополнительных расчетов и укреплений."
-            },
-            {
-                question: "Какой тип фундамента предпочитаете?",
-                options: [
-                    { text: "Ленточный", value: 250000 },
-                    { text: "Свайный", value: 200000 },
-                    { text: "Плитный", value: 300000 },
-                    { text: "Столбчатый", value: 150000 }
-                ],
-                note: "Тип фундамента зависит от грунта и веса будущего дома."
-            },
-            {
-                question: "Какой тип кровли вам нужен?",
-                options: [
-                    { text: "Металлочерепица", value: 150000 },
-                    { text: "Мягкая кровля", value: 200000 },
-                    { text: "Профнастил", value: 120000 },
-                    { text: "Натуральная черепица", value: 250000 }
-                ],
-                note: "Кровля влияет на внешний вид дома и его долговечность."
-            },
-            {
-                question: "Нужна ли внутренняя отделка?",
-                options: [
-                    { text: "Черновая отделка", value: 200000 },
-                    { text: "Под чистовую", value: 350000 },
-                    { text: "Полная отделка под ключ", value: 500000 }
-                ],
-                note: "Полная отделка включает все работы по внутреннему обустройству дома."
-            },
-            {
-                question: "Дополнительные опции",
-                options: [
-                    { text: "Терраса или веранда", value: 100000 },
-                    { text: "Балкон", value: 50000 },
-                    { text: "Гараж", value: 200000 },
-                    { text: "Без дополнительных опций", value: 0 }
-                ],
-                note: "Дополнительные элементы увеличивают стоимость, но добавляют комфорта."
-            }
-        ];
+  const setupQuiz = () => {
+    const questions = [
+        {
+            question: "Какой тип дома вас интересует?",
+            options: [
+                { text: "Каркасный дом", value: 500000 },
+                { text: "Дом из бруса", value: 750000 },
+                { text: "Кирпичный дом", value: 1000000 },
+                { text: "Газобетонный дом", value: 900000 }
+            ],
+            note: "Выбор материала влияет на стоимость, долговечность и теплопроводность дома."
+        },
+        {
+            question: "Какая площадь дома вам нужна?",
+            options: [
+                { text: "До 50 м²", value: 300000 },
+                { text: "50-80 м²", value: 450000 },
+                { text: "80-120 м²", value: 600000 },
+                { text: "Более 120 м²", value: 800000 }
+            ],
+            note: "Чем больше площадь, тем выше стоимость строительства и материалов."
+        },
+        {
+            question: "Сколько этажей планируете?",
+            options: [
+                { text: "Один этаж", value: 400000 },
+                { text: "Два этажа", value: 600000 },
+                { text: "Два этажа с мансардой", value: 550000 }
+            ],
+            note: "Двухэтажные дома требуют дополнительных расчетов и укреплений."
+        },
+        {
+            question: "Какой тип фундамента предпочитаете?",
+            options: [
+                { text: "Ленточный", value: 250000 },
+                { text: "Свайный", value: 200000 },
+                { text: "Плитный", value: 300000 },
+                { text: "Столбчатый", value: 150000 }
+            ],
+            note: "Тип фундамента зависит от грунта и веса будущего дома."
+        },
+        {
+            question: "Какой тип кровли вам нужен?",
+            options: [
+                { text: "Металлочерепица", value: 150000 },
+                { text: "Мягкая кровля", value: 200000 },
+                { text: "Профнастил", value: 120000 },
+                { text: "Натуральная черепица", value: 250000 }
+            ],
+            note: "Кровля влияет на внешний вид дома и его долговечность."
+        },
+        {
+            question: "Нужна ли внутренняя отделка?",
+            options: [
+                { text: "Черновая отделка", value: 200000 },
+                { text: "Под чистовую", value: 350000 },
+                { text: "Полная отделка под ключ", value: 500000 }
+            ],
+            note: "Полная отделка включает все работы по внутреннему обустройству дома."
+        },
+        {
+            question: "Дополнительные опции",
+            options: [
+                { text: "Терраса или веранда", value: 100000 },
+                { text: "Балкон", value: 50000 },
+                { text: "Гараж", value: 200000 },
+                { text: "Без дополнительных опций", value: 0 }
+            ],
+            note: "Дополнительные элементы увеличивают стоимость, но добавляют комфорта."
+        }
+    ];
 
-        const quizContainer = document.getElementById('quiz-questions');
-        const nextBtn = document.getElementById('next-btn');
-        const backBtn = document.getElementById('back-btn');
-        const progressBar = document.querySelector('.progress-bar');
-        const currentQuestionElement = document.getElementById('current-question');
-        const quizResult = document.getElementById('quiz-result');
-        const calculatedPrice = document.getElementById('calculated-price');
-        let currentQuestion = 0;
-        let totalPrice = 0;
-        let userAnswers = [];
+    const quizContainer = document.getElementById('quiz-questions');
+    const nextBtn = document.getElementById('next-btn');
+    const backBtn = document.getElementById('back-btn');
+    const progressBar = document.querySelector('.progress-bar');
+    const currentQuestionElement = document.getElementById('current-question');
+    const quizResult = document.getElementById('quiz-result');
+    const calculatedPrice = document.getElementById('calculated-price');
+    let currentQuestion = 0;
+    let totalPrice = 0;
+    let userAnswers = [];
 
-        const showQuestion = index => {
-            const question = questions[index];
-            progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
-            currentQuestionElement.textContent = index + 1;
+    const showQuestion = index => {
+        const question = questions[index];
+        progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+        currentQuestionElement.textContent = index + 1;
 
-            let questionHTML = `
-                <div class="quiz-question card-title">${question.question}</div>
-                <div class="quiz-options">
+        let questionHTML = `
+            <div class="quiz-question card-title">${question.question}</div>
+            <div class="quiz-options">
+        `;
+        question.options.forEach((option, i) => {
+            const isChecked = userAnswers[index] && userAnswers[index].text === option.text ? 'checked' : '';
+            questionHTML += `
+                <div class="quiz-option">
+                    <input type="radio" name="answer" id="option-${i}" value="${option.value}" class="quiz-input" ${isChecked}>
+                    <label for="option-${i}" class="quiz-label">${option.text}</label>
+                </div>
             `;
-            question.options.forEach((option, i) => {
-                const isChecked = userAnswers[index] && userAnswers[index].text === option.text ? 'checked' : '';
-                questionHTML += `
-                    <div class="quiz-option">
-                        <input type="radio" name="answer" id="option-${i}" value="${option.value}" class="quiz-input" ${isChecked}>
-                        <label for="option-${i}" class="quiz-label">${option.text}</label>
-                    </div>
-                `;
-            });
-            if (question.note) {
-                questionHTML += `
-                    <div class="quiz-note">
-                        <p>${question.note}</p>
-                    </div>
-                `;
-            }
-            quizContainer.innerHTML = questionHTML;
-
-            backBtn.disabled = index === 0;
-            backBtn.classList.toggle('disabled', index === 0);
-            nextBtn.disabled = !userAnswers[index];
-
-            quizContainer.querySelectorAll('.quiz-input').forEach(option => {
-                option.addEventListener('change', () => {
-                    nextBtn.disabled = false;
-                    quizContainer.querySelectorAll('.quiz-label').forEach(label => label.classList.remove('selected'));
-                    option.nextElementSibling.classList.add('selected');
-                });
-            });
-        };
-
-        nextBtn.addEventListener('click', () => {
-            const selectedOption = quizContainer.querySelector('input[name="answer"]:checked');
-            if (!selectedOption) return;
-
-            const selectedText = selectedOption.nextElementSibling.textContent;
-            const selectedValue = parseInt(selectedOption.value);
-
-            if (!userAnswers[currentQuestion]) {
-                totalPrice += selectedValue;
-            } else {
-                totalPrice = totalPrice - userAnswers[currentQuestion].value + selectedValue;
-            }
-
-            userAnswers[currentQuestion] = { text: selectedText, value: selectedValue };
-            currentQuestion++;
-
-            if (currentQuestion < questions.length) {
-                showQuestion(currentQuestion);
-            } else {
-                quizContainer.style.display = 'none';
-                nextBtn.style.display = 'none';
-                backBtn.style.display = 'none';
-                document.querySelector('.quiz-progress').style.display = 'none';
-                quizResult.style.display = 'block';
-                calculatedPrice.textContent = totalPrice.toLocaleString('ru-RU');
-
-                console.log('Результаты квиза:');
-                userAnswers.forEach((answer, index) => {
-                    console.log(`Вопрос ${index + 1}: ${questions[index].question}`);
-                    console.log(`Ответ: ${answer.text}`);
-                    console.log(`Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.`);
-                });
-                console.log(`Итоговая стоимость: ${totalPrice.toLocaleString('ru-RU')} руб.`);
-            }
         });
+        if (question.note) {
+            questionHTML += `
+                <div class="quiz-note">
+                    <p>${question.note}</p>
+                </div>
+            `;
+        }
+        quizContainer.innerHTML = questionHTML;
 
-        backBtn.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                showQuestion(currentQuestion);
-            }
+        backBtn.disabled = index === 0;
+        backBtn.classList.toggle('disabled', index === 0);
+        nextBtn.disabled = !userAnswers[index];
+
+        quizContainer.querySelectorAll('.quiz-input').forEach(option => {
+            option.addEventListener('change', () => {
+                nextBtn.disabled = false;
+                quizContainer.querySelectorAll('.quiz-label').forEach(label => label.classList.remove('selected'));
+                option.nextElementSibling.classList.add('selected');
+            });
         });
-
-        showQuestion(0);
     };
+
+    const showResults = () => {
+        quizContainer.style.display = 'none';
+        nextBtn.style.display = 'none';
+        backBtn.style.display = 'none';
+        document.querySelector('.quiz-progress').style.display = 'none';
+        quizResult.style.display = 'block';
+        calculatedPrice.textContent = totalPrice.toLocaleString('ru-RU');
+
+        // Создаем HTML для отображения выбранных ответов
+        let answersHTML = '<div class="selected-answers"><h3>Ваши ответы:</h3><ul>';
+        userAnswers.forEach((answer, index) => {
+            answersHTML += `
+                <li>
+                    <strong>Вопрос ${index + 1}: ${questions[index].question}</strong><br>
+                    Ответ: ${answer.text}<br>
+                    Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.
+                </li>
+            `;
+        });
+        answersHTML += '</ul></div>';
+
+        // Добавляем ответы перед кнопкой результата
+        quizResult.insertAdjacentHTML('beforeend', answersHTML);
+
+        // Выводим в консоль для отладки
+        console.log('Результаты квиза:');
+        userAnswers.forEach((answer, index) => {
+            console.log(`Вопрос ${index + 1}: ${questions[index].question}`);
+            console.log(`Ответ: ${answer.text}`);
+            console.log(`Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.`);
+        });
+        console.log(`Итоговая стоимость: ${totalPrice.toLocaleString('ru-RU')} руб.`);
+    };
+
+    nextBtn.addEventListener('click', () => {
+        const selectedOption = quizContainer.querySelector('input[name="answer"]:checked');
+        if (!selectedOption) return;
+
+        const selectedText = selectedOption.nextElementSibling.textContent;
+        const selectedValue = parseInt(selectedOption.value);
+
+        if (!userAnswers[currentQuestion]) {
+            totalPrice += selectedValue;
+        } else {
+            totalPrice = totalPrice - userAnswers[currentQuestion].value + selectedValue;
+        }
+
+        userAnswers[currentQuestion] = { text: selectedText, value: selectedValue };
+        currentQuestion++;
+
+        if (currentQuestion < questions.length) {
+            showQuestion(currentQuestion);
+        } else {
+            showResults();
+        }
+    });
+
+    backBtn.addEventListener('click', () => {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            showQuestion(currentQuestion);
+        }
+    });
+
+    showQuestion(0);
+};
 
     const setupTagFilter = () => {
         const tagItems = document.querySelectorAll('.tag-item');
