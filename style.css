@@ -1336,7 +1336,7 @@ body {
 }
 
 .measurement-section {
-    background: url('../img/7cdf8923-bc2d-4793-9de6-3957cb0c3c78.png') no-repeat center center;
+    background: url('./img/7cdf8923-bc2d-4793-9de6-3957cb0c3c78.png') no-repeat center center;
     background-size: cover;
     color: var(--white);
     position: relative;
@@ -1426,7 +1426,7 @@ body {
 }
 
 .hero-section {
-    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url("../img/XXXL (1).jpeg") no-repeat center center;
+    background: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url("./img/XXXL (1).jpeg") no-repeat center center;
     background-size: cover;
     color: var(--grey);
     position: relative;
