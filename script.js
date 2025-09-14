@@ -1208,6 +1208,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelector('.quiz-progress').style.display = 'none';
                 quizResult.style.display = 'block';
                 calculatedPrice.textContent = totalPrice.toLocaleString('ru-RU');
+
+                console.log('Результаты квиза:');
+                userAnswers.forEach((answer, index) => {
+                    console.log(`Вопрос ${index + 1}: ${questions[index].question}`);
+                    console.log(`Ответ: ${answer.text}`);
+                    console.log(`Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.`);
+                });
+                console.log(`Итоговая стоимость: ${totalPrice.toLocaleString('ru-RU')} руб.`);
             }
         });
 
