@@ -107,55 +107,44 @@ const setupNavigation = () => {
     });
 };
 
-    const setupMobileMenu = () => {
-        navItems.forEach((item, index) => {
-            if (item === navItems[navItems.length - 1]) return;
-            const link = item.querySelector('.bottom-nav-link');
-            const megaMenu = item.querySelector('.mega-menu');
-            if (link && megaMenu) {
-                const accordionItem = document.createElement('div');
-                accordionItem.className = 'accordion-item';
-                accordionItem.innerHTML = `
-                    <h2 class="accordion-header">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}">
-                            ${link.textContent.replace(' <span class="arrow"><i class="fas fa-chevron-down"></i></span>', '')}
-                        </button>
-                    </h2>
-                    <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            ${megaMenu.querySelector('.d-flex').innerHTML}
-                        </div>
+const setupMobileMenu = () => {
+    const mobileAccordion = document.querySelector('#mobileMenuAccordion');
+    navItems.forEach((item, index) => {
+        if (item === navItems[navItems.length - 1]) return;
+        const link = item.querySelector('.bottom-nav-link');
+        const megaMenu = item.querySelector('.mega-menu');
+        if (link && megaMenu) {
+            const accordionItem = document.createElement('div');
+            accordionItem.className = 'accordion-item';
+            accordionItem.innerHTML = `
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}" aria-expanded="false">
+                        ${link.textContent.replace(/<span.*<\/span>/, '')}
+                    </button>
+                </h2>
+                <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
+                    <div class="accordion-body">
+                        ${megaMenu.querySelector('.d-flex').innerHTML}
                     </div>
-                `;
-                mobileAccordion.appendChild(accordionItem);
-            }
-        });
-
-        burgerMenu.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
-        });
-
-        mobileOverlay.addEventListener('click', () => {
-            mobileMenu.classList.remove('active');
-            mobileOverlay.classList.remove('active');
-        });
-
-        mobileMenu.querySelectorAll('.accordion-body a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-            });
-        });
-
-        const mobileCalcBtn = mobileMenu.querySelector('.calc-btn');
-        if (mobileCalcBtn) {
-            mobileCalcBtn.addEventListener('click', () => {
-                mobileMenu.classList.remove('active');
-                mobileOverlay.classList.remove('active');
-            });
+                </div>
+            `;
+            mobileAccordion.appendChild(accordionItem);
         }
-    };
+    });
+
+    // Existing burger menu and overlay logic
+    const burgerMenu = document.querySelector('.burger-menu');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileOverlay = document.querySelector('.mobile-overlay');
+    burgerMenu.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+    });
+    mobileOverlay.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+    });
+};
 
 const setupWindowEvents = () => {
     window.addEventListener('resize', () => {
@@ -173,108 +162,147 @@ const setupWindowEvents = () => {
     });
 };
 
-    const setupLightbox = () => {
-        const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
-        const lightboxCaption = document.getElementById('lightbox-caption');
-        const lightboxClose = document.getElementById('lightbox-close');
-        const prevBtn = document.querySelector('.prev-btn');
-        const nextBtn = document.querySelector('.next-btn');
-        const photoItems = document.querySelectorAll('.photo-item');
-        let currentIndex = 0;
-        let scrollPosition = 0;
+const setupLightbox = () => {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+    const lightboxClose = document.getElementById('lightbox-close');
+    const lightboxContent = document.querySelector('.lightbox-content');
+    const photoItems = document.querySelectorAll('.photo-item');
+    
+    // Создаем кнопки навигации
+    const prevButton = document.createElement('button');
+    const nextButton = document.createElement('button');
+    
+    prevButton.className = 'modal-nav modal-prev';
+    prevButton.innerHTML = '&#10094;';
+    nextButton.className = 'modal-nav modal-next';
+    nextButton.innerHTML = '&#10095;';
+    
+    lightboxContent.appendChild(prevButton);
+    lightboxContent.appendChild(nextButton);
+    
+    let currentIndex = 0;
+    let scrollPosition = 0;
 
-        const imageData = Array.from(photoItems).map(item => {
-            const img = item.querySelector('img');
-            return {
-                src: img.getAttribute('data-large') || img.src,
-                alt: img.alt
-            };
-        });
-
-        const updateLightbox = () => {
-            lightboxImg.src = imageData[currentIndex].src;
-            lightboxCaption.textContent = imageData[currentIndex].alt;
+    const imageData = Array.from(photoItems).map(item => {
+        const img = item.querySelector('img');
+        return {
+            src: img.getAttribute('data-large') || img.src,
+            alt: img.alt
         };
+    });
 
-        const closeLightbox = () => {
-            lightbox.classList.remove('active');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            window.scrollTo(0, scrollPosition);
-        };
-
-        photoItems.forEach((item, index) => {
-            item.addEventListener('click', () => {
-                scrollPosition = window.scrollY;
-                currentIndex = index;
-                updateLightbox();
-                lightbox.classList.add('active');
-                document.body.style.overflow = 'hidden';
-                document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
-            });
-        });
-
-        lightboxClose.addEventListener('click', event => {
-            event.preventDefault();
-            closeLightbox();
-        });
-
-        lightbox.addEventListener('click', event => {
-            if (event.target === lightbox) closeLightbox();
-        });
-
-        document.addEventListener('keydown', event => {
-            if (event.key === 'Escape' && lightbox.classList.contains('active')) {
-                closeLightbox();
-            }
-            if (!lightbox.classList.contains('active')) return;
-            if (event.key === 'ArrowLeft') {
-                currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
-                updateLightbox();
-            } else if (event.key === 'ArrowRight') {
-                currentIndex = (currentIndex + 1) % imageData.length;
-                updateLightbox();
-            }
-        });
-
-        prevBtn.addEventListener('click', event => {
-            event.preventDefault();
-            event.stopPropagation();
-            currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
-            updateLightbox();
-        });
-
-        nextBtn.addEventListener('click', event => {
-            event.preventDefault();
-            event.stopPropagation();
-            currentIndex = (currentIndex + 1) % imageData.length;
-            updateLightbox();
-        });
-
-        imageData.forEach(item => {
-            const img = new Image();
-            img.src = item.src;
-        });
+    const updateLightbox = () => {
+        lightboxImg.src = imageData[currentIndex].src;
+        lightboxCaption.textContent = imageData[currentIndex].alt;
+        updateNavigationButtons();
     };
+
+    const updateNavigationButtons = () => {
+        prevButton.style.display = imageData.length > 1 ? 'block' : 'none';
+        nextButton.style.display = imageData.length > 1 ? 'block' : 'none';
+    };
+
+    const closeLightbox = () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        window.scrollTo(0, scrollPosition);
+    };
+
+    const showNextImage = () => {
+        currentIndex = (currentIndex + 1) % imageData.length;
+        updateLightbox();
+    };
+
+    const showPrevImage = () => {
+        currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
+        updateLightbox();
+    };
+
+    photoItems.forEach((item, index) => {
+        item.addEventListener('click', () => {
+            scrollPosition = window.scrollY;
+            currentIndex = index;
+            updateLightbox();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
+        });
+    });
+
+    lightboxClose.addEventListener('click', event => {
+        event.preventDefault();
+        closeLightbox();
+    });
+
+    lightbox.addEventListener('click', event => {
+        if (event.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+        if (!lightbox.classList.contains('active')) return;
+        if (event.key === 'ArrowLeft') {
+            showPrevImage();
+        } else if (event.key === 'ArrowRight') {
+            showNextImage();
+        }
+    });
+
+    prevButton.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        showPrevImage();
+    });
+
+    nextButton.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        showNextImage();
+    });
+
+    imageData.forEach(item => {
+        const img = new Image();
+        img.src = item.src;
+    });
+};
 
 const setupCertificateModal = () => {
     const certificateModal = document.getElementById('certificateModal');
     const modalImage = document.getElementById('modalImage');
     const modalClose = document.querySelector('.modal-close');
     const modalContent = document.querySelector('.modal-content');
-
-    // Переменные для отслеживания движения мыши
+    const certificateImages = document.querySelectorAll('.certificate-img');
+    
+    // Создаем кнопки навигации
+    const prevButton = document.createElement('button');
+    const nextButton = document.createElement('button');
+    
+    prevButton.className = 'modal-nav modal-prev';
+    prevButton.innerHTML = '&#10094;';
+    nextButton.className = 'modal-nav modal-next';
+    nextButton.innerHTML = '&#10095;';
+    
+    modalContent.appendChild(prevButton);
+    modalContent.appendChild(nextButton);
+    
+    let currentImageIndex = 0;
     let isDragging = false;
     let startX, startY;
     let clickStartTime = 0;
 
-    const openCertificateModal = (imgSrc, imgAlt) => {
+    const openCertificateModal = (imgSrc, imgAlt, index) => {
         if (!certificateModal || !modalImage || isDragging) return;
+        currentImageIndex = index;
         modalImage.src = imgSrc;
         modalImage.alt = imgAlt;
         certificateModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        updateNavigationButtons();
     };
 
     const closeCertificateModal = () => {
@@ -284,10 +312,43 @@ const setupCertificateModal = () => {
         modalImage.src = '';
     };
 
-    document.querySelectorAll('.certificate-img').forEach(img => {
+    const showNextImage = () => {
+        currentImageIndex = (currentImageIndex + 1) % certificateImages.length;
+        updateModalImage();
+    };
+
+    const showPrevImage = () => {
+        currentImageIndex = (currentImageIndex - 1 + certificateImages.length) % certificateImages.length;
+        updateModalImage();
+    };
+
+    const updateModalImage = () => {
+        const img = certificateImages[currentImageIndex];
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+        updateNavigationButtons();
+    };
+
+    const updateNavigationButtons = () => {
+        prevButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
+        nextButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
+    };
+
+    // Обработчики для кнопки навигации
+    prevButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showPrevImage();
+    });
+
+    nextButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showNextImage();
+    });
+
+    // Добавляем обработчики для всех изображений сертификатов
+    certificateImages.forEach((img, index) => {
         img.style.cursor = 'pointer';
         
-        // Отслеживаем начало клика
         img.addEventListener('mousedown', (e) => {
             isDragging = false;
             startX = e.clientX;
@@ -295,31 +356,26 @@ const setupCertificateModal = () => {
             clickStartTime = Date.now();
         });
 
-        // Отслеживаем движение мыши
         img.addEventListener('mousemove', (e) => {
             if (startX !== undefined && startY !== undefined) {
                 const diffX = Math.abs(e.clientX - startX);
                 const diffY = Math.abs(e.clientY - startY);
                 
-                // Если движение превышает порог - считаем это перетаскиванием
                 if (diffX > 5 || diffY > 5) {
                     isDragging = true;
                 }
             }
         });
 
-        // Обработка клика
         img.addEventListener('click', (e) => {
             const clickDuration = Date.now() - clickStartTime;
             
-            // Открываем модалку только если не было драга и клик был коротким
             if (!isDragging && clickDuration < 200) {
-                openCertificateModal(img.src, img.alt);
+                openCertificateModal(img.src, img.alt, index);
             }
             isDragging = false;
         });
 
-        // Сбрасываем при уходе мыши с изображения
         img.addEventListener('mouseleave', () => {
             isDragging = false;
             startX = undefined;
@@ -327,36 +383,41 @@ const setupCertificateModal = () => {
         });
     });
 
-    // Закрытие модалки
+    // Остальной код обработки событий (закрытие модалки и т.д.)
     modalClose.addEventListener('click', event => {
         event.stopPropagation();
         closeCertificateModal();
     });
 
-    // Закрытие при клике на затемненный фон (саму модалку)
     certificateModal.addEventListener('click', event => {
         if (event.target === certificateModal) {
             closeCertificateModal();
         }
     });
 
-    // Закрытие при клике на modal-content (вне изображения)
     if (modalContent) {
         modalContent.addEventListener('click', event => {
-            // Проверяем, что клик был не по самому изображению
-            if (!event.target.closest('.modal-image')) {
+            if (!event.target.closest('.modal-image') && 
+                !event.target.closest('.modal-nav')) {
                 closeCertificateModal();
             }
         });
     }
 
-    // Закрытие по ESC
+    // Добавляем навигацию с помощью клавиатуры
     document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && certificateModal.style.display === 'flex') {
+        if (certificateModal.style.display !== 'flex') return;
+        
+        if (event.key === 'Escape') {
             closeCertificateModal();
+        } else if (event.key === 'ArrowLeft') {
+            showPrevImage();
+        } else if (event.key === 'ArrowRight') {
+            showNextImage();
         }
     });
 };
+
 const setupVideoModal = () => {
     const videoModal = document.getElementById('videoModal');
     const modalOverlay = document.getElementById('modalOverlay');
@@ -627,43 +688,20 @@ const setupVideoModal = () => {
 
 const setupAccordion = () => {
     const accordionButtons = document.querySelectorAll('.accordion-button');
-
     accordionButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
             const targetId = button.getAttribute('data-bs-target');
             const targetCollapse = document.querySelector(targetId);
-            const isExpanded = button.getAttribute('aria-expanded') === 'true';
-
-            // Убираем логику закрытия других элементов
-            if (isExpanded) {
-                // Закрываем текущий элемент
-                targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
-                requestAnimationFrame(() => {
-                    targetCollapse.style.height = '0';
-                    targetCollapse.querySelector('.accordion-body').style.opacity = '0';
-                    targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(-10px)';
-                    targetCollapse.classList.remove('show');
-                    button.classList.add('collapsed');
-                    button.setAttribute('aria-expanded', 'false');
-                });
-            } else {
-                // Открываем текущий элемент
-                button.classList.remove('collapsed');
-                button.setAttribute('aria-expanded', 'true');
-                targetCollapse.classList.add('show');
-                targetCollapse.style.height = '0';
-                requestAnimationFrame(() => {
-                    targetCollapse.style.height = `${targetCollapse.scrollHeight}px`;
-                    targetCollapse.querySelector('.accordion-body').style.opacity = '1';
-                    targetCollapse.querySelector('.accordion-body').style.transform = 'translateY(0)';
-                });
-            }
-
-            targetCollapse.addEventListener('transitionend', () => {
-                if (targetCollapse.classList.contains('show')) {
-                    targetCollapse.style.height = 'auto';
-                }
-            }, { once: true });
+            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
+            collapseInstance.toggle();
+        });
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            const targetId = button.getAttribute('data-bs-target');
+            const targetCollapse = document.querySelector(targetId);
+            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
+            collapseInstance.toggle();
         });
     });
 };
@@ -822,15 +860,18 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
 };
 
     const setupCarousels = () => {
-        setupCarousel({
-            sectionSelector: '.reviews-section',
-            itemSelector: '.review-slide',
-            prevBtnSelector: '.prev-btn',
-            nextBtnSelector: '.next-btn',
-            indicatorsContainerSelector: '.custom-indicators',
-            slidesContainerSelector: '.reviews-slider',
-            visibleCountLogic: () => window.innerWidth < 768 ? 1 : 3
-        });
+setupCarousel({
+    sectionSelector: '.reviews-section',
+    itemSelector: '.review-slide',
+    prevBtnSelector: '.prev-btn',
+    nextBtnSelector: '.next-btn',
+    indicatorsContainerSelector: '.custom-indicators',
+    slidesContainerSelector: '.reviews-slider',
+    visibleCountLogic: () => {
+        const width = window.innerWidth;
+        return width < 768 ? 1 : width <= 1000 ? 2 : 3;
+    }
+});
 
         setupCarousel({
             sectionSelector: '.video-reviews-section',
@@ -958,7 +999,7 @@ const setupInfiniteLogoCarousel = () => {
     const logoCards = logosContainer.querySelectorAll('.logo-card');
     if (!logosContainer || !logosRow || logoCards.length === 0) return;
 
-    // Удаляем все дубликаты
+    // Remove any duplicate logo cards to reduce DOM size
     const allLogos = logosRow.querySelectorAll('.logo-card');
     if (allLogos.length > logoCards.length) {
         for (let i = logoCards.length; i < allLogos.length; i++) {
@@ -966,43 +1007,54 @@ const setupInfiniteLogoCarousel = () => {
         }
     }
 
-    // Полностью отключаем CSS анимацию и переходим на JS управление
-    logosRow.style.animation = 'none';
-    logosContainer.style.overflowX = 'auto';
+    // Clone logos for seamless infinite scrolling
+    logoCards.forEach(card => {
+        const clone = card.cloneNode(true);
+        logosRow.appendChild(clone);
+    });
+
+    // CSS adjustments
+    logosRow.style.display = 'flex';
+    logosRow.style.flexWrap = 'nowrap';
+    logosContainer.style.overflow = 'hidden';
     logosContainer.style.cursor = 'grab';
 
+    let scrollPosition = 0;
     let isDragging = false;
     let startX;
     let startScrollLeft;
     let velocity = 0;
     let lastX;
     let lastTime;
-    let autoScrollInterval;
+    let animationFrameId;
+    const scrollSpeed = 1; // Pixels per frame (adjust for desired speed)
+
+    const updateScroll = (timestamp) => {
+        if (!isDragging) {
+            scrollPosition += scrollSpeed;
+            const totalWidth = logosRow.scrollWidth / 2; // Half due to cloned logos
+            if (scrollPosition >= totalWidth) {
+                scrollPosition -= totalWidth; // Reset to start for seamless loop
+                logosContainer.scrollLeft = scrollPosition;
+            } else {
+                logosContainer.scrollLeft = scrollPosition;
+            }
+        }
+        animationFrameId = requestAnimationFrame(updateScroll);
+    };
 
     const startAutoScroll = () => {
-        stopAutoScroll();
-        autoScrollInterval = setInterval(() => {
-            if (!isDragging) {
-                logosContainer.scrollLeft += 1;
-                
-                // Возвращаем в начало при достижении конца
-                if (logosContainer.scrollLeft >= logosRow.scrollWidth / 2) {
-                    logosContainer.scrollLeft = 0;
-                }
-            }
-        }, 20);
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(updateScroll);
     };
 
     const stopAutoScroll = () => {
-        if (autoScrollInterval) {
-            clearInterval(autoScrollInterval);
-            autoScrollInterval = null;
-        }
+        cancelAnimationFrame(animationFrameId);
     };
 
     const handleDragStart = (clientX) => {
         isDragging = true;
-        startX = clientX - logosContainer.getBoundingClientRect().left;
+        startX = clientX;
         startScrollLeft = logosContainer.scrollLeft;
         velocity = 0;
         lastX = clientX;
@@ -1014,12 +1066,11 @@ const setupInfiniteLogoCarousel = () => {
 
     const handleDragMove = (clientX) => {
         if (!isDragging) return;
-
-        const x = clientX - logosContainer.getBoundingClientRect().left;
+        const x = clientX;
         const walk = (x - startX) * 2;
-        logosContainer.scrollLeft = startScrollLeft - walk;
+        scrollPosition = startScrollLeft - walk;
+        logosContainer.scrollLeft = scrollPosition;
 
-        // Рассчитываем скорость для инерции
         const currentTime = Date.now();
         const deltaX = clientX - lastX;
         const deltaTime = currentTime - lastTime;
@@ -1034,25 +1085,21 @@ const setupInfiniteLogoCarousel = () => {
 
     const handleDragEnd = () => {
         if (!isDragging) return;
-
         isDragging = false;
         logosContainer.style.cursor = 'grab';
         logosContainer.style.scrollBehavior = 'smooth';
 
-        // Применяем инерцию
+        // Apply inertia
         if (Math.abs(velocity) > 0.1) {
-            const inertia = velocity * 100;
-            logosContainer.scrollBy({
-                left: -inertia,
-                behavior: 'smooth'
-            });
+            scrollPosition -= velocity * 100;
+            logosContainer.scrollLeft = scrollPosition;
         }
 
-        // Возобновляем автоскролл через 2 секунды
+        // Resume auto-scroll after 2 seconds
         setTimeout(startAutoScroll, 2000);
     };
 
-    // Мышь события
+    // Mouse events
     logosContainer.addEventListener('mousedown', (e) => {
         e.preventDefault();
         handleDragStart(e.clientX);
@@ -1065,7 +1112,7 @@ const setupInfiniteLogoCarousel = () => {
     logosContainer.addEventListener('mouseup', handleDragEnd);
     logosContainer.addEventListener('mouseleave', handleDragEnd);
 
-    // Touch события
+    // Touch events
     logosContainer.addEventListener('touchstart', (e) => {
         handleDragStart(e.touches[0].clientX);
     }, { passive: true });
@@ -1077,15 +1124,16 @@ const setupInfiniteLogoCarousel = () => {
     logosContainer.addEventListener('touchend', handleDragEnd);
     logosContainer.addEventListener('touchcancel', handleDragEnd);
 
-    // Предотвращаем выделение текста при перетаскивании
+    // Prevent text selection during drag
     logosContainer.addEventListener('dragstart', (e) => {
         e.preventDefault();
     });
 
-    // Запускаем автоскролл
-    startAutoScroll();
+    // Pause on hover
+    logosContainer.addEventListener('mouseenter', stopAutoScroll);
+    logosContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
 
-    // Останавливаем автоскролл при скрытии вкладки
+    // Handle visibility change
     document.addEventListener('visibilitychange', () => {
         if (document.hidden) {
             stopAutoScroll();
@@ -1093,6 +1141,9 @@ const setupInfiniteLogoCarousel = () => {
             startAutoScroll();
         }
     });
+
+    // Start auto-scroll
+    startAutoScroll();
 };
 
     const setupSimpleLogoCarousel = () => {
@@ -1334,61 +1385,29 @@ const setupInfiniteLogoCarousel = () => {
         });
     };
 
-    const setupColorSelector = () => {
-        const imageMap = {
-            'вишня': {
-                'серебро': './img/lamination/1.png',
-                'золото': './img/lamination/2.png',
-                'бронза': './img/lamination/3.png',
-                'титан': './img/lamination/4.png',
-                'белое золото': './img/lamination/5.png',
-                'медь': './img/lamination/6.png'
-            },
-            'дуб': {
-                'серебро': './img/lamination/7.png',
-                'золото': './img/lamination/8.png',
-                'бронза': './img/lamination/9.png',
-                'титан': './img/lamination/10.png',
-                'белое золото': './img/lamination/11.png',
-                'медь': './img/lamination/12.png'
-            },
-            'каштан': {
-                'серебро': './img/lamination/13.png',
-                'золото': './img/lamination/14.png',
-                'бронза': './img/lamination/15.png',
-                'титан': './img/lamination/16.png',
-                'белое золото': './img/lamination/17.png',
-                'медь': './img/lamination/18.png'
-            },
-            'сосна': {
-                'серебро': './img/lamination/19.png',
-                'золото': './img/lamination/20.png',
-                'бронза': './img/lamination/21.png',
-                'титан': './img/lamination/22.png',
-                'белое золото': './img/lamination/23.png',
-                'медь': './img/lamination/24.png'
-            },
-            'ольха': {
-                'серебро': './img/lamination/25.png',
-                'золото': './img/lamination/26.png',
-                'бронза': './img/lamination/27.png',
-                'титан': './img/lamination/28.png',
-                'белое золото': './img/lamination/29.png',
-                'медь': './img/lamination/30.png'
-            },
-            'клен': {
-                'серебро': './img/lamination/31.png',
-                'золото': './img/lamination/32.png',
-                'бронза': './img/lamination/33.png',
-                'титан': './img/lamination/34.png',
-                'белое золото': './img/lamination/35.png',
-                'медь': './img/lamination/36.png'
-            }
+const setupColorSelector = () => {
+        // Маппинг цветов на пути к PNG файлам (предполагаем, что файлы в папке img/)
+ const frameColorsMap = {
+            'вишня': './img/lamination/cherry.png',
+            'дуб': './img/lamination/oak.png',
+            'каштан': './img/lamination/chestnut.png',
+            'сосна': './img/lamination/pine.png',
+            'ольха': './img/lamination/alde.png',
+            'клен': './img/lamination/maple.png'
         };
 
+        const hardwareColorsMap = {
+            'серебро': './img/lamination/silver.png',
+            'золото': './img/lamination/gold.png',
+            'бронза': './img/lamination/bronze.png',
+            'титан': './img/lamination/titanium.png',
+            'белое золото': './img/lamination/white-gold.png',
+            'медь': './img/lamination/copper.png'
+        };
         const frameColorOptions = document.querySelectorAll('.frame-colors .color-option');
         const hardwareColorOptions = document.querySelectorAll('.hardware-colors .color-option');
-        const windowImage = document.getElementById('windowImage');
+        const frameImage = document.getElementById('frameImage');
+        const hardwareImage = document.getElementById('hardwareImage');
         const selectionResult = document.getElementById('selectionResult');
 
         const updatePreview = () => {
@@ -1397,21 +1416,35 @@ const setupInfiniteLogoCarousel = () => {
             const frameName = selectedFrame.getAttribute('data-color');
             const hardwareName = selectedHardware.getAttribute('data-color');
 
-            windowImage.classList.add('image-loading');
-            const imagePath = imageMap[frameName]?.[hardwareName] || 'https://placehold.co/600x400/ff0000/FFFFFF/png?text=Изображение+не+найдено';
+            // Загрузка изображения рамы
+            frameImage.classList.add('image-loading');
+            const framePath = frameColorsMap[frameName] || './img/cherry.png'; // fallback
+            const frameNewImg = new Image();
+            frameNewImg.onload = () => {
+                frameImage.src = framePath;
+                frameImage.alt = `Рама ${frameName}`;
+                frameImage.classList.remove('image-loading');
+            };
+            frameNewImg.onerror = () => {
+                console.error('Ошибка загрузки рамы:', framePath);
+                frameImage.classList.remove('image-loading');
+            };
+            frameNewImg.src = framePath;
 
-            const newImage = new Image();
-            newImage.onload = () => {
-                windowImage.src = imagePath;
-                windowImage.alt = `Окно с рамой ${frameName} и фурнитурой ${hardwareName}`;
-                windowImage.classList.remove('image-loading');
+            // Загрузка изображения фурнитуры (прозрачное PNG)
+            hardwareImage.classList.add('image-loading');
+            const hardwarePath = hardwareColorsMap[hardwareName] || './img/silver.png'; // fallback
+            const hardwareNewImg = new Image();
+            hardwareNewImg.onload = () => {
+                hardwareImage.src = hardwarePath;
+                hardwareImage.alt = `Фурнитура ${hardwareName}`;
+                hardwareImage.classList.remove('image-loading');
             };
-            newImage.onerror = () => {
-                windowImage.src = 'https://placehold.co/600x400/ff0000/FFFFFF/png?text=Ошибка+загрузки';
-                windowImage.alt = 'Ошибка загрузки изображения';
-                windowImage.classList.remove('image-loading');
+            hardwareNewImg.onerror = () => {
+                console.error('Ошибка загрузки фурнитуры:', hardwarePath);
+                hardwareImage.classList.remove('image-loading');
             };
-            newImage.src = imagePath;
+            hardwareNewImg.src = hardwarePath;
 
             selectionResult.textContent = `Выбрана рама: ${frameName.charAt(0).toUpperCase() + frameName.slice(1)}, фурнитура: ${hardwareName.charAt(0).toUpperCase() + hardwareName.slice(1)}`;
         };
@@ -1432,7 +1465,7 @@ const setupInfiniteLogoCarousel = () => {
             });
         });
 
-        updatePreview();
+        updatePreview(); // Инициализация
     };
 
     setupNavigation();
