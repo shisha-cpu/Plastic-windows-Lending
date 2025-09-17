@@ -38,497 +38,510 @@ document.addEventListener('DOMContentLoaded', () => {
             if (dropdownMenu) dropdownMenu.style.display = 'none';
         });
     };
-const setupNavigation = () => {
-    navItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            if (isMobile()) return;
-            const megaMenu = item.querySelector('.mega-menu');
-            if (megaMenu) {
-                hideAllMegaMenus();
-                megaMenu.style.display = 'block'; // Show the menu without adjusting top
-                activeMegaMenu = megaMenu;
-            }
-        });
 
-        item.addEventListener('mouseleave', event => {
-            if (isMobile()) return;
-            const megaMenu = item.querySelector('.mega-menu');
-            if (megaMenu) {
-                setTimeout(() => {
-                    if (!isMouseInsideElement(event, megaMenu)) {
-                        megaMenu.style.display = 'none';
-                        if (activeMegaMenu === megaMenu) activeMegaMenu = null;
-                    }
-                }, 100);
-            }
-        });
-    });
-
-    document.querySelectorAll('.mega-menu').forEach(megaMenu => {
-        megaMenu.addEventListener('mouseenter', () => {
-            if (isMobile()) return;
-            megaMenu.style.display = 'block';
-        });
-
-        megaMenu.addEventListener('mouseleave', () => {
-            if (isMobile()) return;
-            megaMenu.style.display = 'none';
-            if (activeMegaMenu === megaMenu) activeMegaMenu = null;
-        });
-    });
-
-    topNavItems.forEach(item => {
-        const dropdownMenu = item.querySelector('.dropdown-menu');
-        if (dropdownMenu) {
+    const setupNavigation = () => {
+        navItems.forEach(item => {
             item.addEventListener('mouseenter', () => {
                 if (isMobile()) return;
-                dropdownMenu.style.display = 'block';
+                const megaMenu = item.querySelector('.mega-menu');
+                if (megaMenu) {
+                    hideAllMegaMenus();
+                    megaMenu.style.display = 'block';
+                    activeMegaMenu = megaMenu;
+                }
             });
 
             item.addEventListener('mouseleave', event => {
                 if (isMobile()) return;
-                setTimeout(() => {
-                    if (!isMouseInsideElement(event, dropdownMenu)) {
-                        dropdownMenu.style.display = 'none';
-                    }
-                }, 100);
+                const megaMenu = item.querySelector('.mega-menu');
+                if (megaMenu) {
+                    setTimeout(() => {
+                        if (!isMouseInsideElement(event, megaMenu)) {
+                            megaMenu.style.display = 'none';
+                            if (activeMegaMenu === megaMenu) activeMegaMenu = null;
+                        }
+                    }, 100);
+                }
+            });
+        });
+
+        document.querySelectorAll('.mega-menu').forEach(megaMenu => {
+            megaMenu.addEventListener('mouseenter', () => {
+                if (isMobile()) return;
+                megaMenu.style.display = 'block';
             });
 
-            dropdownMenu.addEventListener('mouseenter', () => {
+            megaMenu.addEventListener('mouseleave', () => {
                 if (isMobile()) return;
-                dropdownMenu.style.display = 'block';
+                megaMenu.style.display = 'none';
+                if (activeMegaMenu === megaMenu) activeMegaMenu = null;
+            });
+        });
+
+        topNavItems.forEach(item => {
+            const dropdownMenu = item.querySelector('.dropdown-menu');
+            if (dropdownMenu) {
+                item.addEventListener('mouseenter', () => {
+                    if (isMobile()) return;
+                    dropdownMenu.style.display = 'block';
+                });
+
+                item.addEventListener('mouseleave', event => {
+                    if (isMobile()) return;
+                    setTimeout(() => {
+                        if (!isMouseInsideElement(event, dropdownMenu)) {
+                            dropdownMenu.style.display = 'none';
+                        }
+                    }, 100);
+                });
+
+                dropdownMenu.addEventListener('mouseenter', () => {
+                    if (isMobile()) return;
+                    dropdownMenu.style.display = 'block';
+                });
+
+                dropdownMenu.addEventListener('mouseleave', () => {
+                    if (isMobile()) return;
+                    dropdownMenu.style.display = 'none';
+                });
+            }
+        });
+    };
+
+    const setupMobileMenu = () => {
+        const mobileAccordion = document.querySelector('#mobileMenuAccordion');
+        if (mobileAccordion.children.length === 0) {
+            topNavItems.forEach((item, index) => {
+                const link = item.querySelector('.nav-link');
+                const dropdownMenu = item.querySelector('.dropdown-menu');
+                if (link && dropdownMenu) {
+                    const accordionItem = document.createElement('div');
+                    accordionItem.className = 'accordion-item';
+                    accordionItem.innerHTML = `
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-top-${index}" aria-expanded="false">
+                                ${link.textContent}
+                            </button>
+                        </h2>
+                        <div id="mobile-top-${index}" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                ${dropdownMenu.innerHTML}
+                            </div>
+                        </div>
+                    `;
+                    mobileAccordion.appendChild(accordionItem);
+                }
             });
 
-            dropdownMenu.addEventListener('mouseleave', () => {
-                if (isMobile()) return;
-                dropdownMenu.style.display = 'none';
+            navItems.forEach((item, index) => {
+                if (item === navItems[navItems.length - 1]) return;
+                const link = item.querySelector('.bottom-nav-link');
+                const megaMenu = item.querySelector('.mega-menu');
+                if (link && megaMenu) {
+                    const accordionItem = document.createElement('div');
+                    accordionItem.className = 'accordion-item';
+                    accordionItem.innerHTML = `
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}" aria-expanded="false">
+                                ${link.textContent.replace(/<span.*<\/span>/, '')}
+                            </button>
+                        </h2>
+                        <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                ${megaMenu.querySelector('.d-flex').innerHTML}
+                            </div>
+                        </div>
+                    `;
+                    mobileAccordion.appendChild(accordionItem);
+                }
             });
         }
-    });
-};
 
-const setupMobileMenu = () => {
-    const mobileAccordion = document.querySelector('#mobileMenuAccordion');
-    navItems.forEach((item, index) => {
-        if (item === navItems[navItems.length - 1]) return;
-        const link = item.querySelector('.bottom-nav-link');
-        const megaMenu = item.querySelector('.mega-menu');
-        if (link && megaMenu) {
-            const accordionItem = document.createElement('div');
-            accordionItem.className = 'accordion-item';
-            accordionItem.innerHTML = `
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}" aria-expanded="false">
-                        ${link.textContent.replace(/<span.*<\/span>/, '')}
-                    </button>
-                </h2>
-                <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
-                    <div class="accordion-body">
-                        ${megaMenu.querySelector('.d-flex').innerHTML}
-                    </div>
-                </div>
-            `;
-            mobileAccordion.appendChild(accordionItem);
-        }
-    });
+        burgerMenu.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        });
 
-    // Existing burger menu and overlay logic
-    const burgerMenu = document.querySelector('.burger-menu');
-    const mobileMenu = document.querySelector('.mobile-menu');
-    const mobileOverlay = document.querySelector('.mobile-overlay');
-    burgerMenu.addEventListener('click', () => {
-        mobileMenu.classList.toggle('active');
-        mobileOverlay.classList.toggle('active');
-    });
-    mobileOverlay.addEventListener('click', () => {
-        mobileMenu.classList.remove('active');
-        mobileOverlay.classList.remove('active');
-    });
-};
-
-const setupWindowEvents = () => {
-    window.addEventListener('resize', () => {
-        hideAllMegaMenus();
-        hideAllDropdownMenus();
-        if (isMobile()) {
+        mobileOverlay.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
             mobileOverlay.classList.remove('active');
-        }
-    });
-
-    window.addEventListener('mousemove', event => {
-        window.lastMouseX = event.clientX;
-        window.lastMouseY = event.clientY;
-    });
-};
-
-const setupLightbox = () => {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = document.getElementById('lightbox-caption');
-    const lightboxClose = document.getElementById('lightbox-close');
-    const lightboxContent = document.querySelector('.lightbox-content');
-    const photoItems = document.querySelectorAll('.photo-item');
-    
-    // Создаем кнопки навигации
-    const prevButton = document.createElement('button');
-    const nextButton = document.createElement('button');
-    
-    prevButton.className = 'modal-nav modal-prev';
-    prevButton.innerHTML = '&#10094;';
-    nextButton.className = 'modal-nav modal-next';
-    nextButton.innerHTML = '&#10095;';
-    
-    lightboxContent.appendChild(prevButton);
-    lightboxContent.appendChild(nextButton);
-    
-    let currentIndex = 0;
-    let scrollPosition = 0;
-
-    const imageData = Array.from(photoItems).map(item => {
-        const img = item.querySelector('img');
-        return {
-            src: img.getAttribute('data-large') || img.src,
-            alt: img.alt
-        };
-    });
-
-    const updateLightbox = () => {
-        lightboxImg.src = imageData[currentIndex].src;
-        lightboxCaption.textContent = imageData[currentIndex].alt;
-        updateNavigationButtons();
-    };
-
-    const updateNavigationButtons = () => {
-        prevButton.style.display = imageData.length > 1 ? 'block' : 'none';
-        nextButton.style.display = imageData.length > 1 ? 'block' : 'none';
-    };
-
-    const closeLightbox = () => {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-        window.scrollTo(0, scrollPosition);
-    };
-
-    const showNextImage = () => {
-        currentIndex = (currentIndex + 1) % imageData.length;
-        updateLightbox();
-    };
-
-    const showPrevImage = () => {
-        currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
-        updateLightbox();
-    };
-
-    photoItems.forEach((item, index) => {
-        item.addEventListener('click', () => {
-            scrollPosition = window.scrollY;
-            currentIndex = index;
-            updateLightbox();
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
         });
-    });
-
-    lightboxClose.addEventListener('click', event => {
-        event.preventDefault();
-        closeLightbox();
-    });
-
-    lightbox.addEventListener('click', event => {
-        if (event.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && lightbox.classList.contains('active')) {
-            closeLightbox();
-        }
-        if (!lightbox.classList.contains('active')) return;
-        if (event.key === 'ArrowLeft') {
-            showPrevImage();
-        } else if (event.key === 'ArrowRight') {
-            showNextImage();
-        }
-    });
-
-    prevButton.addEventListener('click', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        showPrevImage();
-    });
-
-    nextButton.addEventListener('click', event => {
-        event.preventDefault();
-        event.stopPropagation();
-        showNextImage();
-    });
-
-    imageData.forEach(item => {
-        const img = new Image();
-        img.src = item.src;
-    });
-};
-
-const setupCertificateModal = () => {
-    const certificateModal = document.getElementById('certificateModal');
-    const modalImage = document.getElementById('modalImage');
-    const modalClose = document.querySelector('.modal-close');
-    const modalContent = document.querySelector('.modal-content');
-    const certificateImages = document.querySelectorAll('.certificate-img');
-    
-    // Создаем кнопки навигации
-    const prevButton = document.createElement('button');
-    const nextButton = document.createElement('button');
-    
-    prevButton.className = 'modal-nav modal-prev';
-    prevButton.innerHTML = '&#10094;';
-    nextButton.className = 'modal-nav modal-next';
-    nextButton.innerHTML = '&#10095;';
-    
-    modalContent.appendChild(prevButton);
-    modalContent.appendChild(nextButton);
-    
-    let currentImageIndex = 0;
-    let isDragging = false;
-    let startX, startY;
-    let clickStartTime = 0;
-
-    const openCertificateModal = (imgSrc, imgAlt, index) => {
-        if (!certificateModal || !modalImage || isDragging) return;
-        currentImageIndex = index;
-        modalImage.src = imgSrc;
-        modalImage.alt = imgAlt;
-        certificateModal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        updateNavigationButtons();
     };
 
-    const closeCertificateModal = () => {
-        if (!certificateModal) return;
-        certificateModal.style.display = 'none';
-        document.body.style.overflow = '';
-        modalImage.src = '';
+    const setupWindowEvents = () => {
+        window.addEventListener('resize', () => {
+            hideAllMegaMenus();
+            hideAllDropdownMenus();
+            if (isMobile()) {
+                mobileMenu.classList.remove('active');
+                mobileOverlay.classList.remove('active');
+            }
+        });
+
+        window.addEventListener('mousemove', event => {
+            window.lastMouseX = event.clientX;
+            window.lastMouseY = event.clientY;
+        });
     };
 
-    const showNextImage = () => {
-        currentImageIndex = (currentImageIndex + 1) % certificateImages.length;
-        updateModalImage();
-    };
-
-    const showPrevImage = () => {
-        currentImageIndex = (currentImageIndex - 1 + certificateImages.length) % certificateImages.length;
-        updateModalImage();
-    };
-
-    const updateModalImage = () => {
-        const img = certificateImages[currentImageIndex];
-        modalImage.src = img.src;
-        modalImage.alt = img.alt;
-        updateNavigationButtons();
-    };
-
-    const updateNavigationButtons = () => {
-        prevButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
-        nextButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
-    };
-
-    // Обработчики для кнопки навигации
-    prevButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showPrevImage();
-    });
-
-    nextButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        showNextImage();
-    });
-
-    // Добавляем обработчики для всех изображений сертификатов
-    certificateImages.forEach((img, index) => {
-        img.style.cursor = 'pointer';
+    const setupLightbox = () => {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxContent = document.querySelector('.lightbox-content');
+        const photoItems = document.querySelectorAll('.photo-item');
         
-        img.addEventListener('mousedown', (e) => {
-            isDragging = false;
-            startX = e.clientX;
-            startY = e.clientY;
-            clickStartTime = Date.now();
+        const prevButton = document.createElement('button');
+        const nextButton = document.createElement('button');
+        
+        prevButton.className = 'modal-nav modal-prev';
+        prevButton.innerHTML = '&#10094;';
+        nextButton.className = 'modal-nav modal-next';
+        nextButton.innerHTML = '&#10095;';
+        
+        lightboxContent.appendChild(prevButton);
+        lightboxContent.appendChild(nextButton);
+        
+        let currentIndex = 0;
+        let scrollPosition = 0;
+
+        const imageData = Array.from(photoItems).map(item => {
+            const img = item.querySelector('img');
+            return {
+                src: img.getAttribute('data-large') || img.src,
+                alt: img.alt
+            };
         });
 
-        img.addEventListener('mousemove', (e) => {
-            if (startX !== undefined && startY !== undefined) {
-                const diffX = Math.abs(e.clientX - startX);
-                const diffY = Math.abs(e.clientY - startY);
-                
-                if (diffX > 5 || diffY > 5) {
-                    isDragging = true;
-                }
+        const updateLightbox = () => {
+            lightboxImg.src = imageData[currentIndex].src;
+            lightboxCaption.textContent = imageData[currentIndex].alt;
+            updateNavigationButtons();
+        };
+
+        const updateNavigationButtons = () => {
+            prevButton.style.display = imageData.length > 1 ? 'block' : 'none';
+            nextButton.style.display = imageData.length > 1 ? 'block' : 'none';
+        };
+
+        const closeLightbox = () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            window.scrollTo(0, scrollPosition);
+        };
+
+        const showNextImage = () => {
+            currentIndex = (currentIndex + 1) % imageData.length;
+            updateLightbox();
+        };
+
+        const showPrevImage = () => {
+            currentIndex = (currentIndex - 1 + imageData.length) % imageData.length;
+            updateLightbox();
+        };
+
+        photoItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                scrollPosition = window.scrollY;
+                currentIndex = index;
+                updateLightbox();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
+            });
+        });
+
+        lightboxClose.addEventListener('click', event => {
+            event.preventDefault();
+            closeLightbox();
+        });
+
+        lightbox.addEventListener('click', event => {
+            if (event.target === lightbox) closeLightbox();
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+            if (!lightbox.classList.contains('active')) return;
+            if (event.key === 'ArrowLeft') {
+                showPrevImage();
+            } else if (event.key === 'ArrowRight') {
+                showNextImage();
             }
         });
 
-        img.addEventListener('click', (e) => {
-            const clickDuration = Date.now() - clickStartTime;
+        prevButton.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            showPrevImage();
+        });
+
+        nextButton.addEventListener('click', event => {
+            event.preventDefault();
+            event.stopPropagation();
+            showNextImage();
+        });
+
+        imageData.forEach(item => {
+            const img = new Image();
+            img.src = item.src;
+        });
+    };
+
+    const setupCertificateModal = () => {
+        const certificateModal = document.getElementById('certificateModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.querySelector('.modal-close');
+        const modalContent = document.querySelector('.modal-content');
+        const certificateImages = document.querySelectorAll('.certificate-img');
+        
+        const prevButton = document.createElement('button');
+        const nextButton = document.createElement('button');
+        
+        prevButton.className = 'modal-nav modal-prev';
+        prevButton.innerHTML = '&#10094;';
+        nextButton.className = 'modal-nav modal-next';
+        nextButton.innerHTML = '&#10095;';
+        
+        modalContent.appendChild(prevButton);
+        modalContent.appendChild(nextButton);
+        
+        let currentImageIndex = 0;
+        let isDragging = false;
+        let startX, startY;
+        let clickStartTime = 0;
+
+        const openCertificateModal = (imgSrc, imgAlt, index) => {
+            if (!certificateModal || !modalImage || isDragging) return;
+            currentImageIndex = index;
+            modalImage.src = imgSrc;
+            modalImage.alt = imgAlt;
+            certificateModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            updateNavigationButtons();
+        };
+
+        const closeCertificateModal = () => {
+            if (!certificateModal) return;
+            certificateModal.style.display = 'none';
+            document.body.style.overflow = '';
+            modalImage.src = '';
+        };
+
+        const showNextImage = () => {
+            currentImageIndex = (currentImageIndex + 1) % certificateImages.length;
+            updateModalImage();
+        };
+
+        const showPrevImage = () => {
+            currentImageIndex = (currentImageIndex - 1 + certificateImages.length) % certificateImages.length;
+            updateModalImage();
+        };
+
+        const updateModalImage = () => {
+            const img = certificateImages[currentImageIndex];
+            modalImage.src = img.src;
+            modalImage.alt = img.alt;
+            updateNavigationButtons();
+        };
+
+        const updateNavigationButtons = () => {
+            prevButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
+            nextButton.style.display = certificateImages.length > 1 ? 'block' : 'none';
+        };
+
+        prevButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showPrevImage();
+        });
+
+        nextButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showNextImage();
+        });
+
+        certificateImages.forEach((img, index) => {
+            img.style.cursor = 'pointer';
             
-            if (!isDragging && clickDuration < 200) {
-                openCertificateModal(img.src, img.alt, index);
-            }
-            isDragging = false;
+            img.addEventListener('mousedown', (e) => {
+                isDragging = false;
+                startX = e.clientX;
+                startY = e.clientY;
+                clickStartTime = Date.now();
+            });
+
+            img.addEventListener('mousemove', (e) => {
+                if (startX !== undefined && startY !== undefined) {
+                    const diffX = Math.abs(e.clientX - startX);
+                    const diffY = Math.abs(e.clientY - startY);
+                    if (diffX > 5 || diffY > 5) {
+                        isDragging = true;
+                    }
+                }
+            });
+
+            img.addEventListener('click', (e) => {
+                const clickDuration = Date.now() - clickStartTime;
+                if (!isDragging && clickDuration < 200) {
+                    openCertificateModal(img.src, img.alt, index);
+                }
+                isDragging = false;
+            });
+
+            img.addEventListener('mouseleave', () => {
+                isDragging = false;
+                startX = undefined;
+                startY = undefined;
+            });
         });
 
-        img.addEventListener('mouseleave', () => {
-            isDragging = false;
-            startX = undefined;
-            startY = undefined;
-        });
-    });
-
-    // Остальной код обработки событий (закрытие модалки и т.д.)
-    modalClose.addEventListener('click', event => {
-        event.stopPropagation();
-        closeCertificateModal();
-    });
-
-    certificateModal.addEventListener('click', event => {
-        if (event.target === certificateModal) {
+        modalClose.addEventListener('click', event => {
+            event.stopPropagation();
             closeCertificateModal();
-        }
-    });
+        });
 
-    if (modalContent) {
-        modalContent.addEventListener('click', event => {
-            if (!event.target.closest('.modal-image') && 
-                !event.target.closest('.modal-nav')) {
+        certificateModal.addEventListener('click', event => {
+            if (event.target === certificateModal) {
                 closeCertificateModal();
             }
         });
-    }
 
-    // Добавляем навигацию с помощью клавиатуры
-    document.addEventListener('keydown', event => {
-        if (certificateModal.style.display !== 'flex') return;
-        
-        if (event.key === 'Escape') {
-            closeCertificateModal();
-        } else if (event.key === 'ArrowLeft') {
-            showPrevImage();
-        } else if (event.key === 'ArrowRight') {
-            showNextImage();
+        if (modalContent) {
+            modalContent.addEventListener('click', event => {
+                if (!event.target.closest('.modal-image') && 
+                    !event.target.closest('.modal-nav')) {
+                    closeCertificateModal();
+                }
+            });
         }
-    });
-};
 
-const setupVideoModal = () => {
-    const videoModal = document.getElementById('videoModal');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const videoWrapper = document.getElementById('videoWrapper');
-    const modalClose = document.getElementById('modalClose');
-    const modalContent = document.querySelector('.modal-content');
-    let isModalOpen = false;
+        document.addEventListener('keydown', event => {
+            if (certificateModal.style.display !== 'flex') return;
+            if (event.key === 'Escape') {
+                closeCertificateModal();
+            } else if (event.key === 'ArrowLeft') {
+                showPrevImage();
+            } else if (event.key === 'ArrowRight') {
+                showNextImage();
+            }
+        });
+    };
 
-    const openVideoModal = (videoId) => {
-        if (!videoId) {
-            console.warn('No video ID provided for modal');
-            videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка: Видео недоступно, отсутствует ID.</p>';
+    const setupVideoModal = () => {
+        const videoModal = document.getElementById('videoModal');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const modalClose = document.getElementById('modalClose');
+        const modalContent = document.querySelector('.modal-content');
+        let isModalOpen = false;
+
+        const openVideoModal = (videoId) => {
+            if (!videoId) {
+                console.warn('No video ID provided for modal');
+                videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка: Видео недоступно, отсутствует ID.</p>';
+                videoModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                isModalOpen = true;
+                return;
+            }
+
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://rutube.ru/play/embed/${videoId}?skinColor=000000`;
+            iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
+            iframe.setAttribute('allowfullscreen', '');
+            iframe.style.width = '100%';
+            iframe.style.height = '100%';
+            iframe.style.border = 'none';
+            iframe.onerror = () => {
+                console.error(`Failed to load RuTube video with ID: ${videoId}`);
+                videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка загрузки видео. Пожалуйста, попробуйте позже.</p>';
+                videoModal.classList.add('active');
+                isModalOpen = true;
+            };
+            videoWrapper.innerHTML = '';
+            videoWrapper.appendChild(iframe);
             videoModal.classList.add('active');
             document.body.style.overflow = 'hidden';
             isModalOpen = true;
-            return;
-        }
-
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://rutube.ru/play/embed/${videoId}?skinColor=000000`; // Added skinColor to ensure consistent styling
-        iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media'); // Use setAttribute to avoid CSP issues with allow
-        iframe.setAttribute('allowfullscreen', ''); // Explicitly set allowfullscreen
-        iframe.style.width = '100%';
-        iframe.style.height = '100%';
-        iframe.style.border = 'none';
-        iframe.onerror = () => {
-            console.error(`Failed to load RuTube video with ID: ${videoId}`);
-            videoWrapper.innerHTML = '<p style="color: white; text-align: center;">Ошибка загрузки видео. Пожалуйста, попробуйте позже.</p>';
-            videoModal.classList.add('active');
-            isModalOpen = true;
         };
-        videoWrapper.innerHTML = ''; // Clear previous content
-        videoWrapper.appendChild(iframe);
-        videoModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        isModalOpen = true;
-    };
 
-    const closeVideoModal = () => {
-        videoModal.classList.remove('active');
-        videoWrapper.innerHTML = '';
-        document.body.style.overflow = '';
-        isModalOpen = false;
-    };
+        const closeVideoModal = () => {
+            videoModal.classList.remove('active');
+            videoWrapper.innerHTML = '';
+            document.body.style.overflow = '';
+            isModalOpen = false;
+        };
 
-    document.querySelectorAll('.video-placeholder').forEach(placeholder => {
-        let dragStartTime = 0;
-        let isDragging = false;
+        document.querySelectorAll('.video-placeholder').forEach(placeholder => {
+            let dragStartTime = 0;
+            let isDragging = false;
 
-        placeholder.addEventListener('mousedown', (e) => {
-            dragStartTime = Date.now();
-            isDragging = false;
-            e.stopPropagation(); // Prevent carousel drag
-        });
+            placeholder.addEventListener('mousedown', (e) => {
+                dragStartTime = Date.now();
+                isDragging = false;
+                e.stopPropagation();
+            });
 
-        placeholder.addEventListener('mousemove', (e) => {
-            if (Date.now() - dragStartTime > 200) {
-                isDragging = true;
-            }
-        });
+            placeholder.addEventListener('mousemove', (e) => {
+                if (Date.now() - dragStartTime > 200) {
+                    isDragging = true;
+                }
+            });
 
-        placeholder.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent carousel click handling
-            if (isDragging) return;
-            const videoId = placeholder.getAttribute('data-video-id');
-            openVideoModal(videoId);
-        });
-
-        placeholder.addEventListener('mouseup', (e) => {
-            e.stopPropagation(); // Prevent carousel drag end
-        });
-
-        // Touch events for mobile
-        placeholder.addEventListener('touchstart', (e) => {
-            dragStartTime = Date.now();
-            isDragging = false;
-            e.stopPropagation();
-        }, { passive: false });
-
-        placeholder.addEventListener('touchmove', (e) => {
-            if (Date.now() - dragStartTime > 200) {
-                isDragging = true;
-            }
-        }, { passive: false });
-
-        placeholder.addEventListener('touchend', (e) => {
-            e.stopPropagation();
-            if (!isDragging) {
+            placeholder.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (isDragging) return;
                 const videoId = placeholder.getAttribute('data-video-id');
                 openVideoModal(videoId);
-            }
+            });
+
+            placeholder.addEventListener('mouseup', (e) => {
+                e.stopPropagation();
+            });
+
+            placeholder.addEventListener('touchstart', (e) => {
+                dragStartTime = Date.now();
+                isDragging = false;
+                e.stopPropagation();
+            }, { passive: false });
+
+            placeholder.addEventListener('touchmove', (e) => {
+                if (Date.now() - dragStartTime > 200) {
+                    isDragging = true;
+                }
+            }, { passive: false });
+
+            placeholder.addEventListener('touchend', (e) => {
+                e.stopPropagation();
+                if (!isDragging) {
+                    const videoId = placeholder.getAttribute('data-video-id');
+                    openVideoModal(videoId);
+                }
+            });
         });
-    });
 
-    modalClose?.addEventListener('click', (event) => {
-        event.stopPropagation();
-        closeVideoModal();
-    });
+        modalClose?.addEventListener('click', (event) => {
+            event.stopPropagation();
+            closeVideoModal();
+        });
 
-    modalOverlay?.addEventListener('click', closeVideoModal);
+        modalOverlay?.addEventListener('click', closeVideoModal);
 
-    videoModal?.addEventListener('click', (event) => {
-        if (event.target === videoModal) closeVideoModal();
-    });
+        videoModal?.addEventListener('click', (event) => {
+            if (event.target === videoModal) closeVideoModal();
+        });
 
-    modalContent?.addEventListener('click', (event) => event.stopPropagation());
+        modalContent?.addEventListener('click', (event) => event.stopPropagation());
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && isModalOpen) closeVideoModal();
-    });
-};
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && isModalOpen) closeVideoModal();
+        });
+    };
+
     const setupCalculator = () => {
         const heightSlider = document.getElementById('height-slider');
         const widthSlider = document.getElementById('width-slider');
@@ -686,181 +699,224 @@ const setupVideoModal = () => {
         });
     };
 
-const setupAccordion = () => {
-    const accordionButtons = document.querySelectorAll('.accordion-button');
-    accordionButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = button.getAttribute('data-bs-target');
-            const targetCollapse = document.querySelector(targetId);
-            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
-            collapseInstance.toggle();
+    const setupAccordion = () => {
+        document.querySelectorAll('.accordion-collapse').forEach(collapse => {
+            collapse.removeAttribute('data-bs-parent');
         });
-        button.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            const targetId = button.getAttribute('data-bs-target');
-            const targetCollapse = document.querySelector(targetId);
-            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
-            collapseInstance.toggle();
+
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = button.getAttribute('data-bs-target');
+                const targetCollapse = document.querySelector(targetId);
+                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
+                collapseInstance.toggle();
+            });
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                const targetId = button.getAttribute('data-bs-target');
+                const targetCollapse = document.querySelector(targetId);
+                const collapseInstance = bootstrap.Collapse.getOrCreateInstance(targetCollapse);
+                collapseInstance.toggle();
+            });
         });
-    });
-};
-
-const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
-  const section = document.querySelector(sectionSelector);
-  if (!section) return;
-
-  const slidesContainer = section.querySelector(slidesContainerSelector);
-  const items = section.querySelectorAll(itemSelector);
-  const prevBtn = section.querySelector(prevBtnSelector);
-  const nextBtn = section.querySelector(nextBtnSelector);
-  const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
-  if (!slidesContainer || items.length === 0) return;
-
-  let currentIndex = 0;
-  let visibleCount = visibleCountLogic();
-  let isDragging = false;
-  let startX = 0;
-  let currentTranslate = 0;
-  let prevTranslate = 0;
-  const threshold = 50;
-  let lastFrameTime = 0;
-  let autoScrollTimer;
-
-  const updateVisibleCount = () => {
-    const oldVisibleCount = visibleCount;
-    visibleCount = visibleCountLogic();
-    slidesContainer.style.setProperty('--visible-count', visibleCount);
-    if (oldVisibleCount !== visibleCount) {
-      currentIndex = Math.min(currentIndex, Math.max(0, items.length - visibleCount));
-      showSlide(currentIndex, false);
-    }
-    items.forEach(item => {
-      item.style.flex = `0 0 ${100 / visibleCount}%`;
-    });
-    createIndicators();
-    updateButtonState();
-  };
-
-  const createIndicators = () => {
-    if (!indicatorsContainer) return;
-    indicatorsContainer.innerHTML = '';
-    const totalIndicators = Math.max(1, Math.ceil(items.length / visibleCount));
-    for (let i = 0; i < totalIndicators; i++) {
-      const indicator = document.createElement('button');
-      indicator.className = `custom-indicator${i === Math.floor(currentIndex / visibleCount) ? ' active' : ''}`;
-      indicator.setAttribute('aria-label', `Slide ${i + 1}`);
-      indicator.addEventListener('click', () => showSlide(i * visibleCount));
-      indicatorsContainer.appendChild(indicator);
-    }
-  };
-
-  const showSlide = (index, animate = true) => {
-    currentIndex = Math.max(0, Math.min(index, Math.max(0, items.length - visibleCount)));
-    const translateX = -(currentIndex * (100 / visibleCount));
-    prevTranslate = translateX;
-    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
-    slidesContainer.style.transform = `translateX(${translateX}%)`;
-    updateIndicators();
-    updateButtonState();
-  };
-
-  const updateIndicators = () => {
-    if (!indicatorsContainer) return;
-    const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
-    const activeIndicator = Math.floor(currentIndex / visibleCount);
-    indicators.forEach((indicator, index) => {
-      indicator.classList.toggle('active', index === activeIndicator);
-    });
-  };
-
-  const updateButtonState = () => {
-    if (prevBtn) prevBtn.disabled = currentIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentIndex >= items.length - visibleCount;
-  };
-
-  const throttle = (callback, limit) => {
-    return function (...args) {
-      const now = performance.now();
-      if (now - lastFrameTime >= limit) {
-        callback(...args);
-        lastFrameTime = now;
-      }
     };
-  };
 
-  const startDrag = event => {
-    if (event.type === 'touchstart') {
-      startX = event.touches[0].clientX;
-    } else {
-      event.preventDefault();
-      startX = event.clientX;
-    }
-    isDragging = true;
-    slidesContainer.style.transition = 'none';
-    clearInterval(autoScrollTimer); // Pause auto-scroll on drag start
-  };
+    const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
+        const section = document.querySelector(sectionSelector);
+        if (!section) return;
 
-  const drag = throttle(event => {
-    if (!isDragging) return;
-    const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
-    if (event.type !== 'touchmove') event.preventDefault();
-    const deltaX = currentX - startX;
-    const containerWidth = slidesContainer.parentElement.offsetWidth;
-    currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
-    const maxTranslate = 0;
-    const minTranslate = -((items.length - visibleCount) * (100 / visibleCount));
-    currentTranslate = Math.max(minTranslate, Math.min(maxTranslate, currentTranslate));
-    slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
-  }, 16); // Throttle to ~60fps
+        const slidesContainer = section.querySelector(slidesContainerSelector);
+        const originalItems = section.querySelectorAll(itemSelector);
+        if (!slidesContainer || originalItems.length === 0) return;
 
-  const endDrag = () => {
-    if (!isDragging) return;
-    isDragging = false;
-    const containerWidth = slidesContainer.parentElement.offsetWidth;
-    const movedBy = (currentTranslate - prevTranslate) * containerWidth / 100;
-    if (Math.abs(movedBy) > threshold) {
-      showSlide(movedBy < 0 ? currentIndex + 1 : currentIndex - 1);
-    } else {
-      showSlide(currentIndex);
-    }
-    // Resume auto-scroll after 2 seconds
-    setTimeout(startAutoScroll, 2000);
-  };
+        // Clone slides for infinite scrolling
+        const items = Array.from(originalItems);
+        const totalOriginalItems = items.length;
+        const clonesBefore = items.map(item => item.cloneNode(true));
+        const clonesAfter = items.map(item => item.cloneNode(true));
+        clonesBefore.forEach(clone => slidesContainer.appendChild(clone));
+        items.forEach(item => slidesContainer.appendChild(item));
+        clonesAfter.forEach(clone => slidesContainer.appendChild(clone));
 
-  const startAutoScroll = () => {
-    clearInterval(autoScrollTimer);
-    autoScrollTimer = setInterval(() => {
-      if (!isDragging) showSlide(currentIndex + 1);
-    }, 5000);
-  };
+        const prevBtn = section.querySelector(prevBtnSelector);
+        const nextBtn = section.querySelector(nextBtnSelector);
+        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
 
-  prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
-  nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
+        let currentIndex = totalOriginalItems; // Start at the original slides
+        let visibleCount = visibleCountLogic();
+        let isDragging = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationFrameId;
+        const threshold = 50;
+        let lastFrameTime = 0;
+        let autoScrollTimer;
 
-  slidesContainer.addEventListener('mousedown', startDrag);
-  slidesContainer.addEventListener('mousemove', drag);
-  slidesContainer.addEventListener('mouseup', endDrag);
-  slidesContainer.addEventListener('mouseleave', endDrag);
-  slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
-  slidesContainer.addEventListener('touchmove', drag, { passive: false });
-  slidesContainer.addEventListener('touchend', endDrag);
+        const updateVisibleCount = () => {
+            const oldVisibleCount = visibleCount;
+            visibleCount = visibleCountLogic();
+            slidesContainer.style.setProperty('--visible-count', visibleCount);
+            if (oldVisibleCount !== visibleCount) {
+                // Adjust currentIndex to stay within original slides
+                currentIndex = totalOriginalItems + (currentIndex % totalOriginalItems);
+                showSlide(currentIndex, false);
+            }
+            slidesContainer.querySelectorAll(itemSelector).forEach(item => {
+                item.style.flex = `0 0 ${100 / visibleCount}%`;
+            });
+            createIndicators();
+            updateButtonState();
+        };
 
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(updateVisibleCount, 250);
-  });
+        const createIndicators = () => {
+            if (!indicatorsContainer) return;
+            indicatorsContainer.innerHTML = '';
+            for (let i = 0; i < totalOriginalItems; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = `custom-indicator${i === (currentIndex % totalOriginalItems) ? ' active' : ''}`;
+                indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+                indicator.addEventListener('click', () => showSlide(totalOriginalItems + i));
+                indicatorsContainer.appendChild(indicator);
+            }
+        };
 
-  updateVisibleCount();
-  startAutoScroll();
+        const showSlide = (index, animate = true) => {
+            currentIndex = index;
+            const totalItems = slidesContainer.querySelectorAll(itemSelector).length;
+            const slideWidth = 100 / visibleCount;
+            let translateX = -(currentIndex * slideWidth);
 
-  slidesContainer.addEventListener('mouseenter', () => clearInterval(autoScrollTimer));
-  slidesContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
-};
+            // Adjust for seamless looping
+            if (currentIndex < totalOriginalItems) {
+                currentIndex += totalOriginalItems;
+                translateX = -(currentIndex * slideWidth);
+                slidesContainer.style.transition = 'none';
+                slidesContainer.style.transform = `translateX(${translateX}%)`;
+                requestAnimationFrame(() => {
+                    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
+                    slidesContainer.style.transform = `translateX(${translateX}%)`;
+                });
+            } else if (currentIndex >= totalOriginalItems * 2) {
+                currentIndex -= totalOriginalItems;
+                translateX = -(currentIndex * slideWidth);
+                slidesContainer.style.transition = 'none';
+                slidesContainer.style.transform = `translateX(${translateX}%)`;
+                requestAnimationFrame(() => {
+                    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
+                    slidesContainer.style.transform = `translateX(${translateX}%)`;
+                });
+            } else {
+                slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
+                slidesContainer.style.transform = `translateX(${translateX}%)`;
+            }
+
+            prevTranslate = translateX;
+            updateIndicators();
+            updateButtonState();
+        };
+
+        const updateIndicators = () => {
+            if (!indicatorsContainer) return;
+            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+            const activeIndicator = currentIndex % totalOriginalItems;
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === activeIndicator);
+            });
+        };
+
+        const updateButtonState = () => {
+            if (prevBtn) prevBtn.disabled = false;
+            if (nextBtn) nextBtn.disabled = false;
+        };
+
+        const throttle = (callback, limit) => {
+            return function (...args) {
+                const now = performance.now();
+                if (now - lastFrameTime >= limit) {
+                    callback(...args);
+                    lastFrameTime = now;
+                }
+            };
+        };
+
+        const startDrag = event => {
+            if (event.type === 'touchstart') {
+                startX = event.touches[0].clientX;
+            } else {
+                event.preventDefault();
+                startX = event.clientX;
+            }
+            isDragging = true;
+            slidesContainer.style.transition = 'none';
+            cancelAnimationFrame(animationFrameId);
+            clearInterval(autoScrollTimer);
+        };
+
+        const drag = throttle(event => {
+            if (!isDragging) return;
+            const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+            if (event.type !== 'touchmove') event.preventDefault();
+            const deltaX = currentX - startX;
+            const containerWidth = slidesContainer.parentElement.offsetWidth;
+            currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+            slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+        }, 16);
+
+        const endDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            const slideWidth = 100 / visibleCount;
+            const dragDistance = prevTranslate - currentTranslate;
+            let slidesToMove = Math.round(dragDistance / slideWidth);
+            currentIndex += slidesToMove;
+
+            // Handle looping
+            if (currentIndex < totalOriginalItems) {
+                currentIndex += totalOriginalItems;
+            } else if (currentIndex >= totalOriginalItems * 2) {
+                currentIndex -= totalOriginalItems;
+            }
+
+            showSlide(currentIndex);
+            setTimeout(startAutoScroll, 2000);
+        };
+
+        const startAutoScroll = () => {
+            clearInterval(autoScrollTimer);
+            autoScrollTimer = setInterval(() => {
+                if (!isDragging) showSlide(currentIndex + 1);
+            }, 5000);
+        };
+
+        prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
+        nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
+
+        slidesContainer.addEventListener('mousedown', startDrag);
+        slidesContainer.addEventListener('mousemove', drag);
+        slidesContainer.addEventListener('mouseup', endDrag);
+        slidesContainer.addEventListener('mouseleave', endDrag);
+        slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+        slidesContainer.addEventListener('touchmove', drag, { passive: false });
+        slidesContainer.addEventListener('touchend', endDrag);
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(updateVisibleCount, 250);
+        });
+
+        updateVisibleCount();
+        startAutoScroll();
+
+        slidesContainer.addEventListener('mouseenter', () => clearInterval(autoScrollTimer));
+        slidesContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
+    };
 
     const setupCarousels = () => {
-setupCarousel({
+      setupCarousel({
     sectionSelector: '.reviews-section',
     itemSelector: '.review-slide',
     prevBtnSelector: '.prev-btn',
@@ -892,20 +948,25 @@ setupCarousel({
             slidesContainerSelector: '.carousel-inner .row',
             visibleCountLogic: () => {
                 const width = window.innerWidth;
-                return width < 768 ? 1 : width < 992 ? 2 : 3;
+                if (width < 768) return 1;
+                if (width < 1100) return 2;
+                return 3;
             }
         });
 
         setupCarousel({
             sectionSelector: '.promotions-section',
-            itemSelector: '.promotion-card',
+            itemSelector: '.col-md-4',
             prevBtnSelector: '.carousel-control.prev',
             nextBtnSelector: '.carousel-control.next',
             indicatorsContainerSelector: '.custom-indicators',
             slidesContainerSelector: '.carousel-inner .row',
             visibleCountLogic: () => {
                 const width = window.innerWidth;
-                return width < 768 ? 1 : width < 992 ? 2 : 3;
+                if (width < 576) return 1;
+                if (width < 768) return 1;
+                if (width < 992) return 2;
+                return 3;
             }
         });
 
@@ -930,6 +991,7 @@ setupCarousel({
                 touch-action: pan-y;
                 display: flex;
                 width: 100%;
+                flex-wrap: nowrap;
             }
             .review-slide, .video-slide, .promotion-card, .installer-card, .certificate-slide {
                 flex: 0 0 calc(100% / var(--visible-count, 3));
@@ -993,158 +1055,144 @@ setupCarousel({
         document.head.appendChild(style);
     };
 
-const setupInfiniteLogoCarousel = () => {
-    const logosContainer = document.getElementById('partnersContainer');
-    const logosRow = logosContainer.querySelector('.logos-row');
-    const logoCards = logosContainer.querySelectorAll('.logo-card');
-    if (!logosContainer || !logosRow || logoCards.length === 0) return;
+    const setupInfiniteLogoCarousel = () => {
+        const logosContainer = document.getElementById('partnersContainer');
+        const logosRow = logosContainer.querySelector('.logos-row');
+        const logoCards = logosContainer.querySelectorAll('.logo-card');
+        if (!logosContainer || !logosRow || logoCards.length === 0) return;
 
-    // Remove any duplicate logo cards to reduce DOM size
-    const allLogos = logosRow.querySelectorAll('.logo-card');
-    if (allLogos.length > logoCards.length) {
-        for (let i = logoCards.length; i < allLogos.length; i++) {
-            allLogos[i].remove();
-        }
-    }
-
-    // Clone logos for seamless infinite scrolling
-    logoCards.forEach(card => {
-        const clone = card.cloneNode(true);
-        logosRow.appendChild(clone);
-    });
-
-    // CSS adjustments
-    logosRow.style.display = 'flex';
-    logosRow.style.flexWrap = 'nowrap';
-    logosContainer.style.overflow = 'hidden';
-    logosContainer.style.cursor = 'grab';
-
-    let scrollPosition = 0;
-    let isDragging = false;
-    let startX;
-    let startScrollLeft;
-    let velocity = 0;
-    let lastX;
-    let lastTime;
-    let animationFrameId;
-    const scrollSpeed = 1; // Pixels per frame (adjust for desired speed)
-
-    const updateScroll = (timestamp) => {
-        if (!isDragging) {
-            scrollPosition += scrollSpeed;
-            const totalWidth = logosRow.scrollWidth / 2; // Half due to cloned logos
-            if (scrollPosition >= totalWidth) {
-                scrollPosition -= totalWidth; // Reset to start for seamless loop
-                logosContainer.scrollLeft = scrollPosition;
-            } else {
-                logosContainer.scrollLeft = scrollPosition;
+        const allLogos = logosRow.querySelectorAll('.logo-card');
+        if (allLogos.length > logoCards.length) {
+            for (let i = logoCards.length; i < allLogos.length; i++) {
+                allLogos[i].remove();
             }
         }
-        animationFrameId = requestAnimationFrame(updateScroll);
-    };
 
-    const startAutoScroll = () => {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = requestAnimationFrame(updateScroll);
-    };
+        logoCards.forEach(card => {
+            const clone = card.cloneNode(true);
+            logosRow.appendChild(clone);
+        });
 
-    const stopAutoScroll = () => {
-        cancelAnimationFrame(animationFrameId);
-    };
-
-    const handleDragStart = (clientX) => {
-        isDragging = true;
-        startX = clientX;
-        startScrollLeft = logosContainer.scrollLeft;
-        velocity = 0;
-        lastX = clientX;
-        lastTime = Date.now();
-        stopAutoScroll();
-        logosContainer.style.cursor = 'grabbing';
-        logosContainer.style.scrollBehavior = 'auto';
-    };
-
-    const handleDragMove = (clientX) => {
-        if (!isDragging) return;
-        const x = clientX;
-        const walk = (x - startX) * 2;
-        scrollPosition = startScrollLeft - walk;
-        logosContainer.scrollLeft = scrollPosition;
-
-        const currentTime = Date.now();
-        const deltaX = clientX - lastX;
-        const deltaTime = currentTime - lastTime;
-
-        if (deltaTime > 0) {
-            velocity = deltaX / deltaTime;
-        }
-
-        lastX = clientX;
-        lastTime = currentTime;
-    };
-
-    const handleDragEnd = () => {
-        if (!isDragging) return;
-        isDragging = false;
+        logosRow.style.display = 'flex';
+        logosRow.style.flexWrap = 'nowrap';
+        logosContainer.style.overflow = 'hidden';
         logosContainer.style.cursor = 'grab';
-        logosContainer.style.scrollBehavior = 'smooth';
 
-        // Apply inertia
-        if (Math.abs(velocity) > 0.1) {
-            scrollPosition -= velocity * 100;
-            logosContainer.scrollLeft = scrollPosition;
-        }
+        let scrollPosition = 0;
+        let isDragging = false;
+        let startX;
+        let startScrollLeft;
+        let velocity = 0;
+        let lastX;
+        let lastTime;
+        let animationFrameId;
+        const scrollSpeed = 1;
 
-        // Resume auto-scroll after 2 seconds
-        setTimeout(startAutoScroll, 2000);
-    };
+        const updateScroll = (timestamp) => {
+            if (!isDragging) {
+                scrollPosition += scrollSpeed;
+                const totalWidth = logosRow.scrollWidth / 2;
+                if (scrollPosition >= totalWidth) {
+                    scrollPosition -= totalWidth;
+                    logosContainer.scrollLeft = scrollPosition;
+                } else {
+                    logosContainer.scrollLeft = scrollPosition;
+                }
+            }
+            animationFrameId = requestAnimationFrame(updateScroll);
+        };
 
-    // Mouse events
-    logosContainer.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        handleDragStart(e.clientX);
-    });
+        const startAutoScroll = () => {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(updateScroll);
+        };
 
-    logosContainer.addEventListener('mousemove', (e) => {
-        handleDragMove(e.clientX);
-    });
+        const stopAutoScroll = () => {
+            cancelAnimationFrame(animationFrameId);
+        };
 
-    logosContainer.addEventListener('mouseup', handleDragEnd);
-    logosContainer.addEventListener('mouseleave', handleDragEnd);
-
-    // Touch events
-    logosContainer.addEventListener('touchstart', (e) => {
-        handleDragStart(e.touches[0].clientX);
-    }, { passive: true });
-
-    logosContainer.addEventListener('touchmove', (e) => {
-        handleDragMove(e.touches[0].clientX);
-    }, { passive: true });
-
-    logosContainer.addEventListener('touchend', handleDragEnd);
-    logosContainer.addEventListener('touchcancel', handleDragEnd);
-
-    // Prevent text selection during drag
-    logosContainer.addEventListener('dragstart', (e) => {
-        e.preventDefault();
-    });
-
-    // Pause on hover
-    logosContainer.addEventListener('mouseenter', stopAutoScroll);
-    logosContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
-
-    // Handle visibility change
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
+        const handleDragStart = (clientX) => {
+            isDragging = true;
+            startX = clientX;
+            startScrollLeft = logosContainer.scrollLeft;
+            velocity = 0;
+            lastX = clientX;
+            lastTime = Date.now();
             stopAutoScroll();
-        } else {
-            startAutoScroll();
-        }
-    });
+            logosContainer.style.cursor = 'grabbing';
+            logosContainer.style.scrollBehavior = 'auto';
+        };
 
-    // Start auto-scroll
-    startAutoScroll();
-};
+        const handleDragMove = (clientX) => {
+            if (!isDragging) return;
+            const x = clientX;
+            const walk = x - startX;
+            scrollPosition = startScrollLeft - walk;
+            logosContainer.scrollLeft = scrollPosition;
+
+            const currentTime = Date.now();
+            const deltaX = clientX - lastX;
+            const deltaTime = currentTime - lastTime;
+
+            if (deltaTime > 0) {
+                velocity = deltaX / deltaTime;
+            }
+
+            lastX = clientX;
+            lastTime = currentTime;
+        };
+
+        const handleDragEnd = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            logosContainer.style.cursor = 'grab';
+            logosContainer.style.scrollBehavior = 'smooth';
+
+            if (Math.abs(velocity) > 0.1) {
+                scrollPosition -= velocity * 100;
+                logosContainer.scrollLeft = scrollPosition;
+            }
+
+            setTimeout(startAutoScroll, 2000);
+        };
+
+        logosContainer.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            handleDragStart(e.clientX);
+        });
+
+        logosContainer.addEventListener('mousemove', (e) => {
+            handleDragMove(e.clientX);
+        });
+
+        logosContainer.addEventListener('mouseup', handleDragEnd);
+        logosContainer.addEventListener('mouseleave', handleDragEnd);
+
+        logosContainer.addEventListener('touchstart', (e) => {
+            handleDragStart(e.touches[0].clientX);
+        }, { passive: true });
+
+        logosContainer.addEventListener('touchmove', (e) => {
+            handleDragMove(e.touches[0].clientX);
+        }, { passive: true });
+
+        logosContainer.addEventListener('touchend', handleDragEnd);
+        logosContainer.addEventListener('touchcancel', handleDragEnd);
+
+        logosContainer.addEventListener('dragstart', (e) => {
+            e.preventDefault();
+        });
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopAutoScroll();
+            } else {
+                startAutoScroll();
+            }
+        });
+
+        startAutoScroll();
+    };
 
     const setupSimpleLogoCarousel = () => {
         const logosSection = document.querySelector('.logos-section');
@@ -1185,195 +1233,192 @@ const setupInfiniteLogoCarousel = () => {
         updateVisibleCount();
     };
 
-  const setupQuiz = () => {
-    const questions = [
-        {
-            question: "Какой тип дома вас интересует?",
-            options: [
-                { text: "Каркасный дом", value: 500000 },
-                { text: "Дом из бруса", value: 750000 },
-                { text: "Кирпичный дом", value: 1000000 },
-                { text: "Газобетонный дом", value: 900000 }
-            ],
-            note: "Выбор материала влияет на стоимость, долговечность и теплопроводность дома."
-        },
-        {
-            question: "Какая площадь дома вам нужна?",
-            options: [
-                { text: "До 50 м²", value: 300000 },
-                { text: "50-80 м²", value: 450000 },
-                { text: "80-120 м²", value: 600000 },
-                { text: "Более 120 м²", value: 800000 }
-            ],
-            note: "Чем больше площадь, тем выше стоимость строительства и материалов."
-        },
-        {
-            question: "Сколько этажей планируете?",
-            options: [
-                { text: "Один этаж", value: 400000 },
-                { text: "Два этажа", value: 600000 },
-                { text: "Два этажа с мансардой", value: 550000 }
-            ],
-            note: "Двухэтажные дома требуют дополнительных расчетов и укреплений."
-        },
-        {
-            question: "Какой тип фундамента предпочитаете?",
-            options: [
-                { text: "Ленточный", value: 250000 },
-                { text: "Свайный", value: 200000 },
-                { text: "Плитный", value: 300000 },
-                { text: "Столбчатый", value: 150000 }
-            ],
-            note: "Тип фундамента зависит от грунта и веса будущего дома."
-        },
-        {
-            question: "Какой тип кровли вам нужен?",
-            options: [
-                { text: "Металлочерепица", value: 150000 },
-                { text: "Мягкая кровля", value: 200000 },
-                { text: "Профнастил", value: 120000 },
-                { text: "Натуральная черепица", value: 250000 }
-            ],
-            note: "Кровля влияет на внешний вид дома и его долговечность."
-        },
-        {
-            question: "Нужна ли внутренняя отделка?",
-            options: [
-                { text: "Черновая отделка", value: 200000 },
-                { text: "Под чистовую", value: 350000 },
-                { text: "Полная отделка под ключ", value: 500000 }
-            ],
-            note: "Полная отделка включает все работы по внутреннему обустройству дома."
-        },
-        {
-            question: "Дополнительные опции",
-            options: [
-                { text: "Терраса или веранда", value: 100000 },
-                { text: "Балкон", value: 50000 },
-                { text: "Гараж", value: 200000 },
-                { text: "Без дополнительных опций", value: 0 }
-            ],
-            note: "Дополнительные элементы увеличивают стоимость, но добавляют комфорта."
-        }
-    ];
+    const setupQuiz = () => {
+        const questions = [
+            {
+                question: "Какой тип дома вас интересует?",
+                options: [
+                    { text: "Каркасный дом", value: 500000 },
+                    { text: "Дом из бруса", value: 750000 },
+                    { text: "Кирпичный дом", value: 1000000 },
+                    { text: "Газобетонный дом", value: 900000 }
+                ],
+                note: "Выбор материала влияет на стоимость, долговечность и теплопроводность дома."
+            },
+            {
+                question: "Какая площадь дома вам нужна?",
+                options: [
+                    { text: "До 50 м²", value: 300000 },
+                    { text: "50-80 м²", value: 450000 },
+                    { text: "80-120 м²", value: 600000 },
+                    { text: "Более 120 м²", value: 800000 }
+                ],
+                note: "Чем больше площадь, тем выше стоимость строительства и материалов."
+            },
+            {
+                question: "Сколько этажей планируете?",
+                options: [
+                    { text: "Один этаж", value: 400000 },
+                    { text: "Два этажа", value: 600000 },
+                    { text: "Два этажа с мансардой", value: 550000 }
+                ],
+                note: "Двухэтажные дома требуют дополнительных расчетов и укреплений."
+            },
+            {
+                question: "Какой тип фундамента предпочитаете?",
+                options: [
+                    { text: "Ленточный", value: 250000 },
+                    { text: "Свайный", value: 200000 },
+                    { text: "Плитный", value: 300000 },
+                    { text: "Столбчатый", value: 150000 }
+                ],
+                note: "Тип фундамента зависит от грунта и веса будущего дома."
+            },
+            {
+                question: "Какой тип кровли вам нужен?",
+                options: [
+                    { text: "Металлочерепица", value: 150000 },
+                    { text: "Мягкая кровля", value: 200000 },
+                    { text: "Профнастил", value: 120000 },
+                    { text: "Натуральная черепица", value: 250000 }
+                ],
+                note: "Кровля влияет на внешний вид дома и его долговечность."
+            },
+            {
+                question: "Нужна ли внутренняя отделка?",
+                options: [
+                    { text: "Черновая отделка", value: 200000 },
+                    { text: "Под чистовую", value: 350000 },
+                    { text: "Полная отделка под ключ", value: 500000 }
+                ],
+                note: "Полная отделка включает все работы по внутреннему обустройству дома."
+            },
+            {
+                question: "Дополнительные опции",
+                options: [
+                    { text: "Терраса или веранда", value: 100000 },
+                    { text: "Балкон", value: 50000 },
+                    { text: "Гараж", value: 200000 },
+                    { text: "Без дополнительных опций", value: 0 }
+                ],
+                note: "Дополнительные элементы увеличивают стоимость, но добавляют комфорта."
+            }
+        ];
 
-    const quizContainer = document.getElementById('quiz-questions');
-    const nextBtn = document.getElementById('next-btn');
-    const backBtn = document.getElementById('back-btn');
-    const progressBar = document.querySelector('.progress-bar');
-    const currentQuestionElement = document.getElementById('current-question');
-    const quizResult = document.getElementById('quiz-result');
-    const calculatedPrice = document.getElementById('calculated-price');
-    let currentQuestion = 0;
-    let totalPrice = 0;
-    let userAnswers = [];
+        const quizContainer = document.getElementById('quiz-questions');
+        const nextBtn = document.getElementById('next-btn');
+        const backBtn = document.getElementById('back-btn');
+        const progressBar = document.querySelector('.progress-bar');
+        const currentQuestionElement = document.getElementById('current-question');
+        const quizResult = document.getElementById('quiz-result');
+        const calculatedPrice = document.getElementById('calculated-price');
+        let currentQuestion = 0;
+        let totalPrice = 0;
+        let userAnswers = [];
 
-    const showQuestion = index => {
-        const question = questions[index];
-        progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
-        currentQuestionElement.textContent = index + 1;
+        const showQuestion = index => {
+            const question = questions[index];
+            progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+            currentQuestionElement.textContent = index + 1;
 
-        let questionHTML = `
-            <div class="quiz-question card-title">${question.question}</div>
-            <div class="quiz-options">
-        `;
-        question.options.forEach((option, i) => {
-            const isChecked = userAnswers[index] && userAnswers[index].text === option.text ? 'checked' : '';
-            questionHTML += `
-                <div class="quiz-option">
-                    <input type="radio" name="answer" id="option-${i}" value="${option.value}" class="quiz-input" ${isChecked}>
-                    <label for="option-${i}" class="quiz-label">${option.text}</label>
-                </div>
+            let questionHTML = `
+                <div class="quiz-question card-title">${question.question}</div>
+                <div class="quiz-options">
             `;
-        });
-        if (question.note) {
-            questionHTML += `
-                <div class="quiz-note">
-                    <p>${question.note}</p>
-                </div>
-            `;
-        }
-        quizContainer.innerHTML = questionHTML;
-
-        backBtn.disabled = index === 0;
-        backBtn.classList.toggle('disabled', index === 0);
-        nextBtn.disabled = !userAnswers[index];
-
-        quizContainer.querySelectorAll('.quiz-input').forEach(option => {
-            option.addEventListener('change', () => {
-                nextBtn.disabled = false;
-                quizContainer.querySelectorAll('.quiz-label').forEach(label => label.classList.remove('selected'));
-                option.nextElementSibling.classList.add('selected');
+            question.options.forEach((option, i) => {
+                const isChecked = userAnswers[index] && userAnswers[index].text === option.text ? 'checked' : '';
+                questionHTML += `
+                    <div class="quiz-option">
+                        <input type="radio" name="answer" id="option-${i}" value="${option.value}" class="quiz-input" ${isChecked}>
+                        <label for="option-${i}" class="quiz-label">${option.text}</label>
+                    </div>
+                `;
             });
+            if (question.note) {
+                questionHTML += `
+                    <div class="quiz-note">
+                        <p>${question.note}</p>
+                    </div>
+                `;
+            }
+            quizContainer.innerHTML = questionHTML;
+
+            backBtn.disabled = index === 0;
+            backBtn.classList.toggle('disabled', index === 0);
+            nextBtn.disabled = !userAnswers[index];
+
+            quizContainer.querySelectorAll('.quiz-input').forEach(option => {
+                option.addEventListener('change', () => {
+                    nextBtn.disabled = false;
+                    quizContainer.querySelectorAll('.quiz-label').forEach(label => label.classList.remove('selected'));
+                    option.nextElementSibling.classList.add('selected');
+                });
+            });
+        };
+
+        const showResults = () => {
+            quizContainer.style.display = 'none';
+            nextBtn.style.display = 'none';
+            backBtn.style.display = 'none';
+            document.querySelector('.quiz-progress').style.display = 'none';
+            quizResult.style.display = 'block';
+            calculatedPrice.textContent = totalPrice.toLocaleString('ru-RU');
+
+            let answersHTML = '<div class="selected-answers"><h3>Ваши ответы:</h3><ul>';
+            userAnswers.forEach((answer, index) => {
+                answersHTML += `
+                    <li>
+                        <strong>Вопрос ${index + 1}: ${questions[index].question}</strong><br>
+                        Ответ: ${answer.text}<br>
+                        Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.
+                    </li>
+                `;
+            });
+            answersHTML += '</ul></div>';
+
+            quizResult.insertAdjacentHTML('beforeend', answersHTML);
+
+            console.log('Результаты квиза:');
+            userAnswers.forEach((answer, index) => {
+                console.log(`Вопрос ${index + 1}: ${questions[index].question}`);
+                console.log(`Ответ: ${answer.text}`);
+                console.log(`Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.`);
+            });
+            console.log(`Итоговая стоимость: ${totalPrice.toLocaleString('ru-RU')} руб.`);
+        };
+
+        nextBtn.addEventListener('click', () => {
+            const selectedOption = quizContainer.querySelector('input[name="answer"]:checked');
+            if (!selectedOption) return;
+
+            const selectedText = selectedOption.nextElementSibling.textContent;
+            const selectedValue = parseInt(selectedOption.value);
+
+            if (!userAnswers[currentQuestion]) {
+                totalPrice += selectedValue;
+            } else {
+                totalPrice = totalPrice - userAnswers[currentQuestion].value + selectedValue;
+            }
+
+            userAnswers[currentQuestion] = { text: selectedText, value: selectedValue };
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                showQuestion(currentQuestion);
+            } else {
+                showResults();
+            }
         });
+
+        backBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        });
+
+        showQuestion(0);
     };
-
-    const showResults = () => {
-        quizContainer.style.display = 'none';
-        nextBtn.style.display = 'none';
-        backBtn.style.display = 'none';
-        document.querySelector('.quiz-progress').style.display = 'none';
-        quizResult.style.display = 'block';
-        calculatedPrice.textContent = totalPrice.toLocaleString('ru-RU');
-
-        // Создаем HTML для отображения выбранных ответов
-        let answersHTML = '<div class="selected-answers"><h3>Ваши ответы:</h3><ul>';
-        userAnswers.forEach((answer, index) => {
-            answersHTML += `
-                <li>
-                    <strong>Вопрос ${index + 1}: ${questions[index].question}</strong><br>
-                    Ответ: ${answer.text}<br>
-                    Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.
-                </li>
-            `;
-        });
-        answersHTML += '</ul></div>';
-
-        // Добавляем ответы перед кнопкой результата
-        quizResult.insertAdjacentHTML('beforeend', answersHTML);
-
-        // Выводим в консоль для отладки
-        console.log('Результаты квиза:');
-        userAnswers.forEach((answer, index) => {
-            console.log(`Вопрос ${index + 1}: ${questions[index].question}`);
-            console.log(`Ответ: ${answer.text}`);
-            console.log(`Стоимость: ${answer.value.toLocaleString('ru-RU')} руб.`);
-        });
-        console.log(`Итоговая стоимость: ${totalPrice.toLocaleString('ru-RU')} руб.`);
-    };
-
-    nextBtn.addEventListener('click', () => {
-        const selectedOption = quizContainer.querySelector('input[name="answer"]:checked');
-        if (!selectedOption) return;
-
-        const selectedText = selectedOption.nextElementSibling.textContent;
-        const selectedValue = parseInt(selectedOption.value);
-
-        if (!userAnswers[currentQuestion]) {
-            totalPrice += selectedValue;
-        } else {
-            totalPrice = totalPrice - userAnswers[currentQuestion].value + selectedValue;
-        }
-
-        userAnswers[currentQuestion] = { text: selectedText, value: selectedValue };
-        currentQuestion++;
-
-        if (currentQuestion < questions.length) {
-            showQuestion(currentQuestion);
-        } else {
-            showResults();
-        }
-    });
-
-    backBtn.addEventListener('click', () => {
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            showQuestion(currentQuestion);
-        }
-    });
-
-    showQuestion(0);
-};
 
     const setupTagFilter = () => {
         const tagItems = document.querySelectorAll('.tag-item');
@@ -1385,9 +1430,8 @@ const setupInfiniteLogoCarousel = () => {
         });
     };
 
-const setupColorSelector = () => {
-        // Маппинг цветов на пути к PNG файлам (предполагаем, что файлы в папке img/)
- const frameColorsMap = {
+    const setupColorSelector = () => {
+        const frameColorsMap = {
             'вишня': './img/lamination/cherry.png',
             'дуб': './img/lamination/oak.png',
             'каштан': './img/lamination/chestnut.png',
@@ -1416,9 +1460,8 @@ const setupColorSelector = () => {
             const frameName = selectedFrame.getAttribute('data-color');
             const hardwareName = selectedHardware.getAttribute('data-color');
 
-            // Загрузка изображения рамы
             frameImage.classList.add('image-loading');
-            const framePath = frameColorsMap[frameName] || './img/cherry.png'; // fallback
+            const framePath = frameColorsMap[frameName] || './img/cherry.png';
             const frameNewImg = new Image();
             frameNewImg.onload = () => {
                 frameImage.src = framePath;
@@ -1431,9 +1474,8 @@ const setupColorSelector = () => {
             };
             frameNewImg.src = framePath;
 
-            // Загрузка изображения фурнитуры (прозрачное PNG)
             hardwareImage.classList.add('image-loading');
-            const hardwarePath = hardwareColorsMap[hardwareName] || './img/silver.png'; // fallback
+            const hardwarePath = hardwareColorsMap[hardwareName] || './img/silver.png';
             const hardwareNewImg = new Image();
             hardwareNewImg.onload = () => {
                 hardwareImage.src = hardwarePath;
@@ -1465,7 +1507,7 @@ const setupColorSelector = () => {
             });
         });
 
-        updatePreview(); // Инициализация
+        updatePreview();
     };
 
     setupNavigation();

@@ -63,7 +63,9 @@ body {
 .brand-section, .nav-section, .contact-section {
     padding: 0;
 }
-
+.dropdown-toggle{
+    padding: 0 10px;
+}
 .brand-section {
     display: flex;
     align-items: center;
@@ -75,6 +77,7 @@ body {
     display: flex;
     justify-content: center;
     overflow: visible;
+    
 }
 
 .contact-section {
@@ -99,8 +102,7 @@ body {
 }
 
 .nav-link {
-    color: var(--black);
-    text-decoration: none;
+ 
 
     white-space: nowrap;
     position: relative;
@@ -114,6 +116,7 @@ body {
     display: flex;
     justify-content: center;
     gap: 1rem;
+    margin-left: 20px;
 }
 
 .top-nav .nav-item {
@@ -340,7 +343,7 @@ body {
 }
 
 .mobile-menu .accordion-button:not(.collapsed) {
-    background: var(--hover-bg);
+
     color: var(--black);
 }
 
@@ -349,7 +352,7 @@ body {
 }
 
 .mobile-menu .accordion-body {
-    background: var(--hover-bg);
+  
     padding: 0.5rem 1rem;
 }
 
@@ -471,8 +474,12 @@ body {
                 padding: 80px 15px 80px 15px !important;
             }
             .header-container{
+            
+                width: 100%;
 padding: 0 15px;
             }
+           
+      
         }
         @media (max-width: 768px) {
             .modal-nav {
@@ -482,6 +489,58 @@ padding: 0 15px;
                 font-size: 22px;
                 top: 30%; /* Выше на мобильных */
             }
+              .header-container .row{
+                width: 45svw  !important;
+             }
+            .vertical-slider {
+                width: 50svw;
+            }
+            .small{
+                white-space: nowrap;
+            }
+               .accessories-section .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+        .additional-services .col-md-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    
+
+    
+    .service-card .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+    }
+    
+    .service-price {
+        font-size: 1.1rem;
+    }
+    
+
+
+    
+    .accessory-card {
+        height: 200px;
+        margin-bottom: 15px;
+    }
+    
+    .accessory-title {
+        font-size: 16px;
+        padding: 0.4rem 0.8rem;
+    }
+    
+    /* Улучшение отступов для мобильных */
+    .accessories-section .row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+    
+    .accessories-section .col-md-4 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
             
 .header .row {
     display: flex;
@@ -496,7 +555,7 @@ padding: 0 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-  
+
     margin: 0;
     padding: 0;
 }
@@ -731,7 +790,7 @@ padding: 0 15px;
 .vertical-slider {
     -webkit-appearance: none;
     appearance: none;
-    width: 15svw;
+    width: 230px;
     height: 15px;
     transform: rotate(-90deg);
     transform-origin: center;
@@ -856,9 +915,11 @@ padding: 0 15px;
     gap: 10px;
     align-items: flex-start;
     justify-content: flex-start;
-  
+    
 }
-
+.right-section .additional-services{
+    margin-left: 20px;
+}
 .form-check-input {
     width: 20px;
     height: 20px;
@@ -915,8 +976,8 @@ padding: 0 15px;
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    margin-left: 90px;
-    width: calc(55% - 90px);
+    margin-left: 10px;
+    width: calc(55% - 100px);
     overflow: hidden;
 }
 
@@ -1072,9 +1133,7 @@ padding: 0 15px;
     color: var(--black);
 }
 
-.text-center {
-    text-align: center !important;
-}
+
 
 .cost-section {
     border-radius: 15px;
@@ -1209,15 +1268,18 @@ padding: 0 15px;
     100% { transform: translateX(calc(-200px * 8 - 15px * 16)); }
 }
 
-.logos-container:hover .logos-row {
-    animation-play-state: paused;
-}
+
 
 @media (min-width: 1200px) {
     .header-container, .mega-menu-content {
         max-width: 1200px !important;
         margin: 0 auto;
   
+    }
+}
+@media (min-width: 770px) and (max-width:1000px) {
+    .vertical-slider{
+        width: 180px;
     }
 }
 
@@ -1256,6 +1318,7 @@ padding: 0 15px;
     .profile-container{
         flex-wrap: wrap;
     }
+
 }
 
        .section-title {
@@ -1551,6 +1614,7 @@ padding: 0 15px;
 .checkbox-label {
     color: var(--white);
     font-size: 0.95rem;
+    margin-top: -20px;
 }
 
 .whatsapp-icon {
@@ -2029,7 +2093,7 @@ padding: 0 15px;
     box-shadow: none;
     padding: 20px;
     opacity: 0;
-    transform: translateY(-10px);
+     ;
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
@@ -2041,7 +2105,7 @@ padding: 0 15px;
 .accordion-collapse {
     overflow: hidden;
     height: 0;
-    transition: height 0.4s ease-in-out;
+    transition: 0;
 }
 
 .accordion-collapse.show {
@@ -2273,6 +2337,7 @@ padding: 0 15px;
     transform: skew(-15deg);
     display: inline-block;
     margin-bottom: 20px;
+    margin:  0 auto;
 }
 
 .prepayment-text-unique {
@@ -2283,7 +2348,7 @@ padding: 0 15px;
     color: var(--white);
 }
 .prepayment-title{
-    margin-bottom: -50px !important;
+   display: flex;
 }
 
 .logosPayment {
@@ -2293,7 +2358,7 @@ padding: 0 15px;
 .payment-method-compact, .bank-transfer-compact {
     background: var(--white);
     border-radius: 8px;
-    padding: 20px;
+    padding: 10px;
     margin-bottom: 20px;
     transition: transform 0.3s ease;
     height: 180px;
@@ -2317,6 +2382,7 @@ padding: 0 15px;
     min-width: 100px;
     text-align: center;
     flex-shrink: 0;
+    max-width: 140px;
 }
 
 .title-content-compact {
@@ -2324,6 +2390,7 @@ padding: 0 15px;
     font-weight: 600;
     font-size: 0.95rem;
     color: var(--white);
+    display: flex;
 }
 
 .method-text-compact {
@@ -2696,13 +2763,44 @@ padding: 0 15px;
     .installer-image-container { width: 130px; height: 130px; }
     .experience-badge { width: 65px; height: 65px; font-size: 0.75rem; line-height: 1.2; }
     .windows-count { font-size: 1.8rem; }
-    .header-title h2 { font-size: 2.2rem; }
+    .header-title-text { font-size: 2.2rem; }
     .photo-collage { column-count: 2; }
+    .prepayment-badge-unique{
+        margin: 0 10px;
+    }
     .container{overflow-x: hidden; padding: 80px 10px !important;}
 }
 
 @media (max-width: 768px) {
+    .prepayment-title{
+        flex-direction: column;
+    }
+       .cost-items-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .cost-item {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        padding: 15px;
+        text-align: left;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .cost-icon {
+        margin-bottom: 0;
+        margin-right: 15px;
+        width: 35px;
+        height: 35px;
+        flex-shrink: 0;
+    }
+    
+
     .section-title { font-size: 1.8rem; }
+    .nav-section{display: none;}
     .work-content { padding: 12px; }
     .work-image { height: 160px; }
     .footer { padding: 40px 0 0; }
@@ -2727,8 +2825,8 @@ padding: 0 15px;
     .carousel-control-prev, .carousel-control-next { width: 35px; height: 35px; }
     .carousel-control-prev-icon, .carousel-control-next-icon { width: 16px; height: 16px; background-size: 16px 16px; }
     .experience-badge { width: 50px; height: 50px; font-size: 10px; line-height: 1.1; }
-    .header-title h2 { font-size: 2rem; }
-    .accordion-button { font-size: 1rem; padding: 1rem; }
+    .header-title-text { font-size: 2rem; }
+    .accordion-button { font-size: 1rem;  }
     .question-number { width: 25px; height: 25px; margin-right: 10px; font-size: 13px; }
     .accordion-body { padding: 15px; }
     .method-content-compact { flex-direction: column; }
@@ -2740,11 +2838,26 @@ padding: 0 15px;
     .photo-item { margin-bottom: 10px; border-radius: 8px; }
     .nav-btn { font-size: 35px; width: 50px; height: 50px; }
     .close { font-size: 30px; top: -35px; }
+    .lightbox-content {
+    max-width: 70vw;
+    max-height: 70vh;
+}
 }
 
 @media (max-width: 576px) {
     .installers-section  {
         min-height: 0;
+    }
+    .carousel-control-prev,
+.carousel-control-next {
+
+    width: 50px;
+    height: 50px;
+
+}
+
+    .window-image img{
+        margin-left: 60px;
     }
     .work-title { font-size: 1.1rem; }
     .work-price { font-size: 1rem; }
@@ -2752,8 +2865,11 @@ padding: 0 15px;
     .banner-title { font-size: 1.5rem; }
     .banner-subtitle { font-size: 1rem; }
     .banner-text { font-size: 2rem; }
-    .hero-section { padding: 30px 0; text-align: center; }
-    .breadcrumb { justify-content: center; }
+    .hero-section { padding: 30px 0;  }
+    .window-preview-container{
+        padding: 20px 0 ;
+    }
+ 
     .display-5 { font-size: 1.6rem; margin-bottom: 15px; }
     .lead { font-size: 0.95rem; margin-bottom: 20px; }
     .form-flex { flex-direction: column; }
@@ -2764,8 +2880,8 @@ padding: 0 15px;
     .rating-value { font-size: 1.6rem; }
     .rating-text { font-size: 0.75rem; }
     .experience-badge { width: 40px; height: 40px; font-size: 8px; line-height: 1; }
-    .header-title h2 { font-size: 1.8rem; }
-    .accordion-button { font-size: 0.95rem; padding: 0.75rem; }
+    .header-title-text { font-size: 1.8rem; }
+    .accordion-button { font-size: 0.95rem; margin-left: -20px; }
     .accordion-body { padding: 10px; }
     .photo-collage { column-count: 1; }
     .consultation-subtitle { font-size: 1rem; margin-bottom: 30px; }
@@ -3020,7 +3136,7 @@ padding: 0 15px;
     box-shadow: none;
     padding: 0 1.25rem 1rem 1.25rem;
     opacity: 0;
-    transform: translateY(-10px);
+     ;
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
@@ -3032,7 +3148,7 @@ padding: 0 15px;
 .accordion-collapse {
     overflow: hidden;
     height: 0;
-    transition: height 0.4s ease-in-out;
+    transition: height 0 ease-in-out;
 }
 
 .accordion-collapse.show {
@@ -3817,7 +3933,7 @@ padding: 0 15px;
 }
 
 
-.header-title h2 {
+.header-title-text {
     color: var(--black);
     text-align: left;
     font-size: 1.9rem;
@@ -3826,7 +3942,7 @@ padding: 0 15px;
     padding-bottom: 0px;
 }
 
-.header-title h2::after {
+.header-title-text::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -4039,9 +4155,7 @@ padding: 0 15px;
     .quiz-sidebar { padding-left: 0; margin-top: 2rem; }
     .video-thumbnail { height: 300px; }
     .author-photo { width: 70px; height: 70px; font-size: 1.8rem; }
-    .prepayment-title{
-    margin-bottom: 40px !important;
-}
+ 
 }
 
 @media (max-width: 768px) {
@@ -4051,24 +4165,28 @@ padding: 0 15px;
     .promotion-content { padding: 20px; }
     .header-controls .carousel-control { width: 45px; height: 45px; }
 
-    .quiz-container { padding: 1.5rem; }
-    .expert-card { padding: 1.5rem; }
+
+
     .control-container { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .button-container { width: 100%; justify-content: flex-end; }
 
     .author-photo { width: 60px; height: 60px; font-size: 1.5rem; margin-left: 15px; }
-    .pricing-table td { padding: 12px 15px; }
+ 
     .tags-container { gap: 12px; }
     .tag-item { padding: 12px 20px; min-width: 140px; font-size: 0.9rem; }
 }
 
 @media (max-width: 576px) {
+    .carousel-btn {
+        width: 50px;
+        height: 50px;
+    }
     .section-title { font-size: 1.8rem; }
     .promotion-card { height: 250px; }
     .promotion-title { font-size: 1.2rem; }
     .promotion-description { font-size: 0.9rem; }
     .promotion-btn { padding: 10px 20px; font-size: 0.8rem; }
-    .header-controls .carousel-control { width: 40px; height: 40px; font-size: 1rem; }
+    .header-controls .carousel-control { width: 50px; height: 50px; font-size: 1rem; }
     .about-img{display: none;}
     .custom-indicators button { width: 14px; height: 14px; }
     .custom-indicators button::before { width: 8px; height: 8px; }
@@ -4155,7 +4273,7 @@ padding: 0 15px;
 
 .mobile-menu .accordion-button {
     font-size: 0.95rem;
-    padding: 1rem 1.25rem;
+ 
 }
 
 .mobile-overlay {
@@ -4206,10 +4324,12 @@ padding: 0 15px;
         display: none;
     }
     .phone-number{
-        font-size: 1rem;
+        font-size: 1.3rem;
+        margin-left: -20px;
     }
     .logo {
         font-size: 1.25rem;
+        margin-left: -25px;
     }
     .burger-menu {
         display: block;
@@ -4247,7 +4367,9 @@ padding: 0 15px;
         transform: none;
         margin-top: 0; /* Remove margin to keep inline */
     }
-
+ .video-reviews-section .carousel-controls{
+    margin-left: -20px;
+ }
     .video-reviews-section .section-header,
     .promotions-section .section-header {
         flex-direction: row; /* Keep row layout */
@@ -4260,5 +4382,4 @@ padding: 0 15px;
         flex: 1; /* Allow title to take available space */
     }
 }
-
 
