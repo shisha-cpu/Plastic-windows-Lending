@@ -753,7 +753,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let animationFrameId;
         const threshold = 50;
         let lastFrameTime = 0;
-        let autoScrollTimer;
 
         const updateVisibleCount = () => {
             const oldVisibleCount = visibleCount;
@@ -852,7 +851,6 @@ document.addEventListener('DOMContentLoaded', () => {
             isDragging = true;
             slidesContainer.style.transition = 'none';
             cancelAnimationFrame(animationFrameId);
-            clearInterval(autoScrollTimer);
         };
 
         const drag = throttle(event => {
@@ -881,14 +879,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             showSlide(currentIndex);
-            setTimeout(startAutoScroll, 2000);
-        };
-
-        const startAutoScroll = () => {
-            clearInterval(autoScrollTimer);
-            autoScrollTimer = setInterval(() => {
-                if (!isDragging) showSlide(currentIndex + 1);
-            }, 5000);
         };
 
         prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
@@ -909,10 +899,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         updateVisibleCount();
-        startAutoScroll();
-
-        slidesContainer.addEventListener('mouseenter', () => clearInterval(autoScrollTimer));
-        slidesContainer.addEventListener('mouseleave', () => setTimeout(startAutoScroll, 2000));
     };
 
     const setupCarousels = () => {
