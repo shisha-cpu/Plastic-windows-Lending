@@ -489,6 +489,7 @@ padding: 0 15px;
                 font-size: 22px;
                 top: 30%; /* Выше на мобильных */
             }
+        
               .header-container .row{
                 width: 45svw  !important;
              }
@@ -2009,15 +2010,7 @@ padding: 0 15px;
     cursor: grabbing;
 }
 
-.accordion-item {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    margin-bottom: 0;
-    box-shadow: none;
-    border-bottom: 1px solid var(--light-grey);
-    margin-left: -20px;
-}
+
 
 .accordion-button {
     background: transparent;
@@ -2220,7 +2213,7 @@ padding: 0 15px;
     background: var(--gradient-primary);
 
     box-shadow: 0 10px 30px var(--shadow-medium);
-    margin: 40px 0;
+
     overflow: hidden;
     position: relative;
 }
@@ -3058,13 +3051,17 @@ padding: 0 15px;
 
 /* quest */
 .accordion-item {
-    background: transparent;
+
+
+
+    border-radius: 0 !important;
+
     border: none;
     border-radius: 0;
     margin-bottom: 0;
     box-shadow: none;
     border-bottom: 1px solid var(--light-grey);
-    border-radius: 0 !important;
+    margin-left: -20px;
 }
 
 .accordion-button {
@@ -3078,7 +3075,7 @@ padding: 0 15px;
     display: flex;
     align-items: flex-start;
     cursor: pointer;
-    padding: 1.25rem;
+ 
     transition: background-color 0.3s ease;
 }
 
@@ -3511,11 +3508,7 @@ padding: 0 15px;
 }
 
 @media (max-width: 767px) {
-    .reviews-section .review-slide {
-        flex: 0 0 calc(100% - 20px) !important;
-        padding: 0 10px;
-        max-width: calc(100% - 20px);
-    }
+
 
     .reviews-section .carousel-controls {
         top: 20px;
@@ -3958,19 +3951,37 @@ padding: 0 15px;
     color: var(--grey);
 }
 
-.glass-card {
-    border-radius: 10px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-    border: none;
-    box-shadow: 0 5px 15px var(--shadow-medium);
-   
-    position: relative;
+.image-container {
+  width: 100%;
+  height: auto; /* Убираем фиксированную высоту */
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center; /* Вертикальное центрирование */
+  justify-content: center; /* Горизонтальное центрирование */
 }
 
-.card-body-text{
-    margin-top: -40px;
+.glass-img {
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Изображение масштабируется без обрезки */
+}
+
+.glass-card {
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  box-shadow: 0 5px 15px var(--shadow-medium);
+  position: relative;
+}
+
+.glass-card:hover {
+  box-shadow: 0 12px 20px var(--shadow-dark);
+}
+
+.card-body-text {
+  margin-top: -40px;
 }
 
 .card-body{
@@ -4382,4 +4393,5 @@ padding: 0 15px;
         flex: 1; /* Allow title to take available space */
     }
 }
+
 

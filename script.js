@@ -108,65 +108,74 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const setupMobileMenu = () => {
-        const mobileAccordion = document.querySelector('#mobileMenuAccordion');
-        if (mobileAccordion.children.length === 0) {
-            topNavItems.forEach((item, index) => {
-                const link = item.querySelector('.nav-link');
-                const dropdownMenu = item.querySelector('.dropdown-menu');
-                if (link && dropdownMenu) {
-                    const accordionItem = document.createElement('div');
-                    accordionItem.className = 'accordion-item';
-                    accordionItem.innerHTML = `
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-top-${index}" aria-expanded="false">
-                                ${link.textContent}
-                            </button>
-                        </h2>
-                        <div id="mobile-top-${index}" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                ${dropdownMenu.innerHTML}
-                            </div>
+const setupMobileMenu = () => {
+    const mobileAccordion = document.querySelector('#mobileMenuAccordion');
+    if (mobileAccordion.children.length === 0) {
+        topNavItems.forEach((item, index) => {
+            const link = item.querySelector('.nav-link');
+            const dropdownMenu = item.querySelector('.dropdown-menu');
+            if (link && dropdownMenu) {
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-top-${index}" aria-expanded="false">
+                            ${link.textContent}
+                        </button>
+                    </h2>
+                    <div id="mobile-top-${index}" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            ${dropdownMenu.innerHTML}
                         </div>
-                    `;
-                    mobileAccordion.appendChild(accordionItem);
-                }
-            });
-
-            navItems.forEach((item, index) => {
-                if (item === navItems[navItems.length - 1]) return;
-                const link = item.querySelector('.bottom-nav-link');
-                const megaMenu = item.querySelector('.mega-menu');
-                if (link && megaMenu) {
-                    const accordionItem = document.createElement('div');
-                    accordionItem.className = 'accordion-item';
-                    accordionItem.innerHTML = `
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}" aria-expanded="false">
-                                ${link.textContent.replace(/<span.*<\/span>/, '')}
-                            </button>
-                        </h2>
-                        <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                ${megaMenu.querySelector('.d-flex').innerHTML}
-                            </div>
-                        </div>
-                    `;
-                    mobileAccordion.appendChild(accordionItem);
-                }
-            });
-        }
-
-        burgerMenu.addEventListener('click', () => {
-            mobileMenu.classList.toggle('active');
-            mobileOverlay.classList.toggle('active');
+                    </div>
+                `;
+                mobileAccordion.appendChild(accordionItem);
+            }
         });
 
-        mobileOverlay.addEventListener('click', () => {
+        navItems.forEach((item, index) => {
+            if (item === navItems[navItems.length - 1]) return;
+            const link = item.querySelector('.bottom-nav-link');
+            const megaMenu = item.querySelector('.mega-menu');
+            if (link && megaMenu) {
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-bottom-${index}" aria-expanded="false">
+                            ${link.textContent.replace(/<span.*<\/span>/, '')}
+                        </button>
+                    </h2>
+                    <div id="mobile-bottom-${index}" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            ${megaMenu.querySelector('.d-flex').innerHTML}
+                        </div>
+                    </div>
+                `;
+                mobileAccordion.appendChild(accordionItem);
+            }
+        });
+    }
+
+    burgerMenu.addEventListener('click', () => {
+        mobileMenu.classList.toggle('active');
+        mobileOverlay.classList.toggle('active');
+    });
+
+    mobileOverlay.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+    });
+
+    // Add event listener for the close button
+    const closeButton = document.querySelector('.mobile-menu-close');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
             mobileOverlay.classList.remove('active');
         });
-    };
+    }
+};
 
     const setupWindowEvents = () => {
         window.addEventListener('resize', () => {
@@ -722,185 +731,217 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     };
+const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
+    const section = document.querySelector(sectionSelector);
+    if (!section) return;
 
-    const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtnSelector, indicatorsContainerSelector, slidesContainerSelector, visibleCountLogic }) => {
-        const section = document.querySelector(sectionSelector);
-        if (!section) return;
+    const slidesContainer = section.querySelector(slidesContainerSelector);
+    const originalItems = section.querySelectorAll(itemSelector);
+    if (!slidesContainer || originalItems.length === 0) return;
 
-        const slidesContainer = section.querySelector(slidesContainerSelector);
-        const originalItems = section.querySelectorAll(itemSelector);
-        if (!slidesContainer || originalItems.length === 0) return;
+    const items = Array.from(originalItems);
+    const totalOriginalItems = items.length;
+    const clonesBefore = items.map(item => item.cloneNode(true));
+    const clonesAfter = items.map(item => item.cloneNode(true));
+    clonesBefore.forEach(clone => slidesContainer.appendChild(clone));
+    items.forEach(item => slidesContainer.appendChild(item));
+    clonesAfter.forEach(clone => slidesContainer.appendChild(clone));
 
-        // Clone slides for infinite scrolling
-        const items = Array.from(originalItems);
-        const totalOriginalItems = items.length;
-        const clonesBefore = items.map(item => item.cloneNode(true));
-        const clonesAfter = items.map(item => item.cloneNode(true));
-        clonesBefore.forEach(clone => slidesContainer.appendChild(clone));
-        items.forEach(item => slidesContainer.appendChild(item));
-        clonesAfter.forEach(clone => slidesContainer.appendChild(clone));
+    const prevBtn = section.querySelector(prevBtnSelector);
+    const nextBtn = section.querySelector(nextBtnSelector);
+    const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
 
-        const prevBtn = section.querySelector(prevBtnSelector);
-        const nextBtn = section.querySelector(nextBtnSelector);
-        const indicatorsContainer = section.querySelector(indicatorsContainerSelector);
+    let currentIndex = totalOriginalItems;
+    let visibleCount = visibleCountLogic();
+    let isDragging = false;
+    let startX = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let isAnimating = false;
+    const threshold = 50;
 
-        let currentIndex = totalOriginalItems; // Start at the original slides
-        let visibleCount = visibleCountLogic();
-        let isDragging = false;
-        let startX = 0;
-        let currentTranslate = 0;
-        let prevTranslate = 0;
-        let animationFrameId;
-        const threshold = 50;
-        let lastFrameTime = 0;
-
-        const updateVisibleCount = () => {
-            const oldVisibleCount = visibleCount;
-            visibleCount = visibleCountLogic();
-            slidesContainer.style.setProperty('--visible-count', visibleCount);
-            if (oldVisibleCount !== visibleCount) {
-                // Adjust currentIndex to stay within original slides
-                currentIndex = totalOriginalItems + (currentIndex % totalOriginalItems);
-                showSlide(currentIndex, false);
-            }
+    const updateVisibleCount = () => {
+        const oldVisibleCount = visibleCount;
+        visibleCount = visibleCountLogic();
+        slidesContainer.style.setProperty('--visible-count', visibleCount);
+        if (oldVisibleCount !== visibleCount) {
+            currentIndex = totalOriginalItems; // Reset to the first original slide
             slidesContainer.querySelectorAll(itemSelector).forEach(item => {
                 item.style.flex = `0 0 ${100 / visibleCount}%`;
             });
-            createIndicators();
-            updateButtonState();
-        };
-
-        const createIndicators = () => {
-            if (!indicatorsContainer) return;
-            indicatorsContainer.innerHTML = '';
-            for (let i = 0; i < totalOriginalItems; i++) {
-                const indicator = document.createElement('button');
-                indicator.className = `custom-indicator${i === (currentIndex % totalOriginalItems) ? ' active' : ''}`;
-                indicator.setAttribute('aria-label', `Slide ${i + 1}`);
-                indicator.addEventListener('click', () => showSlide(totalOriginalItems + i));
-                indicatorsContainer.appendChild(indicator);
-            }
-        };
-
-        const showSlide = (index, animate = true) => {
-            currentIndex = index;
-            const totalItems = slidesContainer.querySelectorAll(itemSelector).length;
-            const slideWidth = 100 / visibleCount;
-            let translateX = -(currentIndex * slideWidth);
-
-            // Adjust for seamless looping
-            if (currentIndex < totalOriginalItems) {
-                currentIndex += totalOriginalItems;
-                translateX = -(currentIndex * slideWidth);
-                slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = `translateX(${translateX}%)`;
-                requestAnimationFrame(() => {
-                    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
-                    slidesContainer.style.transform = `translateX(${translateX}%)`;
-                });
-            } else if (currentIndex >= totalOriginalItems * 2) {
-                currentIndex -= totalOriginalItems;
-                translateX = -(currentIndex * slideWidth);
-                slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = `translateX(${translateX}%)`;
-                requestAnimationFrame(() => {
-                    slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
-                    slidesContainer.style.transform = `translateX(${translateX}%)`;
-                });
-            } else {
-                slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
-                slidesContainer.style.transform = `translateX(${translateX}%)`;
-            }
-
-            prevTranslate = translateX;
-            updateIndicators();
-            updateButtonState();
-        };
-
-        const updateIndicators = () => {
-            if (!indicatorsContainer) return;
-            const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
-            const activeIndicator = currentIndex % totalOriginalItems;
-            indicators.forEach((indicator, index) => {
-                indicator.classList.toggle('active', index === activeIndicator);
-            });
-        };
-
-        const updateButtonState = () => {
-            if (prevBtn) prevBtn.disabled = false;
-            if (nextBtn) nextBtn.disabled = false;
-        };
-
-        const throttle = (callback, limit) => {
-            return function (...args) {
-                const now = performance.now();
-                if (now - lastFrameTime >= limit) {
-                    callback(...args);
-                    lastFrameTime = now;
-                }
-            };
-        };
-
-        const startDrag = event => {
-            if (event.type === 'touchstart') {
-                startX = event.touches[0].clientX;
-            } else {
-                event.preventDefault();
-                startX = event.clientX;
-            }
-            isDragging = true;
-            slidesContainer.style.transition = 'none';
-            cancelAnimationFrame(animationFrameId);
-        };
-
-        const drag = throttle(event => {
-            if (!isDragging) return;
-            const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
-            if (event.type !== 'touchmove') event.preventDefault();
-            const deltaX = currentX - startX;
-            const containerWidth = slidesContainer.parentElement.offsetWidth;
-            currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
-            slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
-        }, 16);
-
-        const endDrag = () => {
-            if (!isDragging) return;
-            isDragging = false;
-            const slideWidth = 100 / visibleCount;
-            const dragDistance = prevTranslate - currentTranslate;
-            let slidesToMove = Math.round(dragDistance / slideWidth);
-            currentIndex += slidesToMove;
-
-            // Handle looping
-            if (currentIndex < totalOriginalItems) {
-                currentIndex += totalOriginalItems;
-            } else if (currentIndex >= totalOriginalItems * 2) {
-                currentIndex -= totalOriginalItems;
-            }
-
-            showSlide(currentIndex);
-        };
-
-        prevBtn?.addEventListener('click', () => showSlide(currentIndex - 1));
-        nextBtn?.addEventListener('click', () => showSlide(currentIndex + 1));
-
-        slidesContainer.addEventListener('mousedown', startDrag);
-        slidesContainer.addEventListener('mousemove', drag);
-        slidesContainer.addEventListener('mouseup', endDrag);
-        slidesContainer.addEventListener('mouseleave', endDrag);
-        slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
-        slidesContainer.addEventListener('touchmove', drag, { passive: false });
-        slidesContainer.addEventListener('touchend', endDrag);
-
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(updateVisibleCount, 250);
-        });
-
-        updateVisibleCount();
+            showSlide(currentIndex, false); // Reposition without animation
+        }
+        createIndicators();
+        updateButtonState();
     };
 
+    const createIndicators = () => {
+        if (!indicatorsContainer) return;
+        indicatorsContainer.innerHTML = '';
+        for (let i = 0; i < totalOriginalItems; i++) {
+            const indicator = document.createElement('button');
+            indicator.className = `custom-indicator${i === (currentIndex % totalOriginalItems) ? ' active' : ''}`;
+            indicator.setAttribute('aria-label', `Slide ${i + 1}`);
+            indicator.addEventListener('click', () => {
+                if (!isAnimating) showSlide(totalOriginalItems + i);
+            });
+            indicatorsContainer.appendChild(indicator);
+        }
+    };
+
+    const showSlide = (index, animate = true) => {
+        if (isAnimating) return;
+        isAnimating = true;
+        currentIndex = index;
+        const totalItems = slidesContainer.querySelectorAll(itemSelector).length;
+        const slideWidth = 100 / visibleCount;
+        let translateX = -(currentIndex * slideWidth);
+
+        // Ensure translateX is within bounds for mobile
+        if (visibleCount === 1) {
+            translateX = -(currentIndex * 100); // Each slide takes 100% width
+        }
+
+        slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
+        slidesContainer.style.transform = `translateX(${translateX}%)`;
+
+        // Handle infinite scrolling
+        if (currentIndex <= totalOriginalItems - visibleCount) {
+            setTimeout(() => {
+                currentIndex += totalOriginalItems;
+                translateX = -(currentIndex * slideWidth);
+                slidesContainer.style.transition = 'none';
+                slidesContainer.style.transform = `translateX(${translateX}%)`;
+                slidesContainer.offsetHeight; // Force reflow
+                isAnimating = false;
+                updateButtonState();
+            }, animate ? 500 : 0);
+        } else if (currentIndex >= totalOriginalItems * 2) {
+            setTimeout(() => {
+                currentIndex -= totalOriginalItems;
+                translateX = -(currentIndex * slideWidth);
+                slidesContainer.style.transition = 'none';
+                slidesContainer.style.transform = `translateX(${translateX}%)`;
+                slidesContainer.offsetHeight; // Force reflow
+                isAnimating = false;
+                updateButtonState();
+            }, animate ? 500 : 0);
+        } else {
+            setTimeout(() => {
+                isAnimating = false;
+                updateButtonState();
+            }, animate ? 500 : 0);
+        }
+
+        prevTranslate = translateX;
+        updateIndicators();
+    };
+
+    const updateIndicators = () => {
+        if (!indicatorsContainer) return;
+        const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
+        const activeIndicator = currentIndex % totalOriginalItems;
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === activeIndicator);
+        });
+    };
+
+    const updateButtonState = () => {
+        if (prevBtn) {
+            prevBtn.disabled = isAnimating || totalOriginalItems <= visibleCount;
+            prevBtn.style.pointerEvents = isAnimating ? 'none' : 'auto';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = isAnimating || totalOriginalItems <= visibleCount;
+            nextBtn.style.pointerEvents = isAnimating ? 'none' : 'auto';
+        }
+    };
+
+    const startDrag = event => {
+        if (isAnimating) return;
+        
+        // ИСПРАВЛЕНИЕ: Игнорируем drag, если событие начинается на изображении сертификата
+        if (event.target.closest('.certificate-img')) {
+            return;
+        }
+        
+        if (event.type === 'touchstart') {
+            startX = event.touches[0].clientX;
+        } else {
+            event.preventDefault();
+            startX = event.clientX;
+        }
+        isDragging = true;
+        slidesContainer.style.transition = 'none';
+    };
+
+    const drag = event => {
+        if (!isDragging) return;
+        const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
+        if (event.type !== 'touchmove') event.preventDefault();
+        const deltaX = currentX - startX;
+        const containerWidth = slidesContainer.parentElement.offsetWidth;
+        currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
+        slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+    };
+
+    const endDrag = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        const slideWidth = 100 / visibleCount;
+        const dragDistance = prevTranslate - currentTranslate;
+        let slidesToMove = Math.round(dragDistance / slideWidth);
+        currentIndex += slidesToMove;
+
+        if (currentIndex < totalOriginalItems) {
+            currentIndex += totalOriginalItems;
+        } else if (currentIndex >= totalOriginalItems * 2) {
+            currentIndex -= totalOriginalItems;
+        }
+
+        showSlide(currentIndex);
+    };
+
+    prevBtn?.addEventListener('click', (event) => {
+        event.preventDefault(); // Предотвращаем стандартное поведение
+        event.stopPropagation(); // Останавливаем всплытие события
+        if (!isAnimating && totalOriginalItems > visibleCount) {
+            showSlide(currentIndex - 1);
+        }
+    });
+
+    nextBtn?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!isAnimating && totalOriginalItems > visibleCount) {
+            showSlide(currentIndex + 1);
+        }
+    });
+
+    slidesContainer.addEventListener('mousedown', startDrag);
+    slidesContainer.addEventListener('mousemove', drag);
+    slidesContainer.addEventListener('mouseup', endDrag);
+    slidesContainer.addEventListener('mouseleave', endDrag);
+    slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
+    slidesContainer.addEventListener('touchmove', drag, { passive: false });
+    slidesContainer.addEventListener('touchend', endDrag);
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updateVisibleCount, 250);
+    });
+
+    // Отключаем навигацию, если слайдов меньше или равно visibleCount
+    if (totalOriginalItems <= visibleCount) {
+        if (prevBtn) prevBtn.style.display = 'none';
+        if (nextBtn) nextBtn.style.display = 'none';
+        if (indicatorsContainer) indicatorsContainer.style.display = 'none';
+    }
+
+    updateVisibleCount();
+    showSlide(currentIndex, false);
+};
     const setupCarousels = () => {
       setupCarousel({
     sectionSelector: '.reviews-section',
@@ -909,10 +950,13 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtnSelector: '.next-btn',
     indicatorsContainerSelector: '.custom-indicators',
     slidesContainerSelector: '.reviews-slider',
-    visibleCountLogic: () => {
-        const width = window.innerWidth;
-        return width < 768 ? 1 : width <= 1000 ? 2 : 3;
-    }
+
+            visibleCountLogic: () => {
+                const width = window.innerWidth;
+                if (width < 768) return 1;
+                if (width < 1100) return 2;
+                return 3;
+            }
 });
 
         setupCarousel({
