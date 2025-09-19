@@ -103,7 +103,6 @@ body {
 
 .nav-link {
  
-
     white-space: nowrap;
     position: relative;
 }
@@ -4393,5 +4392,6 @@ padding: 0 15px;
         flex: 1; /* Allow title to take available space */
     }
 }
+
 
 

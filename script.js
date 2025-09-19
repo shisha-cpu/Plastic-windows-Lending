@@ -741,11 +741,19 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
 
     const items = Array.from(originalItems);
     const totalOriginalItems = items.length;
+    
+    // Клонируем слайды для бесконечной прокрутки
     const clonesBefore = items.map(item => item.cloneNode(true));
     const clonesAfter = items.map(item => item.cloneNode(true));
+    
+    // Очищаем контейнер и добавляем клоны + оригиналы
+    slidesContainer.innerHTML = '';
     clonesBefore.forEach(clone => slidesContainer.appendChild(clone));
     items.forEach(item => slidesContainer.appendChild(item));
     clonesAfter.forEach(clone => slidesContainer.appendChild(clone));
+
+    const allSlides = slidesContainer.querySelectorAll(itemSelector);
+    const totalSlides = allSlides.length;
 
     const prevBtn = section.querySelector(prevBtnSelector);
     const nextBtn = section.querySelector(nextBtnSelector);
@@ -755,26 +763,31 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
     let visibleCount = visibleCountLogic();
     let isDragging = false;
     let startX = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
+    let startScrollLeft = 0;
     let isAnimating = false;
-    const threshold = 50;
+    let touchStartTime = 0;
+    const dragThreshold = 5;
+    const clickThreshold = 200;
 
+    // Функция для обновления количества видимых слайдов
     const updateVisibleCount = () => {
         const oldVisibleCount = visibleCount;
         visibleCount = visibleCountLogic();
-        slidesContainer.style.setProperty('--visible-count', visibleCount);
+        
+        // Обновляем размеры слайдов
+        allSlides.forEach(item => {
+            item.style.flex = `0 0 ${100 / visibleCount}%`;
+        });
+        
         if (oldVisibleCount !== visibleCount) {
-            currentIndex = totalOriginalItems; // Reset to the first original slide
-            slidesContainer.querySelectorAll(itemSelector).forEach(item => {
-                item.style.flex = `0 0 ${100 / visibleCount}%`;
-            });
-            showSlide(currentIndex, false); // Reposition without animation
+            currentIndex = totalOriginalItems;
+            showSlide(currentIndex, false);
         }
         createIndicators();
         updateButtonState();
     };
 
+    // Создание индикаторов
     const createIndicators = () => {
         if (!indicatorsContainer) return;
         indicatorsContainer.innerHTML = '';
@@ -783,60 +796,61 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
             indicator.className = `custom-indicator${i === (currentIndex % totalOriginalItems) ? ' active' : ''}`;
             indicator.setAttribute('aria-label', `Slide ${i + 1}`);
             indicator.addEventListener('click', () => {
-                if (!isAnimating) showSlide(totalOriginalItems + i);
+                if (!isAnimating) goToSlide(i);
             });
             indicatorsContainer.appendChild(indicator);
         }
     };
 
+    // Перейти к конкретному слайду (по индексу оригинального слайда)
+    const goToSlide = (slideIndex) => {
+        const targetIndex = totalOriginalItems + slideIndex;
+        showSlide(targetIndex);
+    };
+
+    // Показать определенный слайд
     const showSlide = (index, animate = true) => {
         if (isAnimating) return;
         isAnimating = true;
-        currentIndex = index;
-        const totalItems = slidesContainer.querySelectorAll(itemSelector).length;
+        
         const slideWidth = 100 / visibleCount;
-        let translateX = -(currentIndex * slideWidth);
-
-        // Ensure translateX is within bounds for mobile
-        if (visibleCount === 1) {
-            translateX = -(currentIndex * 100); // Each slide takes 100% width
-        }
-
+        const translateX = -(index * slideWidth);
+        
         slidesContainer.style.transition = animate ? 'transform 0.5s ease-out' : 'none';
         slidesContainer.style.transform = `translateX(${translateX}%)`;
-
-        // Handle infinite scrolling
-        if (currentIndex <= totalOriginalItems - visibleCount) {
-            setTimeout(() => {
-                currentIndex += totalOriginalItems;
-                translateX = -(currentIndex * slideWidth);
+        
+        const handleTransitionEnd = () => {
+            slidesContainer.removeEventListener('transitionend', handleTransitionEnd);
+            
+            // Корректируем позицию для бесконечной прокрутки
+            if (index < totalOriginalItems) {
+                currentIndex = index + totalOriginalItems;
                 slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = `translateX(${translateX}%)`;
-                slidesContainer.offsetHeight; // Force reflow
-                isAnimating = false;
-                updateButtonState();
-            }, animate ? 500 : 0);
-        } else if (currentIndex >= totalOriginalItems * 2) {
-            setTimeout(() => {
-                currentIndex -= totalOriginalItems;
-                translateX = -(currentIndex * slideWidth);
+                slidesContainer.style.transform = `translateX(${-(currentIndex * slideWidth)}%)`;
+            } else if (index >= totalOriginalItems * 2) {
+                currentIndex = index - totalOriginalItems;
                 slidesContainer.style.transition = 'none';
-                slidesContainer.style.transform = `translateX(${translateX}%)`;
-                slidesContainer.offsetHeight; // Force reflow
-                isAnimating = false;
-                updateButtonState();
-            }, animate ? 500 : 0);
+                slidesContainer.style.transform = `translateX(${-(currentIndex * slideWidth)}%)`;
+            } else {
+                currentIndex = index;
+            }
+            
+            isAnimating = false;
+            updateButtonState();
+            updateIndicators();
+        };
+        
+        if (animate) {
+            slidesContainer.addEventListener('transitionend', handleTransitionEnd);
         } else {
-            setTimeout(() => {
-                isAnimating = false;
-                updateButtonState();
-            }, animate ? 500 : 0);
+            currentIndex = index;
+            isAnimating = false;
+            updateButtonState();
+            updateIndicators();
         }
-
-        prevTranslate = translateX;
-        updateIndicators();
     };
 
+    // Обновление индикаторов
     const updateIndicators = () => {
         if (!indicatorsContainer) return;
         const indicators = indicatorsContainer.querySelectorAll('.custom-indicator');
@@ -846,6 +860,7 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
         });
     };
 
+    // Обновление состояния кнопок
     const updateButtonState = () => {
         if (prevBtn) {
             prevBtn.disabled = isAnimating || totalOriginalItems <= visibleCount;
@@ -857,54 +872,72 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
         }
     };
 
+    // Начало перетаскивания
     const startDrag = event => {
         if (isAnimating) return;
-        
-        // ИСПРАВЛЕНИЕ: Игнорируем drag, если событие начинается на изображении сертификата
-        if (event.target.closest('.certificate-img')) {
-            return;
-        }
         
         if (event.type === 'touchstart') {
             startX = event.touches[0].clientX;
         } else {
-            event.preventDefault();
             startX = event.clientX;
         }
+        
+        touchStartTime = Date.now();
         isDragging = true;
         slidesContainer.style.transition = 'none';
+        startScrollLeft = currentIndex * (100 / visibleCount);
     };
 
+    // Процесс перетаскивания
     const drag = event => {
         if (!isDragging) return;
+        
         const currentX = event.type === 'touchmove' ? event.touches[0].clientX : event.clientX;
-        if (event.type !== 'touchmove') event.preventDefault();
         const deltaX = currentX - startX;
         const containerWidth = slidesContainer.parentElement.offsetWidth;
-        currentTranslate = prevTranslate + (deltaX / containerWidth) * 100;
-        slidesContainer.style.transform = `translateX(${currentTranslate}%)`;
+        
+        const translateX = startScrollLeft - (deltaX / containerWidth) * 100;
+        slidesContainer.style.transform = `translateX(${-translateX}%)`;
     };
 
-    const endDrag = () => {
+    // Завершение перетаскивания
+    const endDrag = event => {
         if (!isDragging) return;
         isDragging = false;
-        const slideWidth = 100 / visibleCount;
-        const dragDistance = prevTranslate - currentTranslate;
-        let slidesToMove = Math.round(dragDistance / slideWidth);
-        currentIndex += slidesToMove;
-
-        if (currentIndex < totalOriginalItems) {
-            currentIndex += totalOriginalItems;
-        } else if (currentIndex >= totalOriginalItems * 2) {
-            currentIndex -= totalOriginalItems;
+        
+        const currentX = event.type === 'touchend' ? event.changedTouches[0].clientX : event.clientX;
+        const deltaX = currentX - startX;
+        const deltaTime = Date.now() - touchStartTime;
+        
+        // Определяем, был ли это клик или свайп
+        if (Math.abs(deltaX) < dragThreshold && deltaTime < clickThreshold) {
+            // Клик - возвращаемся к текущей позиции
+            showSlide(currentIndex);
+            return;
         }
-
-        showSlide(currentIndex);
+        
+        // Определяем направление и количество слайдов для перехода
+        const containerWidth = slidesContainer.parentElement.offsetWidth;
+        const slideWidthPercentage = 100 / visibleCount;
+        const dragDistancePercentage = (deltaX / containerWidth) * 100;
+        
+        // Определяем, на сколько слайдов нужно перейти
+        let slidesToMove = Math.round(dragDistancePercentage / slideWidthPercentage);
+        
+        // Учитываем направление (negative для левого свайпа)
+        slidesToMove = -slidesToMove;
+        
+        // Ограничиваем максимальное количество слайдов для перехода
+        slidesToMove = Math.max(-visibleCount, Math.min(visibleCount, slidesToMove));
+        
+        // Переходим к новому слайду
+        const newIndex = currentIndex + slidesToMove;
+        showSlide(newIndex);
     };
 
+    // Обработчики событий для кнопок
     prevBtn?.addEventListener('click', (event) => {
-        event.preventDefault(); // Предотвращаем стандартное поведение
-        event.stopPropagation(); // Останавливаем всплытие события
+        event.preventDefault();
         if (!isAnimating && totalOriginalItems > visibleCount) {
             showSlide(currentIndex - 1);
         }
@@ -912,35 +945,71 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
 
     nextBtn?.addEventListener('click', (event) => {
         event.preventDefault();
-        event.stopPropagation();
         if (!isAnimating && totalOriginalItems > visibleCount) {
             showSlide(currentIndex + 1);
         }
     });
 
+    // Обработчики событий для перетаскивания
     slidesContainer.addEventListener('mousedown', startDrag);
     slidesContainer.addEventListener('mousemove', drag);
     slidesContainer.addEventListener('mouseup', endDrag);
     slidesContainer.addEventListener('mouseleave', endDrag);
-    slidesContainer.addEventListener('touchstart', startDrag, { passive: false });
-    slidesContainer.addEventListener('touchmove', drag, { passive: false });
+    
+    slidesContainer.addEventListener('touchstart', startDrag, { passive: true });
+    slidesContainer.addEventListener('touchmove', drag, { passive: true });
     slidesContainer.addEventListener('touchend', endDrag);
 
+    // Предотвращаем стандартное поведение браузера для изображений
+    slidesContainer.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', (e) => e.preventDefault());
+    });
+
+    // Обработчик изменения размера окна
     let resizeTimer;
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(updateVisibleCount, 250);
     });
 
-    // Отключаем навигацию, если слайдов меньше или равно visibleCount
+    // Скрываем кнопки если слайдов меньше чем видимое количество
     if (totalOriginalItems <= visibleCount) {
         if (prevBtn) prevBtn.style.display = 'none';
         if (nextBtn) nextBtn.style.display = 'none';
         if (indicatorsContainer) indicatorsContainer.style.display = 'none';
     }
 
+    // Инициализация
     updateVisibleCount();
     showSlide(currentIndex, false);
+    
+    // Добавляем CSS стили если их нет
+    if (!document.querySelector('#carousel-styles')) {
+        const style = document.createElement('style');
+        style.id = 'carousel-styles';
+        style.textContent = `
+            .reviews-slider, .video-slider, .carousel-inner .row {
+                display: flex;
+                width: 100%;
+                flex-wrap: nowrap;
+                transition: transform 0.5s ease-out;
+                will-change: transform;
+            }
+            
+            .review-slide, .video-slide, .promotion-card, .installer-card, .certificate-slide {
+                flex: 0 0 calc(100% / var(--visible-count, 3));
+                min-width: 0;
+                padding: 0 10px;
+                box-sizing: border-box;
+                transition: flex 0.3s ease;
+            }
+            
+            .reviews-slider:active, .video-slider:active {
+                cursor: grabbing;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 };
     const setupCarousels = () => {
       setupCarousel({
@@ -1544,12 +1613,13 @@ const setupCarousel = ({ sectionSelector, itemSelector, prevBtnSelector, nextBtn
     setupMobileMenu();
     setupWindowEvents();
     setupLightbox();
-    setupCertificateModal();
+
     setupVideoModal();
     setupCalculator();
     setupProjectFilter();
     setupAccordion();
     setupCarousels();
+        setupCertificateModal();
     setupInfiniteLogoCarousel();
     setupSimpleLogoCarousel();
     setupQuiz();
